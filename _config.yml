@@ -3,11 +3,11 @@
 ## Source: https://github.com/hexojs/hexo/
 
 # Site
-title: Hexo
+title: Jae's Blog
 subtitle:
-description:
+description: blog,Java,Web
 keywords:
-author: John Doe
+author: Jae Peng
 language:
 timezone:
 
@@ -26,7 +26,9 @@ archive_dir: archives
 category_dir: categories
 code_dir: downloads/code
 i18n_dir: :lang
+# 这个配置就是要告诉hexo对plugins目录下的所有文件跳过解析渲染，因为测试时发现如果不配置，加载prettify的相关js会报脚本错误，猜测hexo渲染造成的编码问题
 skip_render:
+    - "plugins/**"
 
 # Writing
 new_post_name: :title.md # File name of new posts
@@ -41,7 +43,7 @@ future: true
 highlight:
   enable: true
   line_number: true
-  auto_detect: false
+  auto_detect: true
   tab_replace:
   
 # Home page setting
@@ -73,7 +75,8 @@ pagination_dir: page
 # Extensions
 ## Plugins: https://hexo.io/plugins/
 ## Themes: https://hexo.io/themes/
-theme: landscape
+
+theme: hexo-theme-Claudia
 
 # Deployment
 ## Docs: https://hexo.io/docs/deployment.html
