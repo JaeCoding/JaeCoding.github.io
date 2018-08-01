@@ -120,9 +120,10 @@ class Solution {
 
 我们可以使用 min( numRows, len(s)) 个列表来表示 Z 字形图案中的**非空行**。
 
-从左到右迭代 s，将每个字符添加到合适的行。可以使用当前行和当前方向这两个变量对合适的行进行跟踪。
+从左到右迭代 s，将每个字符添加到合适的行。
+可以**使用当前行**和**当前方向**这两个变量对合适的行进行跟踪。
 
-只有当我们向上移动到最上面的行或向下移动到最下面的行时，当前方向才会发生改变。
+只有当我们向上移动到最上面的行或向下移动到最下面的行时，**当前方向**才会发生改变。
 ```Java
 class Solution {
     public String convert(String s, int numRows) {
@@ -130,16 +131,17 @@ class Solution {
         if (numRows == 1) return s;
 
         List<StringBuilder> rows = new ArrayList<>();
-        for (int i = 0; i < Math.min(numRows, s.length()); i++)
-            rows.add(new StringBuilder());
+        for (int i = 0; i < Math.min(numRows, s.length()); i++){
+            rows.add(new StringBuilder());//确定list中有若干个个sb
+            }
 
         int curRow = 0;
-        boolean goingDown = false;
+        boolean goingDown = false;//方向
 
         for (char c : s.toCharArray()) {
-            rows.get(curRow).append(c);
+            rows.get(curRow).append(c);//获取正确的sb，添加c
             if (curRow == 0 || curRow == numRows - 1) goingDown = !goingDown;
-            curRow += goingDown ? 1 : -1;
+            curRow += goingDown ? 1 : -1;//是向上还是向下
         }
 
         StringBuilder ret = new StringBuilder();
