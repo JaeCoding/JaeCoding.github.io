@@ -1,8 +1,11 @@
 ﻿---
 title: APM工具-分布式跟踪监控工具pinpoint搭建与使用
 date: 2018-07-09 10:34:13
-tags:
+tags: [pinpoint]
+
 ---
+
+# APM工具-分布式跟踪监控工具pinpoint搭建与使用
 
 在公司实习期间，主管让我了解一下pinpoint的搭建和使用细则。然后我就根据这个关键词开始了我的面向谷歌编程。
 
@@ -11,7 +14,7 @@ tags:
 https://www.cnblogs.com/yyhh/p/6106472.html#yy01
 https://blog.csdn.net/qq_21816375/article/details/80455681
 
-看了很多博客，各自有各自的坑，我在这里做了一个精华总结版本。
+看了很多博客，各自有各自的坑，我在这里做了一个总结版本。
 
 ## 环境要求
 
