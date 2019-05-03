@@ -1,0 +1,1128 @@
+
+<!doctype html>
+<html class="theme-next use-motion theme-next-mala">
+<head>
+  
+
+<meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+  <meta name="google-site-verification" content="xxx" />
+
+
+
+
+
+  <link rel="stylesheet" type="text/css" href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5"/>
+
+
+
+  <link href='//fonts.googleapis.com/css?family=Lato:300,400,700,400italic&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
+
+
+<link rel="stylesheet" type="text/css" href="/css/main.css?v=0.4.5.1"/>
+
+
+    <meta name="description" content="A purchasing coder" />
+
+
+
+  <meta name="keywords" content="整理," />
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Jae's blog" type="application/atom+xml" />
+
+
+
+  <link rel="shorticon icon" type="image/x-icon" href="/favicon.ico?v=0.4.5.1" />
+
+
+<meta name="description" content="操作系统面试题及相关原理linux查看进程1.查进程    ps 命令查找与进程相关的PID号： ps a 显示现行终端机下的**所有程序**，包括其他用户的程序。 ps -A 显示**所有**程序。 ps c 列出程序时，显示每个程序真正的指令名称，而不包含路径，参数或常驻服务的标示。  最常用的方法是ps aux,然后再通过管道使用grep命令过滤查找特定的进程,然后再对特定的进程进行操作。">
+<meta name="keywords" content="整理">
+<meta property="og:type" content="article">
+<meta property="og:title" content="操作系统面试题及相关原理">
+<meta property="og:url" content="http://jaecoding.github.io/2018/02/18/操作系统面试题及相关原理/index.html">
+<meta property="og:site_name" content="Jae&#39;s blog">
+<meta property="og:description" content="操作系统面试题及相关原理linux查看进程1.查进程    ps 命令查找与进程相关的PID号： ps a 显示现行终端机下的**所有程序**，包括其他用户的程序。 ps -A 显示**所有**程序。 ps c 列出程序时，显示每个程序真正的指令名称，而不包含路径，参数或常驻服务的标示。  最常用的方法是ps aux,然后再通过管道使用grep命令过滤查找特定的进程,然后再对特定的进程进行操作。">
+<meta property="og:locale" content="en">
+<meta property="og:updated_time" content="2018-08-02T14:34:37.558Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="操作系统面试题及相关原理">
+<meta name="twitter:description" content="操作系统面试题及相关原理linux查看进程1.查进程    ps 命令查找与进程相关的PID号： ps a 显示现行终端机下的**所有程序**，包括其他用户的程序。 ps -A 显示**所有**程序。 ps c 列出程序时，显示每个程序真正的指令名称，而不包含路径，参数或常驻服务的标示。  最常用的方法是ps aux,然后再通过管道使用grep命令过滤查找特定的进程,然后再对特定的进程进行操作。">
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var CONFIG = {
+    scheme: 'Mala',
+    sidebar: 'post'
+  };
+</script>
+
+  <title> 操作系统面试题及相关原理 | Jae's blog </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  <!--[if lte IE 8]>
+  <div style=' clear: both; height: 59px; padding:0 0 0 15px; position: relative;margin:0 auto;'>
+    <a href="http://windows.microsoft.com/en-US/internet-explorer/products/ie/home?ocid=ie6_countdown_bannercode">
+      <img src="http://7u2nvr.com1.z0.glb.clouddn.com/picouterie.jpg" border="0" height="42" width="820"
+           alt="You are using an outdated browser. For a faster, safer browsing experience, upgrade for free today or use other browser ,like chrome firefox safari."
+           style='margin-left:auto;margin-right:auto;display: block;'/>
+    </a>
+  </div>
+<![endif]-->
+  
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+  ga('create', 'xxx', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?xxx";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+  <div class="container one-column page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><h1 class="site-meta">
+  <span class="logo-line-before"><i></i></span>
+  <a href="/" class="brand" rel="start">
+      <span class="logo">
+        <i class="icon-next-logo"></i>
+      </span>
+      <span class="site-title">彭文杰的博客</span>
+  </a>
+  <span class="logo-line-after"><i></i></span>
+</h1>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu menu-left">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            <i class="menu-item-icon icon-next-home"></i> <br />
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            <i class="menu-item-icon icon-next-categories"></i> <br />
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            <i class="menu-item-icon icon-next-archives"></i> <br />
+            Archives
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            <i class="menu-item-icon icon-next-tags"></i> <br />
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            <i class="menu-item-icon icon-next-about"></i> <br />
+            About
+          </a>
+        </li>
+      
+
+      
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  
+  <form class="site-search-form">
+    <input type="text" id="st-search-input" class="st-search-input st-default-search-input" />
+  </form>
+
+
+<script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+    (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+    e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install', 'xxx','2.0.0');
+</script>
+
+
+
+    </div>
+  
+</nav>
+
+ </div>
+    </header>
+
+    
+      
+
+      
+        <style type="text/css">
+
+    .circle {
+        width: 40px;
+        height: 40px;
+        background: #555 no-repeat;
+        cursor: move;
+    }
+
+    .assist-btn {
+        position: fixed;
+        top: 50％;
+        left: 10px;
+        -moz-border-radius: 50px;
+        -webkit-border-radius: 50px;
+        border-radius: 50px;
+        outline: none;
+        border: none;
+        color: #87daff;
+    }
+
+</style>
+
+<script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+<script type="text/javascript">
+    // 浮动圆点展开与收缩
+    /*
+    $(function () {
+        var assist_box = $('.assist-box');
+        $('#assist_btn').hover(function () {
+            assist_box.stop().show(300);
+        }, function () {
+            assist_box.stop().hide(150);
+        })
+    });
+    */  
+    //浮动圆点拖动
+    $(function () {
+        var box = document.getElementById('assist_btn');
+        box.onmousedown = function (event) {
+            var e = event || window.event,
+                t = e.target || e.srcElement,
+                // 鼠标按下时的坐标x1,y1
+                x1 = e.clientX,
+                y1 = e.clientY,
+                //鼠标按下时的左右偏移量
+                dragLeft = this.offsetLeft,
+                dragTop = this.offsetTop;
+
+            document.onmousemove = function (event) {
+                var e = event || window.event,
+                    t = e.target || e.srcElement,
+                    // 鼠标移动时的动态坐标
+                    x2 = e.clientX,
+                    y2 = e.clientY,
+                    // 鼠标移动时的坐标的变化量
+                    x = x2 - x1,
+                    y = y2 - y1;
+                box.style.left = (dragLeft + x) + 'px';
+                box.style.top = (dragTop + y) + 'px';
+            }
+
+            document.onmouseup = function () {
+                this.onmousemove = null;
+            }
+        }
+    });
+
+/*
+    $whitesmoke   = #f5f5f5
+    $gainsboro    = #eee
+    $gray-lighter = #ddd
+    $grey-light   = #ccc
+    $grey         = #bbb
+    $grey-dark    = #999
+    $grey-dim     = #666
+    $black-light  = #555
+    $black-deep   = #222
+    $red          = #ff2a2a
+    $blue-bright  = #87daff
+    $blue         = #0684bd
+    $blue-deep    = #262a30
+*/
+    // white theme
+    var body = {color: "#555", background: "white"};
+    var a_tag = {color: "#222"};
+    var header = { background: "#f5f5f5"};
+    var logo_line_i = {background: "#222"};
+    // var post_code = {background: "#eee", color: "#222"};
+
+    function switch_theme() {
+        $("body").css(body);
+        $("a:not('.links-of-author-item a, .site-state-item a, .site-state-posts a, .feed-link a, .motion-element a, .post-tags a, .show-commit-cls a, #donate_board a')").css(a_tag);
+        $(".header, .footer").css(header);
+        $(".logo-line-before i, .logo-line-after i").css(logo_line_i);
+        //$(".post code").css(post_code);
+        $("#idhyt-surprise-ball #idhyt-surprise-ball-animation .drag").css(a_tag);
+        $(".post-title-link, .posts-expand .post-meta, .post-comments-count, .disqus-comment-count, .post-category a, .post-nav-next a, .post-nav-item a").css(a_tag);
+        
+        // $("code").css({color: '#c5c8c6', background: '#1d1f21'});
+        $("#assist_btn").hide(1500);
+    }
+
+    $(function () {
+        $("#assist_btn").dblclick(function() {
+            switch_theme();
+        });
+    });
+
+</script>
+
+<div>
+
+    <button class="assist-btn circle" id="assist_btn" title="双击切换">
+        亮
+    </button>
+
+</div>
+
+
+
+
+
+
+
+
+
+      
+
+    
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div id="content" class="content"> 
+
+  <div id="posts" class="posts-expand">
+    
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+
+      
+      
+        <h1 class="post-title" itemprop="name headline">
+          
+          
+            
+              操作系统面试题及相关原理
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          Posted on
+          <time itemprop="dateCreated" datetime="2018-02-18T16:31:26+08:00" content="2018-02-18">
+            2018-02-18
+          </time>
+        </span>
+
+        
+          <span class="post-category" >
+            &nbsp; | &nbsp; In
+            
+              <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                <a href="/categories/原理/" itemprop="url" rel="index">
+                  <span itemprop="name">原理</span>
+                </a>
+              </span>
+
+              
+              
+
+            
+          </span>
+        
+
+        
+          
+            <span class="post-comments-count">
+            &nbsp; | &nbsp;
+            <a href="/2018/02/18/操作系统面试题及相关原理/#comments" itemprop="discussionUrl">
+              <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2018/02/18/操作系统面试题及相关原理/" itemprop="commentsCount"></span>
+            </a>
+          </span>
+          
+        
+      </div>
+    </header>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        <span itemprop="articleBody"><h1 id="操作系统面试题及相关原理"><a href="#操作系统面试题及相关原理" class="headerlink" title="操作系统面试题及相关原理"></a>操作系统面试题及相关原理</h1><h2 id="linux查看进程"><a href="#linux查看进程" class="headerlink" title="linux查看进程"></a>linux查看进程</h2><p>1.查进程<br>    ps 命令查找与进程相关的PID号：</p>
+<pre><code>ps a 显示现行终端机下的**所有程序**，包括其他用户的程序。
+ps -A 显示**所有**程序。
+ps c 列出程序时，显示每个程序真正的指令名称，而不包含路径，参数或常驻服务的标示。
+
+最常用的方法是ps aux,然后再通过管道使用grep命令过滤查找特定的进程,然后再对特定的进程进行操作。
+`ps aux | grep   program_filter_word,ps -ef |grep tomcat
+</code></pre><p><code>ps -ef|grep java</code><br><code>ps -ef|grep java|grep -v grep</code> 显示出所有的java进程，去处掉当前的grep进程。</p>
+<h2 id="查看端口"><a href="#查看端口" class="headerlink" title="查看端口"></a>查看端口</h2><p><code>netstat</code>命令各个参数说明如下：</p>
+<pre><code>-t : 指明显示TCP端口
+-u : 指明显示UDP端口
+-l : 仅显示监听套接字(所谓套接字就是使应用程序能够读写与收发通讯协议(protocol)与资料的程序)
+-p : 显示进程标识符和程序名称，每一个套接字/端口都属于一个程序。
+-n : 不进行DNS轮询，显示IP(可以加速操作)
+</code></pre><p>即可显示当前服务器上所有端口及进程服务，于grep结合可查看某个具体端口及服务情况··</p>
+<p>netstat -ntlp    //查看当前所有tcp端口·<br>netstat -ntulp |grep 80   //查看所有80端口使用情况·<br>netstat -an | grep 3306   //查看所有3306端口使用情况·</p>
+<pre><code>`netstat  -lanp` 查看一台服务器上面哪些服务及端口
+
+ps -ef |grep mysqld查看一个**服务有几个端口**。比如要查看mysqld
+
+netstat -pnt |grep :3306 |wc 查看某一端口的**连接数量**,比如3306端口
+
+netstat -anp |grep 3306    查看某一端口的连接客户端IP 比如3306端口
+</code></pre><p>netstat -an 查看网络端口 </p>
+<p>lsof -i :port，使用lsof -i :port就能看见所指定端口运行的程序，同时还有当前连接。 </p>
+<p>nmap 端口扫描<br>netstat -nupl  (UDP类型的端口)<br>netstat -ntpl  (TCP类型的端口)<br>netstat -anp <strong>显示系统端口使用情况</strong></p>
+<h2 id="搜索文件中匹配符"><a href="#搜索文件中匹配符" class="headerlink" title="搜索文件中匹配符"></a>搜索文件中匹配符</h2><pre><code>命令：grep 
+格式：grep [option] pattern filenames 
+功能：逐行搜索所指定的文件或标准输入，并显示匹配模式的每一行。 
+选项：-i    匹配时忽略大小写 
+</code></pre><p>  -v 找出模式失配的行 </p>
+<pre><code>例如：% grep -i &apos;java*&apos; ./test/run.sh 
+</code></pre><h2 id="寻找文件"><a href="#寻找文件" class="headerlink" title="寻找文件"></a>寻找文件</h2><pre><code>命令：find 
+格式：find pathname [option] expression 
+功能：在 所给的路经名下 寻找符合表达式相匹配的文件。 
+选项：-name     表示文件名 
+      -user     用户名，选取该用户所属的文件 
+      -size     按大小查找，以block为单位，一个block是512B 
+      -mtime n  按最后一次修改时间查找，选取n天内被修改的文件 
+</code></pre><p>  -perm     按权限查找<br>          -type     按文件类型查找<br>  -atime    按最后一次访问时间查找 </p>
+<pre><code>例如：% find ./ -name &apos;*abc*&apos; -print 
+</code></pre><h2 id="文件传输"><a href="#文件传输" class="headerlink" title="文件传输"></a>文件传输</h2><pre><code>命令：ftp (file transfer program) 
+格式：ftp hostname 
+功能：网络文件传输及远程操作。 
+</code></pre><h2 id="线程进程区别"><a href="#线程进程区别" class="headerlink" title="线程进程区别"></a>线程进程区别</h2><p>实现并发的方式有多种：比如<strong>多进程</strong>、<strong>多线程</strong>、<strong>IO多路复用</strong>。</p>
+<p>一句话总结：进程关注资源分配，线程关注程序运行。<br>Why：因为CPU与其他PC资源速度不协调， 为了实现“同时执行”，  计算机需要进程来 保存和切换上下文。 </p>
+<p>可以类比于火车 和 车厢。</p>
+<p><strong>进程：关注的是内存资源的管理与分配</strong><br>进程是资源（CPU、内存等）分配的基本单位，它是程序执行时的一个实例。<br>程序运行时系统就会创建一个进程，并为它分配资源，然后把该进程放入进程就绪队列，进程调度器选中它的时候就会为它分配CPU时间，程序开始真正运行。</p>
+<p>Linux系统函数fork()可以在父进程中创建一个子进程，但是成本昂贵<br>父进程：负责监控请求的到来，交由子进程处理<br>子进程：多个 处理多个请求</p>
+<p><strong>线程：关注的是系统的调度，cpu的使用</strong><br>线程是程序执行时的<strong>最小单位</strong>，它是进程的一个<strong>执行流（也就是一系列的操作）</strong>，是CPU调度和分派的基本单位，一个进程可以由很多个线程组成，线程间共享进程的所有资源，每个线程有自己的堆栈和局部变量。<br>线程由CPU独立调度执行，在多CPU环境下就允许多个线程同时运行。同样多线程也可以实现并发操作，每个请求分配一个线程来处理。</p>
+<h2 id="线程和进程de区别和优劣呢？"><a href="#线程和进程de区别和优劣呢？" class="headerlink" title="线程和进程de区别和优劣呢？"></a>线程和进程de区别和优劣呢？</h2><p>原因：！！区别完全由地址空间造成，进程地址不同，线程用进程下的地址空间。</p>
+<ul>
+<li>进程是<strong>资源分配</strong>的最小单位，线程是<strong>程序执行</strong>的最小单位。</li>
+<li>进程有自己的独立地址空间，每启动一个进程，系统就会为它<strong>分配地址空间，建立数据表(所以说是资源分配最小单位）</strong>来维护代码段、堆栈段和数据段，这种操作非常<strong>昂贵</strong>。     而线程是<strong>共享进程中的数据的，使用相同的地址空间</strong>，因此CPU切换一个线程的花费远比进程要小很多（在一个相同地址空间切换自然轻松），同时创建一个线程的开销也比进程要小很多。</li>
+<li>线程之间的通信更方便，切换更快，同一进程下的<strong>线程共享全局变量、静态变量</strong>等数据，而进程之间的通信需要以通信的方式（IPC)进行。</li>
+<li>多进程程序<strong>更健壮</strong>。多线程程序只要有一个线程死掉，整个进程也死掉了，而一个进程死掉并不会对另外一个进程造成影响，因为进程有自己<strong>独立的地址空间</strong>。</li>
+</ul>
+<h2 id="五种进程通信（IPC，InterProcess-Communication）的方式"><a href="#五种进程通信（IPC，InterProcess-Communication）的方式" class="headerlink" title="五种进程通信（IPC，InterProcess Communication）的方式"></a>五种进程通信（IPC，InterProcess Communication）的方式</h2><p>管道（包括无名管道和命名管道）、消息队列、信号量、共享存储、Socket和Streams（这俩支持不同主机之间进程IPC）</p>
+<p><strong>一、管道（无名管道）</strong><br>管道，通常指<strong>无名管道</strong>，是 UNIX 系统IPC最古老的形式。</p>
+<p><strong>1、特点：</strong></p>
+<ul>
+<li>半双工（数据只能在一个方向上流动），具有固定的读端和写端。</li>
+<li>只能用于具有<strong>亲缘关系的进程</strong>之间的通信（也是父子进程或者兄弟进程之间）。因为子进程继承父继承的<strong>文件描述符</strong>，除了父子进程，其他进程不知道fd的值，所以通常调用pipe的进程接着调用fork，在父子之间通信。</li>
+<li>可以看成是一种特殊的文件，对于它的读写也可以使用普通的read、write<br>等函数。但是它不是普通的文件，并不属于其他任何文件系统，并且只存在于内存中。</li>
+</ul>
+<p><strong>二、FIFO（命名管道）</strong><br>命名管道，它是一种文件类型。</p>
+<p><strong>1、特点</strong></p>
+<ul>
+<li>可以在<strong>无关的进程</strong>之间交换数据，与无名管道不同。</li>
+<li>FIFO有<strong>路径名</strong>与之相关联，它以一种<strong>特殊设备文件形式</strong>存在于文件系统中。</li>
+</ul>
+<p>FIFO的通信方式类似于<strong>在进程中使用文件来传输数据</strong>，只不过FIFO类型文件同时具有管道的特性。在数据读出时，FIFO管道中同时清除数据，并且“先进先出”。</p>
+<p><strong>三、消息队列</strong><br>消息队列，是<strong>消息的链接表</strong>，存放在内核中。一个消息队列由一个标识符（即队列ID）来标识。<br><strong>1、特点</strong></p>
+<ul>
+<li>面向记录，其中的<strong>消息具有特定的格式</strong>以及特定的优先级。</li>
+<li>消息队列<strong>独立于</strong>发送与接收进程。进程终止时，消息队列及其内容并不会被删除。(管道不同，进程终止管道内容删除）</li>
+<li>消息队列可以实现消息的随机查询,消息不一定要以先进先出的次序读取,也可以按消息的<strong>类型</strong>读取。</li>
+</ul>
+<p><strong>四、信号量（用于同步不用于存储）</strong><br>信号量（semaphore）与已经介绍过的 IPC 结构不同，它是一个<strong>计数器</strong>。信号量用于实现进程间的<strong>互斥与同步</strong>，而不是用于存储进程间通信数据。</p>
+<p><strong>1、特点</strong></p>
+<ul>
+<li>用于进程间同步，若要在进程间传递数据需要结合共享内存。</li>
+<li>基于操作系统的 PV 操作（信号量的处理相关，P表示通过的意思，V表示释放的意思），程序对信号量的操作都是原子操作。</li>
+<li>每次对信号量的 PV 操作不仅限于对信号量值加 1 或减 1，而且可以加减任意正整数。</li>
+<li>支持信号量组。</li>
+</ul>
+<p><strong>五、共享内存</strong><br>共享内存（Shared Memory），指两个或多个进程<strong>共享一个给定的存储区</strong>。</p>
+<p><strong>1、特点</strong></p>
+<ul>
+<li><strong>最快</strong>的IPC，因为进程是直接对内存进行存取。</li>
+<li>因为多个进程可以同时操作，所以<strong>需要进行同步</strong>。</li>
+<li>信号量+共享内存 通常结合在一起使用，信号量<strong>用来同步</strong>对共享内存的访问。</li>
+</ul>
+<p><strong>例子</strong><br>使用【共享内存+信号量+消息队列】的组合来实现服务器进程与客户进程间的通信。<br>共享内存用来<strong>传递数据</strong>；信号量用来<strong>同步</strong>；消息队列用来 在客户端修改了共享内存后 <strong>通知服务器读取</strong>。</p>
+<h2 id="孤儿进程与僵尸进程"><a href="#孤儿进程与僵尸进程" class="headerlink" title="孤儿进程与僵尸进程"></a>孤儿进程与僵尸进程</h2><p><strong>父进程→子进程→新的进程</strong><br>子进程的结束和父进程的运行是一个异步过程,即父进程永远无法预测子进程 到底什么时候结束（生出来就管不了了）。<br>当一个 进程完成它的工作终止之后，它的父进程需要调用wait()或者waitpid()系统调用取得子进程的终止状态。<strong>（状态收集:电话联系）</strong></p>
+<p><strong>孤儿进程：</strong>一个父进程退出，而它的一个或<strong>多个子进程还在运行</strong>，那么那些子进程将成为孤儿进程。孤儿进程将被<strong>init进程(进程号为1</strong>)所<strong>收养</strong>，并由init进程对它们完成状态收集工作。</p>
+<p><strong>僵尸进程：</strong>一个进程使用fork创建子进程，如果子进程退出，而父进程并没有调用wait或waitpid获取子进程的状态信息，那么子进程的进程描述符仍然保存在系统中。这种进程称之为僵尸进程。（子进程已死，父进程都没联系儿子，都不知道他死了，跟系统说还活着）<br>　　<br><strong>危害：</strong><br><strong>孤儿危害：</strong>联系孤儿进程的重任就落到了init进程身上，init进程就好像是一个民政局，专门负责孤儿的善后工作。每当出现一个孤儿进程的时候，内核就把孤 儿进程的父进程设置为init，而init进程会循环地wait()它的已经退出的子进程。因此孤儿进程并不会有什么危害。<br><strong>僵尸危害：</strong>如果进程不调用wait / waitpid的话， 那么保留的那段信息就不会释放，其<strong>进程号</strong>就会一直被占用，但是系统所能使用的进程号是有限的，如果大量的产生僵死进程，将因为没有<strong>可用的进程号</strong>而导致系统不能产生新的进程。</p>
+<p><strong>原因：有僵尸召唤者</strong><br>任何一个子进程(init除外)在exit()之后，并非马上就消失掉，而是<strong>留下一个称为僵尸进程(Zombie)的数据结构</strong>，等待父进程处理。这是每个 子进程在结束时都要经过的阶段。<br>如果子进程在exit()之后，父进程没有来得及处理，这时用ps命令就能看到子进程的状态是“Z”。如果父进程能及时 处理，可能用ps命令就来不及看到子进程的僵尸状态，但这并不等于子进程不经过僵尸状态。  如果父进程在子进程结束之前退出，则子进程将由init接管。init将会以父进程的身份对僵尸状态的子进程进行处理。</p>
+<p><strong>解决：杀僵尸不治本，要杀死僵尸召唤者</strong><br>就像僵尸片我们不能怪僵尸，要怪召唤僵尸的人。僵尸进程也应该归罪于父进程没有善后（没有调用wait / waitpid），所以我们只要消灭父进程，让他不要继续生产僵尸。僵尸也会因为没了父亲变为孤儿进程，被init消灭。</p>
+<p>死锁（代码实现）<br>作业调度方式<br>协程</p>
+<p>怎么实现管道，为什么管道都是用于父子进程或兄弟进程（fork机制的原因），我说了子进程完全继承了父进程的内容，又问我信号会继承吗，我说是的，他说真的吗，难道有什么问题吗（信号掩码之类继承，但是pending的信号就直接丢了。）</p>
+<p>IO复用很熟吧，说说怎么用的</p>
+<p>怎么看进程占用的系统资源，<br>怎么用命令给一个文件里面的数字按次数排序</p>
+</span>
+      
+    </div>
+    <div>
+  
+    ﻿
+  
+</div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/整理/" rel="tag">#整理</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/04/14/JVM部分/" rel="prev">JVM部分</a>
+            
+          </div>
+
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/08/25/设计模式沉思录（十）之 组合模式/" rel="next">设计模式沉思录（十）之 组合模式</a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div>
+      
+        <style type="text/css">
+
+    .donate_bar {
+        text-align: center;
+        margin-top : 5%;
+    }
+
+    .donate_bar.hidden {
+        display:none;
+    }
+/*
+    .donate_bar a.btn_donate {
+        display: inline-block;
+        width: 82px;
+        height: 82px;
+        margin-left:auto;
+        margin-right:auto;
+
+        background: url("http://img.t.sinajs.cn/t5/style/images/apps_PRF/e_media/btn_reward.gif") no-repeat;
+        _background: url("http://img.t.sinajs.cn/t5/style/images/apps_PRF/e_media/btn_reward.gif") no-repeat; 
+
+        -webkit-transition: background 0s;
+        -moz-transition: background 0s;
+        -o-transition: background 0s;
+        -ms-transition: background 0s;
+        transition: background 0s;
+    }
+*/
+    .donate_bar a.btn_donate:hover { 
+        // background-position: 0px -82px;
+        color: #87daff
+    }
+
+    .donate_bar .donate_txt {
+        display: block;
+        color: #9d9d9d;
+        font: 14px/2 "Microsoft Yahei";
+    }
+
+    .bold { 
+        font-weight: bold; 
+    }
+
+    .post-donate a {
+        border-bottom: 0px;
+    }
+
+    #donate_guide table {
+        border: none;
+    }
+
+    #donate_guide td {
+        border-bottom: none;
+        border-right: none;
+        background: #333333;
+        valign: top;
+    }
+
+</style>
+
+
+
+    
+
+    <div class ="post-donate">
+        <div id="donate_board" class="donate_bar center">
+              <a id="btn_donate" class="btn_donate" href="javascript:;" title="打赏">赏</a>
+              <span id="donate_txt" class="donate_txt">
+                   
+                        仅仅是一个功能
+                   
+              </span>
+            <br>
+        </div>  
+  
+        <div id="donate_guide" class="donate_bar center hidden">
+            <!--
+            
+                <a href="http://paxblmm0h.bkt.clouddn.com/ali_pay.jpg" title="支付宝打赏" class="fancybox" rel="article0" 
+                    style="float:left;margin-left:25%;margin-right:10px;">
+                    <img src="http://paxblmm0h.bkt.clouddn.com/ali_pay.jpg" title="" height="164px" width="164px">
+                </a> 
+              
+
+            
+                <a href="http://paxblmm0h.bkt.clouddn.com/wechat_pay.jpg" title="微信打赏" class="fancybox" rel="article0"
+                    style="margin-right:30%">
+                    <img src="http://paxblmm0h.bkt.clouddn.com/wechat_pay.jpg" title="" height="164px" width="164px">
+                </a>
+            
+            -->
+            <table>
+                <tr>
+                    <td>
+                        
+                            <a href="http://paxblmm0h.bkt.clouddn.com/ali_pay.jpg" title="支付宝打赏" class="fancybox" rel="article0" 
+                                style="float:left;margin-left:25%;margin-right:10px;">
+                                <img src="http://paxblmm0h.bkt.clouddn.com/ali_pay.jpg" title="" height="164px" width="164px">
+                            </a> 
+                         
+                    </td>
+                    <td>
+                        
+                            <a href="http://paxblmm0h.bkt.clouddn.com/wechat_pay.jpg" title="微信打赏" class="fancybox" rel="article0"
+                                style="margin-right:30%">
+                                <img src="http://paxblmm0h.bkt.clouddn.com/wechat_pay.jpg" title="" height="164px" width="164px">
+                            </a>
+                        
+                    </td>
+                </tr>
+            </table>
+
+        </div>
+
+        <script type="text/javascript">
+            document.getElementById('btn_donate').onclick = function() {
+                $('#donate_board').addClass('hidden');
+                // $('#donate_guide').removeClass('hidden');
+                $('#donate_guide').show(2000);
+            }
+
+        </script>
+    </div>
+
+    
+
+
+      
+    </div>
+
+    <div class="post-spread">
+      
+        <!-- JiaThis Button BEGIN -->
+<div class="jiathis_style">
+  <a class="jiathis_button_tsina"></a>
+  <a class="jiathis_button_tqq"></a>
+  <a class="jiathis_button_weixin"></a>
+  <a class="jiathis_button_cqq"></a>
+  <a class="jiathis_button_douban"></a>
+  <a class="jiathis_button_renren"></a>
+  <a class="jiathis_button_qzone"></a>
+  <a class="jiathis_button_kaixin001"></a>
+  <a class="jiathis_button_copy"></a>
+  <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jiathis_separator jtico jtico_jiathis" target="_blank"></a>
+  <a class="jiathis_counter_style"></a>
+</div>
+<script type="text/javascript" >
+  var jiathis_config={
+    hideMore:false
+  }
+</script>
+<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js" charset="utf-8"></script>
+<!-- JiaThis Button END -->
+
+      
+    </div>
+  </div>
+
+ </div>
+
+        
+          <div class="comments" id="comments">
+            
+              <div id="disqus_thread">
+                <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+              </div>
+            <!--
+            
+            -->
+        
+      </div>
+
+      
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            Table Of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" src="/images/default_avatar.jpg" alt="Jae Peng" itemprop="image"/>
+          <p class="site-author-name" itemprop="name">Jae Peng</p>
+        </div>
+        <p class="site-description motion-element" itemprop="description">A purchasing coder</p>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">38</span>
+              <span class="site-state-item-name">posts</span>
+            </a>
+          </div>
+
+          <div class="site-state-item site-state-categories">
+            <a href="/categories">
+              <span class="site-state-item-count">7</span>
+              <span class="site-state-item-name">categories</span>
+              </a>
+          </div>
+
+          <div class="site-state-item site-state-tags">
+            <a href="/tags">
+              <span class="site-state-item-count">23</span>
+              <span class="site-state-item-name">tags</span>
+              </a>
+          </div>
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="menu-item-icon icon-next-feed"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="http://github.com/jaecoding" target="_blank">GitHub</a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://twitter.com/xxx" target="_blank">Twitter</a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/" target="_blank">Weibo</a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://www.zhihu.com/people/peng-wen-jie-13" target="_blank">ZhiHu</a>
+              </span>
+            
+          
+        </div>
+
+        <div class="links-of-friendly motion-element">
+          
+            <p class="site-author-name">CSDNblog</p>
+            
+              <span class="links-of-author-item">
+              <a href="https://blog.csdn.net/Jae_Peng" target="_blank">About</a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+          <div class="cc-license motion-element" itemprop="license">
+            <a href="http://creativecommons.org/licenses/by-nc-sa/4.0" class="cc-opacity" target="_blank">
+              <img src="/images/cc-by-nc-sa.svg" alt="Creative Commons" />
+            </a>
+          </div>
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap sidebar-panel-active">
+          <div class="post-toc-indicator-top post-toc-indicator"></div>
+          <div class="post-toc">
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#操作系统面试题及相关原理"><span class="nav-number">1.</span> <span class="nav-text">操作系统面试题及相关原理</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#linux查看进程"><span class="nav-number">1.1.</span> <span class="nav-text">linux查看进程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#查看端口"><span class="nav-number">1.2.</span> <span class="nav-text">查看端口</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#搜索文件中匹配符"><span class="nav-number">1.3.</span> <span class="nav-text">搜索文件中匹配符</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#寻找文件"><span class="nav-number">1.4.</span> <span class="nav-text">寻找文件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#文件传输"><span class="nav-number">1.5.</span> <span class="nav-text">文件传输</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#线程进程区别"><span class="nav-number">1.6.</span> <span class="nav-text">线程进程区别</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#线程和进程de区别和优劣呢？"><span class="nav-number">1.7.</span> <span class="nav-text">线程和进程de区别和优劣呢？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#五种进程通信（IPC，InterProcess-Communication）的方式"><span class="nav-number">1.8.</span> <span class="nav-text">五种进程通信（IPC，InterProcess Communication）的方式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#孤儿进程与僵尸进程"><span class="nav-number">1.9.</span> <span class="nav-text">孤儿进程与僵尸进程</span></a></li></ol></li></ol></div>
+            
+          </div>
+          <div class="post-toc-indicator-bottom post-toc-indicator"></div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner"> <div class="copyright" >
+  
+  &copy; &nbsp;  2011 - 
+  <span itemprop="copyrightYear">2019
+  </span>
+  <span class="with-love">
+    <i class="icon-next-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Jae Peng
+  </span>
+</div>
+
+<div class="powered-by">
+  Powered by <a class="theme-link" href="http://hexo.io">Hexo</a>
+</div>
+
+<div class="theme-info">
+  Theme by <a class="theme-link" href="http://Jaecoding.github.io">Jae</a>.<a class="theme-link" href="https://github.com/idhyt/hexo-theme-next/tree/magiclamp">Mala</a>
+</div>
+
+<!-- busuanzi -->
+
+  <div class="busuanzi-info">
+    <div class="theme-info">
+    <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+    </script>
+    <span id="busuanzi_container_site_pv">
+        本站总访问量<a class="theme-link"><span id="busuanzi_value_site_pv"></span></a>次
+    </span>
+</div>
+  </div>
+
+
+
+ </div>
+    </footer>
+
+    <div class="back-to-top"></div>
+  </div>
+
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  
+  
+    
+
+  <script type="text/javascript">
+    var disqus_shortname = 'xxx';
+    var disqus_identifier = '2018/02/18/操作系统面试题及相关原理/';
+    var disqus_title = '操作系统面试题及相关原理';
+    var disqus_url = 'http://jaecoding.github.io/2018/02/18/操作系统面试题及相关原理/';
+
+    function run_disqus_script(disqus_script){
+      var dsq = document.createElement('script');
+      dsq.type = 'text/javascript';
+      dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }
+
+    run_disqus_script('count.js');
+    
+      run_disqus_script('embed.js');
+    
+  </script>
+
+  
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js"></script>
+  <script type="text/javascript" src="/js/fancy-box.js?v=0.4.5.1"></script>
+
+
+  <script type="text/javascript" src="/js/helpers.js?v=0.4.5.1"></script>
+  
+
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js"></script>
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js"></script>
+
+  <script type="text/javascript" src="/js/motion_global.js?v=0.4.5.1" id="motion.global"></script>
+
+
+
+
+  <script type="text/javascript" src="/js/nav-toggle.js?v=0.4.5.1"></script>
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  
+<script type="text/javascript" src="/js/bootstrap.scrollspy.js?v=0.4.5.1" id="bootstrap.scrollspy.custom"></script>
+
+
+<script type="text/javascript" id="sidebar.toc.highlight">
+  $(document).ready(function () {
+    var tocSelector = '.post-toc';
+    var $tocSelector = $(tocSelector);
+    var activeCurrentSelector = '.active-current';
+
+    $tocSelector
+      .on('activate.bs.scrollspy', function () {
+        var $currentActiveElement = $(tocSelector + ' .active').last();
+
+        removeCurrentActiveClass();
+        $currentActiveElement.addClass('active-current');
+
+        $tocSelector[0].scrollTop = $currentActiveElement.position().top;
+      })
+      .on('clear.bs.scrollspy', function () {
+        removeCurrentActiveClass();
+      });
+
+    function removeCurrentActiveClass () {
+      $(tocSelector + ' ' + activeCurrentSelector)
+        .removeClass(activeCurrentSelector.substring(1));
+    }
+
+    function processTOC () {
+      getTOCMaxHeight();
+      toggleTOCOverflowIndicators();
+    }
+
+    function getTOCMaxHeight () {
+      var height = $('.sidebar').height() -
+                   $tocSelector.position().top -
+                   $('.post-toc-indicator-bottom').height();
+
+      $tocSelector.css('height', height);
+
+      return height;
+    }
+
+    function toggleTOCOverflowIndicators () {
+      tocOverflowIndicator(
+        '.post-toc-indicator-top',
+        $tocSelector.scrollTop() > 0 ? 'show' : 'hide'
+      );
+
+      tocOverflowIndicator(
+        '.post-toc-indicator-bottom',
+        $tocSelector.scrollTop() >= $tocSelector.find('ol').height() - $tocSelector.height() ? 'hide' : 'show'
+      )
+    }
+
+    $(document).on('sidebar.motion.complete', function () {
+      processTOC();
+    });
+
+    $('body').scrollspy({ target: tocSelector });
+    $(window).on('resize', function () {
+      if ( $('.sidebar').hasClass('sidebar-active') ) {
+        processTOC();
+      }
+    });
+
+    onScroll($tocSelector);
+
+    function onScroll (element) {
+      element.on('mousewheel DOMMouseScroll', function (event) {
+          var oe = event.originalEvent;
+          var delta = oe.wheelDelta || -oe.detail;
+
+          this.scrollTop += ( delta < 0 ? 1 : -1 ) * 30;
+          event.preventDefault();
+
+          toggleTOCOverflowIndicators();
+      });
+    }
+
+    function tocOverflowIndicator (indicator, action) {
+      var $indicator = $(indicator);
+      var opacity = action === 'show' ? 0.4 : 0;
+      $indicator.velocity ?
+        $indicator.velocity('stop').velocity({
+          opacity: opacity
+        }, { duration: 100 }) :
+        $indicator.stop().animate({
+          opacity: opacity
+        }, 100);
+    }
+
+  });
+</script>
+
+<script type="text/javascript" id="sidebar.nav">
+  $(document).ready(function () {
+    var html = $('html');
+    var TAB_ANIMATE_DURATION = 200;
+    var hasVelocity = $.isFunction(html.velocity);
+
+    $('.sidebar-nav li').on('click', function () {
+      var item = $(this);
+      var activeTabClassName = 'sidebar-nav-active';
+      var activePanelClassName = 'sidebar-panel-active';
+      if (item.hasClass(activeTabClassName)) {
+        return;
+      }
+
+      var currentTarget = $('.' + activePanelClassName);
+      var target = $('.' + item.data('target'));
+
+      hasVelocity ?
+        currentTarget.velocity('transition.slideUpOut', TAB_ANIMATE_DURATION, function () {
+          target
+            .velocity('stop')
+            .velocity('transition.slideDownIn', TAB_ANIMATE_DURATION)
+            .addClass(activePanelClassName);
+        }) :
+        currentTarget.animate({ opacity: 0 }, TAB_ANIMATE_DURATION, function () {
+          currentTarget.hide();
+          target
+            .stop()
+            .css({'opacity': 0, 'display': 'block'})
+            .animate({ opacity: 1 }, TAB_ANIMATE_DURATION, function () {
+              currentTarget.removeClass(activePanelClassName);
+              target.addClass(activePanelClassName);
+            });
+        });
+
+      item.siblings().removeClass(activeTabClassName);
+      item.addClass(activeTabClassName);
+    });
+
+    $('.post-toc a').on('click', function (e) {
+      e.preventDefault();
+      var targetSelector = escapeSelector(this.getAttribute('href'));
+      var offset = $(targetSelector).offset().top;
+      hasVelocity ?
+        html.velocity('stop').velocity('scroll', {
+          offset: offset  + 'px',
+          mobileHA: false
+        }) :
+        $('html, body').stop().animate({
+          scrollTop: offset
+        }, 500);
+    });
+
+    // Expand sidebar on post detail page by default, when post has a toc.
+    var $tocContent = $('.post-toc-content');
+    if (isDesktop() && CONFIG.sidebar === 'post') {
+      if ($tocContent.length > 0 && $tocContent.html().trim().length > 0) {
+        displaySidebar();
+      }
+    }
+  });
+</script>
+
+
+
+  <script type="text/javascript">
+    $(document).ready(function () {
+      if (CONFIG.sidebar === 'always') {
+        displaySidebar();
+      }
+      if (isMobile()) {
+        FastClick.attach(document.body);
+      }
+    });
+  </script>
+
+  
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/lazyload.js"></script>
+  <script type="text/javascript">
+    $(function () {
+      $("#posts").find('img').lazyload({
+        placeholder: "/images/loading.gif",
+        effect: "fadeIn"
+      });
+    });
+  </script>
+</body>
+</html>

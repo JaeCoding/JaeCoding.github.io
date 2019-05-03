@@ -1,0 +1,1056 @@
+
+<!doctype html>
+<html class="theme-next use-motion theme-next-mala">
+<head>
+  
+
+<meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+  <meta name="google-site-verification" content="xxx" />
+
+
+
+
+
+  <link rel="stylesheet" type="text/css" href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5"/>
+
+
+
+  <link href='//fonts.googleapis.com/css?family=Lato:300,400,700,400italic&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
+
+
+<link rel="stylesheet" type="text/css" href="/css/main.css?v=0.4.5.1"/>
+
+
+    <meta name="description" content="A purchasing coder" />
+
+
+
+  <meta name="keywords" content="高并发,秒杀项目," />
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Jae's blog" type="application/atom+xml" />
+
+
+
+  <link rel="shorticon icon" type="image/x-icon" href="/favicon.ico?v=0.4.5.1" />
+
+
+<meta name="description" content="秒杀项目学习笔记 第三章(秒杀功能开发及管理后台）3-1 商品列表页的设计1.表设计：分为商品表，订单表，秒杀商品表，秒杀订单表分开是为了易于维护。  2.使用IDEA的数据表生成pojo功能：datebase→连接→Scripted Extensions→generatePojo 3.goodsService的会调用goodsDao.listGoodsVo方法取出来的是GoodsVo而不是Goo">
+<meta name="keywords" content="高并发,秒杀项目">
+<meta property="og:type" content="article">
+<meta property="og:title" content="秒杀项目学习笔记 第三章————秒杀功能开发及管理后台">
+<meta property="og:url" content="http://jaecoding.github.io/2018/07/15/秒杀项目学习笔记 第三章(秒杀功能开发及管理后台）/index.html">
+<meta property="og:site_name" content="Jae&#39;s blog">
+<meta property="og:description" content="秒杀项目学习笔记 第三章(秒杀功能开发及管理后台）3-1 商品列表页的设计1.表设计：分为商品表，订单表，秒杀商品表，秒杀订单表分开是为了易于维护。  2.使用IDEA的数据表生成pojo功能：datebase→连接→Scripted Extensions→generatePojo 3.goodsService的会调用goodsDao.listGoodsVo方法取出来的是GoodsVo而不是Goo">
+<meta property="og:locale" content="en">
+<meta property="og:image" content="http://pbw0qqogs.bkt.clouddn.com/%E7%A7%92%E6%9D%80%E6%A8%A1%E5%9D%97%E6%B5%81%E7%A8%8B.jpg">
+<meta property="og:updated_time" content="2019-05-03T13:15:59.428Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="秒杀项目学习笔记 第三章————秒杀功能开发及管理后台">
+<meta name="twitter:description" content="秒杀项目学习笔记 第三章(秒杀功能开发及管理后台）3-1 商品列表页的设计1.表设计：分为商品表，订单表，秒杀商品表，秒杀订单表分开是为了易于维护。  2.使用IDEA的数据表生成pojo功能：datebase→连接→Scripted Extensions→generatePojo 3.goodsService的会调用goodsDao.listGoodsVo方法取出来的是GoodsVo而不是Goo">
+<meta name="twitter:image" content="http://pbw0qqogs.bkt.clouddn.com/%E7%A7%92%E6%9D%80%E6%A8%A1%E5%9D%97%E6%B5%81%E7%A8%8B.jpg">
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var CONFIG = {
+    scheme: 'Mala',
+    sidebar: 'post'
+  };
+</script>
+
+  <title> 秒杀项目学习笔记 第三章————秒杀功能开发及管理后台 | Jae's blog </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  <!--[if lte IE 8]>
+  <div style=' clear: both; height: 59px; padding:0 0 0 15px; position: relative;margin:0 auto;'>
+    <a href="http://windows.microsoft.com/en-US/internet-explorer/products/ie/home?ocid=ie6_countdown_bannercode">
+      <img src="http://7u2nvr.com1.z0.glb.clouddn.com/picouterie.jpg" border="0" height="42" width="820"
+           alt="You are using an outdated browser. For a faster, safer browsing experience, upgrade for free today or use other browser ,like chrome firefox safari."
+           style='margin-left:auto;margin-right:auto;display: block;'/>
+    </a>
+  </div>
+<![endif]-->
+  
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+  ga('create', 'xxx', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?xxx";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+  <div class="container one-column page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><h1 class="site-meta">
+  <span class="logo-line-before"><i></i></span>
+  <a href="/" class="brand" rel="start">
+      <span class="logo">
+        <i class="icon-next-logo"></i>
+      </span>
+      <span class="site-title">彭文杰的博客</span>
+  </a>
+  <span class="logo-line-after"><i></i></span>
+</h1>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu menu-left">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            <i class="menu-item-icon icon-next-home"></i> <br />
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            <i class="menu-item-icon icon-next-categories"></i> <br />
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            <i class="menu-item-icon icon-next-archives"></i> <br />
+            Archives
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            <i class="menu-item-icon icon-next-tags"></i> <br />
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            <i class="menu-item-icon icon-next-about"></i> <br />
+            About
+          </a>
+        </li>
+      
+
+      
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  
+  <form class="site-search-form">
+    <input type="text" id="st-search-input" class="st-search-input st-default-search-input" />
+  </form>
+
+
+<script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+    (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+    e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install', 'xxx','2.0.0');
+</script>
+
+
+
+    </div>
+  
+</nav>
+
+ </div>
+    </header>
+
+    
+      
+
+      
+        <style type="text/css">
+
+    .circle {
+        width: 40px;
+        height: 40px;
+        background: #555 no-repeat;
+        cursor: move;
+    }
+
+    .assist-btn {
+        position: fixed;
+        top: 50％;
+        left: 10px;
+        -moz-border-radius: 50px;
+        -webkit-border-radius: 50px;
+        border-radius: 50px;
+        outline: none;
+        border: none;
+        color: #87daff;
+    }
+
+</style>
+
+<script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+<script type="text/javascript">
+    // 浮动圆点展开与收缩
+    /*
+    $(function () {
+        var assist_box = $('.assist-box');
+        $('#assist_btn').hover(function () {
+            assist_box.stop().show(300);
+        }, function () {
+            assist_box.stop().hide(150);
+        })
+    });
+    */  
+    //浮动圆点拖动
+    $(function () {
+        var box = document.getElementById('assist_btn');
+        box.onmousedown = function (event) {
+            var e = event || window.event,
+                t = e.target || e.srcElement,
+                // 鼠标按下时的坐标x1,y1
+                x1 = e.clientX,
+                y1 = e.clientY,
+                //鼠标按下时的左右偏移量
+                dragLeft = this.offsetLeft,
+                dragTop = this.offsetTop;
+
+            document.onmousemove = function (event) {
+                var e = event || window.event,
+                    t = e.target || e.srcElement,
+                    // 鼠标移动时的动态坐标
+                    x2 = e.clientX,
+                    y2 = e.clientY,
+                    // 鼠标移动时的坐标的变化量
+                    x = x2 - x1,
+                    y = y2 - y1;
+                box.style.left = (dragLeft + x) + 'px';
+                box.style.top = (dragTop + y) + 'px';
+            }
+
+            document.onmouseup = function () {
+                this.onmousemove = null;
+            }
+        }
+    });
+
+/*
+    $whitesmoke   = #f5f5f5
+    $gainsboro    = #eee
+    $gray-lighter = #ddd
+    $grey-light   = #ccc
+    $grey         = #bbb
+    $grey-dark    = #999
+    $grey-dim     = #666
+    $black-light  = #555
+    $black-deep   = #222
+    $red          = #ff2a2a
+    $blue-bright  = #87daff
+    $blue         = #0684bd
+    $blue-deep    = #262a30
+*/
+    // white theme
+    var body = {color: "#555", background: "white"};
+    var a_tag = {color: "#222"};
+    var header = { background: "#f5f5f5"};
+    var logo_line_i = {background: "#222"};
+    // var post_code = {background: "#eee", color: "#222"};
+
+    function switch_theme() {
+        $("body").css(body);
+        $("a:not('.links-of-author-item a, .site-state-item a, .site-state-posts a, .feed-link a, .motion-element a, .post-tags a, .show-commit-cls a, #donate_board a')").css(a_tag);
+        $(".header, .footer").css(header);
+        $(".logo-line-before i, .logo-line-after i").css(logo_line_i);
+        //$(".post code").css(post_code);
+        $("#idhyt-surprise-ball #idhyt-surprise-ball-animation .drag").css(a_tag);
+        $(".post-title-link, .posts-expand .post-meta, .post-comments-count, .disqus-comment-count, .post-category a, .post-nav-next a, .post-nav-item a").css(a_tag);
+        
+        // $("code").css({color: '#c5c8c6', background: '#1d1f21'});
+        $("#assist_btn").hide(1500);
+    }
+
+    $(function () {
+        $("#assist_btn").dblclick(function() {
+            switch_theme();
+        });
+    });
+
+</script>
+
+<div>
+
+    <button class="assist-btn circle" id="assist_btn" title="双击切换">
+        亮
+    </button>
+
+</div>
+
+
+
+
+
+
+
+
+
+      
+
+    
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div id="content" class="content"> 
+
+  <div id="posts" class="posts-expand">
+    
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+
+      
+      
+        <h1 class="post-title" itemprop="name headline">
+          
+          
+            
+              秒杀项目学习笔记 第三章————秒杀功能开发及管理后台
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          Posted on
+          <time itemprop="dateCreated" datetime="2018-07-15T15:13:51+08:00" content="2018-07-15">
+            2018-07-15
+          </time>
+        </span>
+
+        
+          <span class="post-category" >
+            &nbsp; | &nbsp; In
+            
+              <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                <a href="/categories/项目/" itemprop="url" rel="index">
+                  <span itemprop="name">项目</span>
+                </a>
+              </span>
+
+              
+              
+
+            
+          </span>
+        
+
+        
+          
+            <span class="post-comments-count">
+            &nbsp; | &nbsp;
+            <a href="/2018/07/15/秒杀项目学习笔记 第三章(秒杀功能开发及管理后台）/#comments" itemprop="discussionUrl">
+              <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2018/07/15/秒杀项目学习笔记 第三章(秒杀功能开发及管理后台）/" itemprop="commentsCount"></span>
+            </a>
+          </span>
+          
+        
+      </div>
+    </header>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        <span itemprop="articleBody"><h1 id="秒杀项目学习笔记-第三章-秒杀功能开发及管理后台）"><a href="#秒杀项目学习笔记-第三章-秒杀功能开发及管理后台）" class="headerlink" title="秒杀项目学习笔记 第三章(秒杀功能开发及管理后台）"></a>秒杀项目学习笔记 第三章(秒杀功能开发及管理后台）</h1><h1 id="3-1-商品列表页的设计"><a href="#3-1-商品列表页的设计" class="headerlink" title="3-1 商品列表页的设计"></a>3-1 商品列表页的设计</h1><p>1.表设计：分为商品表，订单表，秒杀商品表，秒杀订单表<br>分开是为了易于维护。</p>
+<p><img src="http://pbw0qqogs.bkt.clouddn.com/%E7%A7%92%E6%9D%80%E6%A8%A1%E5%9D%97%E6%B5%81%E7%A8%8B.jpg" alt="此处输入图片的描述"></p>
+<p>2.使用IDEA的数据表生成pojo功能：datebase→连接→Scripted Extensions→generatePojo</p>
+<p>3.goodsService的会调用goodsDao.listGoodsVo方法取出来的是GoodsVo而不是Goods，GoodsVo内的属性是从数据库多表中联立取出。</p>
+<p>4.取出的list加入到model中，在html中通过thymleaf循环取出</p>
+<h1 id="3-3-商品详情页的设计"><a href="#3-3-商品详情页的设计" class="headerlink" title="3-3 商品详情页的设计"></a>3-3 商品详情页的设计</h1><p>彩蛋：数据库ID一般不用自增，容易被他人遍历，而用snowflake算法</p>
+<p>前端部分：<br><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">span</span> <span class="attr">th:if</span>=<span class="string">"$&#123;user eq null&#125;"</span>&gt;</span> 您还没有登录，请登陆后再操作<span class="tag">&lt;<span class="name">br</span>/&gt;</span><span class="tag">&lt;/<span class="name">span</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">tr</span>&gt;</span>  </span><br><span class="line">   <span class="tag">&lt;<span class="name">td</span>&gt;</span>秒杀开始时间<span class="tag">&lt;/<span class="name">td</span>&gt;</span>  </span><br><span class="line">   <span class="tag">&lt;<span class="name">td</span> <span class="attr">th:text</span>=<span class="string">"$&#123;#dates.format(goods.startDate, 'yyyy-MM-dd HH:mm:ss')&#125;"</span>&gt;</span><span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">   <span class="tag">&lt;<span class="name">td</span> <span class="attr">id</span>=<span class="string">"miaoshaTip"</span>&gt;</span></span><br><span class="line">   <span class="comment">&lt;!-- 隐藏域临时保存$&#123;remainSeconds&#125;，在进行中和已结束也有remainSeconds，只是不显示--&gt;</span></span><br><span class="line">   	<span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"hidden"</span> <span class="attr">id</span>=<span class="string">"remainSeconds"</span> <span class="attr">th:value</span>=<span class="string">"$&#123;remainSeconds&#125;"</span> /&gt;</span></span><br><span class="line">   	<span class="tag">&lt;<span class="name">span</span> <span class="attr">th:if</span>=<span class="string">"$&#123;miaoshaStatus eq 0&#125;"</span>&gt;</span>秒杀倒计时：<span class="tag">&lt;<span class="name">span</span> <span class="attr">id</span>=<span class="string">"countDown"</span> <span class="attr">th:text</span>=<span class="string">"$&#123;remainSeconds&#125;"</span>&gt;</span><span class="tag">&lt;/<span class="name">span</span>&gt;</span>秒<span class="tag">&lt;/<span class="name">span</span>&gt;</span>//倒计时的设计</span><br><span class="line">   	<span class="tag">&lt;<span class="name">span</span> <span class="attr">th:if</span>=<span class="string">"$&#123;miaoshaStatus eq 1&#125;"</span>&gt;</span>秒杀进行中<span class="tag">&lt;/<span class="name">span</span>&gt;</span></span><br><span class="line">   	<span class="tag">&lt;<span class="name">span</span> <span class="attr">th:if</span>=<span class="string">"$&#123;miaoshaStatus eq 2&#125;"</span>&gt;</span>秒杀已结束<span class="tag">&lt;/<span class="name">span</span>&gt;</span></span><br><span class="line">   <span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">   <span class="tag">&lt;<span class="name">td</span>&gt;</span></span><br><span class="line">   	<span class="tag">&lt;<span class="name">form</span> <span class="attr">id</span>=<span class="string">"miaoshaForm"</span> <span class="attr">method</span>=<span class="string">"post"</span> <span class="attr">action</span>=<span class="string">"/miaosha/do_miaosha"</span>&gt;</span></span><br><span class="line">   		<span class="tag">&lt;<span class="name">button</span> <span class="attr">class</span>=<span class="string">"btn btn-primary btn-block"</span> <span class="attr">type</span>=<span class="string">"submit"</span> <span class="attr">id</span>=<span class="string">"buyButton"</span>&gt;</span>立即秒杀<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><br><span class="line">   		<span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"hidden"</span> <span class="attr">name</span>=<span class="string">"goodsId"</span> <span class="attr">th:value</span>=<span class="string">"$&#123;goods.id&#125;"</span> /&gt;</span></span><br><span class="line">   	<span class="tag">&lt;/<span class="name">form</span>&gt;</span></span><br><span class="line">   <span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">tr</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>秒杀倒计时的设计：<br><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">span</span> <span class="attr">th:if</span>=<span class="string">"$&#123;miaoshaStatus eq 0&#125;"</span>&gt;</span>秒杀倒计时：<span class="tag">&lt;<span class="name">span</span> <span class="attr">id</span>=<span class="string">"countDown"</span> <span class="attr">th:text</span>=<span class="string">"$&#123;remainSeconds&#125;"</span>&gt;</span><span class="tag">&lt;/<span class="name">span</span>&gt;</span>秒<span class="tag">&lt;/<span class="name">span</span>&gt;</span>//倒计时的设计</span><br></pre></td></tr></table></figure></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">&lt;script&gt;</span><br><span class="line">$(function()&#123;</span><br><span class="line">	countDown();</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">function countDown()&#123;</span><br><span class="line">	</span><br><span class="line">	var remainSeconds = $(&quot;#remainSeconds&quot;).val();</span><br><span class="line">    var timeout;</span><br><span class="line">    </span><br><span class="line">	if(remainSeconds &gt; 0)&#123;//秒杀还没开始，倒计时</span><br><span class="line">		$(&quot;#buyButton&quot;).attr(&quot;disabled&quot;, true);</span><br><span class="line"></span><br><span class="line">		timeout = setTimeout(function()&#123;</span><br><span class="line">			$(&quot;#countDown&quot;).text(remainSeconds - 1);</span><br><span class="line">			$(&quot;#remainSeconds&quot;).val(remainSeconds - 1);</span><br><span class="line">			countDown();//回调函数，回调自己</span><br><span class="line">		&#125;,1000);</span><br><span class="line">	&#125;else if(remainSeconds == 0)&#123;//秒杀进行中</span><br><span class="line">		$(&quot;#buyButton&quot;).attr(&quot;disabled&quot;, false);</span><br><span class="line">		if(timeout)&#123;</span><br><span class="line">			clearTimeout(timeout);</span><br><span class="line">		&#125;</span><br><span class="line">		$(&quot;#miaoshaTip&quot;).html(&quot;秒杀进行中&quot;);</span><br><span class="line">	&#125;else&#123;//秒杀已经结束</span><br><span class="line">		$(&quot;#buyButton&quot;).attr(&quot;disabled&quot;, true);</span><br><span class="line">		$(&quot;#miaoshaTip&quot;).html(&quot;秒杀已经结束&quot;);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure>
+<h2 id="controller类里接收参数-PathVariable和-RequestParam的区别"><a href="#controller类里接收参数-PathVariable和-RequestParam的区别" class="headerlink" title="controller类里接收参数@PathVariable和@RequestParam的区别"></a>controller类里接收参数@PathVariable和@RequestParam的区别</h2><p>1.@PathVariable 路径变量，是用来获得请求url中的动态参数的，用于<strong>将请求URL中的模板变量</strong>映射到功能处理方法的参数上。<br><figure class="highlight plain"><figcaption><span>th:href</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">然后</span><br><span class="line">```Java</span><br><span class="line">    @RequestMapping(&quot;/to_detail/&#123;goodsId&#125;&quot;)</span><br><span class="line">    public String detail(Model model, MiaoshaUser user,</span><br><span class="line">                         @PathVariable(&quot;goodsId&quot;) long goodsId)&#123;</span><br></pre></td></tr></table></figure></p>
+<p>2.@RequestParam ：请求参数  用于接收request发来的参数</p>
+<p>在SpringMVC后台控制层获取参数的方式主要有两种:<br>一种是request.getParameter(“name”)，另外一种是用注解@RequestParam直接获取<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@RequestMapping</span>(<span class="string">"/do_miaosha"</span>)</span><br><span class="line"><span class="function"><span class="keyword">public</span> String <span class="title">list</span><span class="params">(Model model, MiaoshaUser user, @RequestParam(<span class="string">"goodsId"</span>)</span> <span class="keyword">long</span> goodsId)</span>&#123;</span><br></pre></td></tr></table></figure></p>
+<p>接下来我们看一下@RequestParam注解主要有哪些<strong>参数</strong>：<br><strong>value：</strong>参数名字，即入参的请求参数名字，如username表示请求的参数区中的名字为username的参数的值将传入；<br><strong>required：</strong>是否必须，默认是true，表示请求中一定要有相应的参数，否则将报404错误码；<br><strong>defaultValue：</strong>默认值，表示如果请求中没有同名参数时的默认值，例如：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> List&lt;EasyUITreeNode&gt; <span class="title">getItemTreeNode</span><span class="params">(@RequestParam(value=<span class="string">"id"</span>,defaultValue=<span class="string">"0"</span>)</span><span class="keyword">long</span> parentId)</span></span><br></pre></td></tr></table></figure></p>
+<h1 id="3-4-秒杀方法的实现-秒杀需要user，和gooodsId"><a href="#3-4-秒杀方法的实现-秒杀需要user，和gooodsId" class="headerlink" title="3-4 秒杀方法的实现  秒杀需要user，和gooodsId"></a>3-4 秒杀方法的实现  秒杀需要user，和gooodsId</h1><p>1.点击秒杀，传入<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&lt;form id=&quot;miaoshaForm&quot; method=&quot;post&quot; action=&quot;/miaosha/do_miaosha&quot;&gt;</span><br><span class="line">    &lt;button class=&quot;btn btn-primary btn-block&quot; type=&quot;submit&quot; id=&quot;buyButton&quot;&gt;立即秒杀&lt;/button&gt;&lt;!-- 只有在进行中才可以点击--&gt;</span><br><span class="line">    &lt;input type=&quot;hidden&quot; name=&quot;goodsId&quot; th:value=&quot;$&#123;goods.id&#125;&quot; /&gt;</span><br><span class="line">&lt;/form&gt;</span><br></pre></td></tr></table></figure></p>
+<p>2.MiaoshaController只需要两个</p>
+<ul>
+<li>判断user是否为空，为空跳转到login</li>
+<li>判断商品是否还有库存，user是否已经秒杀过（这个用户是否有order）。是的话跳转到miaosha_fail</li>
+<li>调用miaoshaService。<code>OrderInfo orderInfo = miaoshaService.miaosha(user, goods);</code></li>
+</ul>
+<p>3.<code>MiaoshaService</code><br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Transactional</span><span class="comment">//事务</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> OrderInfo <span class="title">miaosha</span><span class="params">(MiaoshaUser user, GoodsVo goods)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//减库存根据逻辑应该在goodsService中完成而不是在miaoshaService里完成</span></span><br><span class="line">    goodsService.reduceStock(goods);</span><br><span class="line"></span><br><span class="line">    <span class="comment">//新建订单,返回一个orderInfo对象</span></span><br><span class="line">    <span class="keyword">return</span> orderService.createOrder(user, goods);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p><strong>3.1 <code>goodsService</code>减库存操作</strong><br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">goodsService.reduceStock(goods.getId());<span class="comment">//使用了ID而没有像教程一样传入GoodsVo,会根据goodsId去减少Miaosha_goods中对应的库存</span></span><br></pre></td></tr></table></figure></p>
+<p><strong>3.2 <code>orderService</code>新建订单操作</strong><br>orderService中。先创建一个OrderInfo对象，然后根据GoodsVogoods对其设置其属性值。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//生成订单后插入orderInfo到order表里</span></span><br><span class="line"><span class="keyword">long</span> orderId = orderDao.insert(orderInfo);</span><br></pre></td></tr></table></figure></p>
+<p>再创建miaoshaOrder并设置其属性值，这里用到了生成的orderId，然后<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//生成订单后插入miaoshaOrder到miaosha_order表里</span></span><br><span class="line">orderDao.insertMiaoshaOrder(miaoshaOrder);</span><br><span class="line"><span class="keyword">return</span> orderInfo;</span><br></pre></td></tr></table></figure></p>
+<p>最后orderService返回订单，并MiaoshaService返回订单，MiaoshaController添加对象到视图中，跳转到order_detail显示属性。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">OrderInfo orderInfo = miaoshaService.miaosha(user, goods);</span><br><span class="line"></span><br><span class="line">model.addAttribute(<span class="string">"orderInfo"</span>, orderInfo);</span><br><span class="line">model.addAttribute(<span class="string">"goods"</span>, goods);</span><br><span class="line"><span class="keyword">return</span> <span class="string">"order_detail"</span>;</span><br></pre></td></tr></table></figure></p>
+<h1 id="3-5-订单详情页"><a href="#3-5-订单详情页" class="headerlink" title="3-5 订单详情页"></a>3-5 订单详情页</h1><p>很简单。在order_detail中取出显示出来即可。<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">&lt;tr&gt;</span><br><span class="line">	&lt;td&gt;订单状态&lt;/td&gt;  </span><br><span class="line">   &lt;td &gt;</span><br><span class="line">   	&lt;span th:if="$&#123;orderInfo.status eq 0&#125;"&gt;未支付&lt;/span&gt;</span><br><span class="line">   	&lt;span th:if="$&#123;orderInfo.status eq 1&#125;"&gt;待发货&lt;/span&gt;</span><br><span class="line">   	&lt;span th:if="$&#123;orderInfo.status eq 2&#125;"&gt;已发货&lt;/span&gt;</span><br><span class="line">   	&lt;span th:if="$&#123;orderInfo.status eq 3&#125;"&gt;已收货&lt;/span&gt;</span><br><span class="line">   	&lt;span th:if="$&#123;orderInfo.status eq 4&#125;"&gt;已退款&lt;/span&gt;</span><br><span class="line">   	&lt;span th:if="$&#123;orderInfo.status eq 5&#125;"&gt;已完成&lt;/span&gt;</span><br><span class="line">   &lt;/td&gt;  </span><br><span class="line">   &lt;td&gt;</span><br><span class="line">   	&lt;button class="btn btn-primary btn-block" type="submit" id="payButton"&gt;立即支付&lt;/button&gt;</span><br><span class="line">   &lt;/td&gt;</span><br><span class="line">&lt;/tr&gt;</span><br></pre></td></tr></table></figure></p>
+</span>
+      
+    </div>
+    <div>
+  
+    ﻿
+  
+</div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/高并发/" rel="tag">#高并发</a>
+          
+            <a href="/tags/秒杀项目/" rel="tag">#秒杀项目</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/07/15/秒杀项目学习笔记 第四章————秒杀压测 Jmeter压力测试/" rel="prev">秒杀项目学习笔记 第四章————秒杀压测 Jmeter压力测试</a>
+            
+          </div>
+
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/07/12/设计模式沉思录（二）之抽象工厂模式/" rel="next">设计模式沉思录（一）之工厂模式</a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div>
+      
+        <style type="text/css">
+
+    .donate_bar {
+        text-align: center;
+        margin-top : 5%;
+    }
+
+    .donate_bar.hidden {
+        display:none;
+    }
+/*
+    .donate_bar a.btn_donate {
+        display: inline-block;
+        width: 82px;
+        height: 82px;
+        margin-left:auto;
+        margin-right:auto;
+
+        background: url("http://img.t.sinajs.cn/t5/style/images/apps_PRF/e_media/btn_reward.gif") no-repeat;
+        _background: url("http://img.t.sinajs.cn/t5/style/images/apps_PRF/e_media/btn_reward.gif") no-repeat; 
+
+        -webkit-transition: background 0s;
+        -moz-transition: background 0s;
+        -o-transition: background 0s;
+        -ms-transition: background 0s;
+        transition: background 0s;
+    }
+*/
+    .donate_bar a.btn_donate:hover { 
+        // background-position: 0px -82px;
+        color: #87daff
+    }
+
+    .donate_bar .donate_txt {
+        display: block;
+        color: #9d9d9d;
+        font: 14px/2 "Microsoft Yahei";
+    }
+
+    .bold { 
+        font-weight: bold; 
+    }
+
+    .post-donate a {
+        border-bottom: 0px;
+    }
+
+    #donate_guide table {
+        border: none;
+    }
+
+    #donate_guide td {
+        border-bottom: none;
+        border-right: none;
+        background: #333333;
+        valign: top;
+    }
+
+</style>
+
+
+
+    
+
+    <div class ="post-donate">
+        <div id="donate_board" class="donate_bar center">
+              <a id="btn_donate" class="btn_donate" href="javascript:;" title="打赏">赏</a>
+              <span id="donate_txt" class="donate_txt">
+                   
+                        仅仅是一个功能
+                   
+              </span>
+            <br>
+        </div>  
+  
+        <div id="donate_guide" class="donate_bar center hidden">
+            <!--
+            
+                <a href="http://paxblmm0h.bkt.clouddn.com/ali_pay.jpg" title="支付宝打赏" class="fancybox" rel="article0" 
+                    style="float:left;margin-left:25%;margin-right:10px;">
+                    <img src="http://paxblmm0h.bkt.clouddn.com/ali_pay.jpg" title="" height="164px" width="164px">
+                </a> 
+              
+
+            
+                <a href="http://paxblmm0h.bkt.clouddn.com/wechat_pay.jpg" title="微信打赏" class="fancybox" rel="article0"
+                    style="margin-right:30%">
+                    <img src="http://paxblmm0h.bkt.clouddn.com/wechat_pay.jpg" title="" height="164px" width="164px">
+                </a>
+            
+            -->
+            <table>
+                <tr>
+                    <td>
+                        
+                            <a href="http://paxblmm0h.bkt.clouddn.com/ali_pay.jpg" title="支付宝打赏" class="fancybox" rel="article0" 
+                                style="float:left;margin-left:25%;margin-right:10px;">
+                                <img src="http://paxblmm0h.bkt.clouddn.com/ali_pay.jpg" title="" height="164px" width="164px">
+                            </a> 
+                         
+                    </td>
+                    <td>
+                        
+                            <a href="http://paxblmm0h.bkt.clouddn.com/wechat_pay.jpg" title="微信打赏" class="fancybox" rel="article0"
+                                style="margin-right:30%">
+                                <img src="http://paxblmm0h.bkt.clouddn.com/wechat_pay.jpg" title="" height="164px" width="164px">
+                            </a>
+                        
+                    </td>
+                </tr>
+            </table>
+
+        </div>
+
+        <script type="text/javascript">
+            document.getElementById('btn_donate').onclick = function() {
+                $('#donate_board').addClass('hidden');
+                // $('#donate_guide').removeClass('hidden');
+                $('#donate_guide').show(2000);
+            }
+
+        </script>
+    </div>
+
+    
+
+
+      
+    </div>
+
+    <div class="post-spread">
+      
+        <!-- JiaThis Button BEGIN -->
+<div class="jiathis_style">
+  <a class="jiathis_button_tsina"></a>
+  <a class="jiathis_button_tqq"></a>
+  <a class="jiathis_button_weixin"></a>
+  <a class="jiathis_button_cqq"></a>
+  <a class="jiathis_button_douban"></a>
+  <a class="jiathis_button_renren"></a>
+  <a class="jiathis_button_qzone"></a>
+  <a class="jiathis_button_kaixin001"></a>
+  <a class="jiathis_button_copy"></a>
+  <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jiathis_separator jtico jtico_jiathis" target="_blank"></a>
+  <a class="jiathis_counter_style"></a>
+</div>
+<script type="text/javascript" >
+  var jiathis_config={
+    hideMore:false
+  }
+</script>
+<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js" charset="utf-8"></script>
+<!-- JiaThis Button END -->
+
+      
+    </div>
+  </div>
+
+ </div>
+
+        
+          <div class="comments" id="comments">
+            
+              <div id="disqus_thread">
+                <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+              </div>
+            <!--
+            
+            -->
+        
+      </div>
+
+      
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            Table Of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" src="/images/default_avatar.jpg" alt="Jae Peng" itemprop="image"/>
+          <p class="site-author-name" itemprop="name">Jae Peng</p>
+        </div>
+        <p class="site-description motion-element" itemprop="description">A purchasing coder</p>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">38</span>
+              <span class="site-state-item-name">posts</span>
+            </a>
+          </div>
+
+          <div class="site-state-item site-state-categories">
+            <a href="/categories">
+              <span class="site-state-item-count">7</span>
+              <span class="site-state-item-name">categories</span>
+              </a>
+          </div>
+
+          <div class="site-state-item site-state-tags">
+            <a href="/tags">
+              <span class="site-state-item-count">23</span>
+              <span class="site-state-item-name">tags</span>
+              </a>
+          </div>
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="menu-item-icon icon-next-feed"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="http://github.com/jaecoding" target="_blank">GitHub</a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://twitter.com/xxx" target="_blank">Twitter</a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/" target="_blank">Weibo</a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://www.zhihu.com/people/peng-wen-jie-13" target="_blank">ZhiHu</a>
+              </span>
+            
+          
+        </div>
+
+        <div class="links-of-friendly motion-element">
+          
+            <p class="site-author-name">CSDNblog</p>
+            
+              <span class="links-of-author-item">
+              <a href="https://blog.csdn.net/Jae_Peng" target="_blank">About</a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+          <div class="cc-license motion-element" itemprop="license">
+            <a href="http://creativecommons.org/licenses/by-nc-sa/4.0" class="cc-opacity" target="_blank">
+              <img src="/images/cc-by-nc-sa.svg" alt="Creative Commons" />
+            </a>
+          </div>
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap sidebar-panel-active">
+          <div class="post-toc-indicator-top post-toc-indicator"></div>
+          <div class="post-toc">
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#秒杀项目学习笔记-第三章-秒杀功能开发及管理后台）"><span class="nav-number">1.</span> <span class="nav-text">秒杀项目学习笔记 第三章(秒杀功能开发及管理后台）</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-1-商品列表页的设计"><span class="nav-number">2.</span> <span class="nav-text">3-1 商品列表页的设计</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-3-商品详情页的设计"><span class="nav-number">3.</span> <span class="nav-text">3-3 商品详情页的设计</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#controller类里接收参数-PathVariable和-RequestParam的区别"><span class="nav-number">3.1.</span> <span class="nav-text">controller类里接收参数@PathVariable和@RequestParam的区别</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-4-秒杀方法的实现-秒杀需要user，和gooodsId"><span class="nav-number">4.</span> <span class="nav-text">3-4 秒杀方法的实现  秒杀需要user，和gooodsId</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-5-订单详情页"><span class="nav-number">5.</span> <span class="nav-text">3-5 订单详情页</span></a></li></ol></div>
+            
+          </div>
+          <div class="post-toc-indicator-bottom post-toc-indicator"></div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner"> <div class="copyright" >
+  
+  &copy; &nbsp;  2011 - 
+  <span itemprop="copyrightYear">2019
+  </span>
+  <span class="with-love">
+    <i class="icon-next-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Jae Peng
+  </span>
+</div>
+
+<div class="powered-by">
+  Powered by <a class="theme-link" href="http://hexo.io">Hexo</a>
+</div>
+
+<div class="theme-info">
+  Theme by <a class="theme-link" href="http://Jaecoding.github.io">Jae</a>.<a class="theme-link" href="https://github.com/idhyt/hexo-theme-next/tree/magiclamp">Mala</a>
+</div>
+
+<!-- busuanzi -->
+
+  <div class="busuanzi-info">
+    <div class="theme-info">
+    <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+    </script>
+    <span id="busuanzi_container_site_pv">
+        本站总访问量<a class="theme-link"><span id="busuanzi_value_site_pv"></span></a>次
+    </span>
+</div>
+  </div>
+
+
+
+ </div>
+    </footer>
+
+    <div class="back-to-top"></div>
+  </div>
+
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  
+  
+    
+
+  <script type="text/javascript">
+    var disqus_shortname = 'xxx';
+    var disqus_identifier = '2018/07/15/秒杀项目学习笔记 第三章(秒杀功能开发及管理后台）/';
+    var disqus_title = '秒杀项目学习笔记 第三章————秒杀功能开发及管理后台';
+    var disqus_url = 'http://jaecoding.github.io/2018/07/15/秒杀项目学习笔记 第三章(秒杀功能开发及管理后台）/';
+
+    function run_disqus_script(disqus_script){
+      var dsq = document.createElement('script');
+      dsq.type = 'text/javascript';
+      dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }
+
+    run_disqus_script('count.js');
+    
+      run_disqus_script('embed.js');
+    
+  </script>
+
+  
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js"></script>
+  <script type="text/javascript" src="/js/fancy-box.js?v=0.4.5.1"></script>
+
+
+  <script type="text/javascript" src="/js/helpers.js?v=0.4.5.1"></script>
+  
+
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js"></script>
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js"></script>
+
+  <script type="text/javascript" src="/js/motion_global.js?v=0.4.5.1" id="motion.global"></script>
+
+
+
+
+  <script type="text/javascript" src="/js/nav-toggle.js?v=0.4.5.1"></script>
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  
+<script type="text/javascript" src="/js/bootstrap.scrollspy.js?v=0.4.5.1" id="bootstrap.scrollspy.custom"></script>
+
+
+<script type="text/javascript" id="sidebar.toc.highlight">
+  $(document).ready(function () {
+    var tocSelector = '.post-toc';
+    var $tocSelector = $(tocSelector);
+    var activeCurrentSelector = '.active-current';
+
+    $tocSelector
+      .on('activate.bs.scrollspy', function () {
+        var $currentActiveElement = $(tocSelector + ' .active').last();
+
+        removeCurrentActiveClass();
+        $currentActiveElement.addClass('active-current');
+
+        $tocSelector[0].scrollTop = $currentActiveElement.position().top;
+      })
+      .on('clear.bs.scrollspy', function () {
+        removeCurrentActiveClass();
+      });
+
+    function removeCurrentActiveClass () {
+      $(tocSelector + ' ' + activeCurrentSelector)
+        .removeClass(activeCurrentSelector.substring(1));
+    }
+
+    function processTOC () {
+      getTOCMaxHeight();
+      toggleTOCOverflowIndicators();
+    }
+
+    function getTOCMaxHeight () {
+      var height = $('.sidebar').height() -
+                   $tocSelector.position().top -
+                   $('.post-toc-indicator-bottom').height();
+
+      $tocSelector.css('height', height);
+
+      return height;
+    }
+
+    function toggleTOCOverflowIndicators () {
+      tocOverflowIndicator(
+        '.post-toc-indicator-top',
+        $tocSelector.scrollTop() > 0 ? 'show' : 'hide'
+      );
+
+      tocOverflowIndicator(
+        '.post-toc-indicator-bottom',
+        $tocSelector.scrollTop() >= $tocSelector.find('ol').height() - $tocSelector.height() ? 'hide' : 'show'
+      )
+    }
+
+    $(document).on('sidebar.motion.complete', function () {
+      processTOC();
+    });
+
+    $('body').scrollspy({ target: tocSelector });
+    $(window).on('resize', function () {
+      if ( $('.sidebar').hasClass('sidebar-active') ) {
+        processTOC();
+      }
+    });
+
+    onScroll($tocSelector);
+
+    function onScroll (element) {
+      element.on('mousewheel DOMMouseScroll', function (event) {
+          var oe = event.originalEvent;
+          var delta = oe.wheelDelta || -oe.detail;
+
+          this.scrollTop += ( delta < 0 ? 1 : -1 ) * 30;
+          event.preventDefault();
+
+          toggleTOCOverflowIndicators();
+      });
+    }
+
+    function tocOverflowIndicator (indicator, action) {
+      var $indicator = $(indicator);
+      var opacity = action === 'show' ? 0.4 : 0;
+      $indicator.velocity ?
+        $indicator.velocity('stop').velocity({
+          opacity: opacity
+        }, { duration: 100 }) :
+        $indicator.stop().animate({
+          opacity: opacity
+        }, 100);
+    }
+
+  });
+</script>
+
+<script type="text/javascript" id="sidebar.nav">
+  $(document).ready(function () {
+    var html = $('html');
+    var TAB_ANIMATE_DURATION = 200;
+    var hasVelocity = $.isFunction(html.velocity);
+
+    $('.sidebar-nav li').on('click', function () {
+      var item = $(this);
+      var activeTabClassName = 'sidebar-nav-active';
+      var activePanelClassName = 'sidebar-panel-active';
+      if (item.hasClass(activeTabClassName)) {
+        return;
+      }
+
+      var currentTarget = $('.' + activePanelClassName);
+      var target = $('.' + item.data('target'));
+
+      hasVelocity ?
+        currentTarget.velocity('transition.slideUpOut', TAB_ANIMATE_DURATION, function () {
+          target
+            .velocity('stop')
+            .velocity('transition.slideDownIn', TAB_ANIMATE_DURATION)
+            .addClass(activePanelClassName);
+        }) :
+        currentTarget.animate({ opacity: 0 }, TAB_ANIMATE_DURATION, function () {
+          currentTarget.hide();
+          target
+            .stop()
+            .css({'opacity': 0, 'display': 'block'})
+            .animate({ opacity: 1 }, TAB_ANIMATE_DURATION, function () {
+              currentTarget.removeClass(activePanelClassName);
+              target.addClass(activePanelClassName);
+            });
+        });
+
+      item.siblings().removeClass(activeTabClassName);
+      item.addClass(activeTabClassName);
+    });
+
+    $('.post-toc a').on('click', function (e) {
+      e.preventDefault();
+      var targetSelector = escapeSelector(this.getAttribute('href'));
+      var offset = $(targetSelector).offset().top;
+      hasVelocity ?
+        html.velocity('stop').velocity('scroll', {
+          offset: offset  + 'px',
+          mobileHA: false
+        }) :
+        $('html, body').stop().animate({
+          scrollTop: offset
+        }, 500);
+    });
+
+    // Expand sidebar on post detail page by default, when post has a toc.
+    var $tocContent = $('.post-toc-content');
+    if (isDesktop() && CONFIG.sidebar === 'post') {
+      if ($tocContent.length > 0 && $tocContent.html().trim().length > 0) {
+        displaySidebar();
+      }
+    }
+  });
+</script>
+
+
+
+  <script type="text/javascript">
+    $(document).ready(function () {
+      if (CONFIG.sidebar === 'always') {
+        displaySidebar();
+      }
+      if (isMobile()) {
+        FastClick.attach(document.body);
+      }
+    });
+  </script>
+
+  
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/lazyload.js"></script>
+  <script type="text/javascript">
+    $(function () {
+      $("#posts").find('img').lazyload({
+        placeholder: "/images/loading.gif",
+        effect: "fadeIn"
+      });
+    });
+  </script>
+</body>
+</html>

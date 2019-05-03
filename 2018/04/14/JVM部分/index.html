@@ -1,0 +1,1112 @@
+
+<!doctype html>
+<html class="theme-next use-motion theme-next-mala">
+<head>
+  
+
+<meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+  <meta name="google-site-verification" content="xxx" />
+
+
+
+
+
+  <link rel="stylesheet" type="text/css" href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5"/>
+
+
+
+  <link href='//fonts.googleapis.com/css?family=Lato:300,400,700,400italic&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
+
+
+<link rel="stylesheet" type="text/css" href="/css/main.css?v=0.4.5.1"/>
+
+
+    <meta name="description" content="A purchasing coder" />
+
+
+
+  <meta name="keywords" content="知识点整理,面试," />
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Jae's blog" type="application/atom+xml" />
+
+
+
+  <link rel="shorticon icon" type="image/x-icon" href="/favicon.ico?v=0.4.5.1" />
+
+
+<meta name="description" content="JVM部分##运行时数据区：  线程私有部分：三个1.程序计数器：可看作当前线程所执行的字节码的行号指示器。字节码解释器通过便便这个计数器的值来完成分支，循环、跳转、异常处理、线程恢复操作。 2.Java虚拟机栈（大部分所说的栈）：生命周期：同线程每个方法产生栈帧：存放存储局部变量表、操作数栈、动态链接、方法出口。存储局部变量表：各种基本数据类型，对象引用，returnAddress地址。 3.本">
+<meta name="keywords" content="知识点整理,面试">
+<meta property="og:type" content="article">
+<meta property="og:title" content="JVM部分">
+<meta property="og:url" content="http://jaecoding.github.io/2018/04/14/JVM部分/index.html">
+<meta property="og:site_name" content="Jae&#39;s blog">
+<meta property="og:description" content="JVM部分##运行时数据区：  线程私有部分：三个1.程序计数器：可看作当前线程所执行的字节码的行号指示器。字节码解释器通过便便这个计数器的值来完成分支，循环、跳转、异常处理、线程恢复操作。 2.Java虚拟机栈（大部分所说的栈）：生命周期：同线程每个方法产生栈帧：存放存储局部变量表、操作数栈、动态链接、方法出口。存储局部变量表：各种基本数据类型，对象引用，returnAddress地址。 3.本">
+<meta property="og:locale" content="en">
+<meta property="og:image" content="http://paxblmm0h.bkt.clouddn.com/%E5%AF%B9%E8%B1%A1%E8%AE%BF%E9%97%AE%E6%96%B9%E5%BC%8F.jpg">
+<meta property="og:image" content="http://paxblmm0h.bkt.clouddn.com/JVM3-1%20%E5%8F%AF%E8%BE%BE%E6%80%A7%E5%88%86%E6%9E%90.png">
+<meta property="og:image" content="http://paxblmm0h.bkt.clouddn.com/HotSpot%E7%9A%84gc%E6%94%B6%E9%9B%86%E5%99%A8.png">
+<meta property="og:image" content="http://paxblmm0h.bkt.clouddn.com/%E5%AF%B9%E8%B1%A1%E5%88%86%E9%85%8D%E5%8F%8A%E5%9E%83%E5%9C%BE%E6%B8%85%E7%90%86%E6%B5%81%E7%A8%8B%E5%9B%BE.png">
+<meta property="og:image" content="http://paxblmm0h.bkt.clouddn.com/%E5%9B%BE7-2%20%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8%E5%8F%8C%E4%BA%B2%E5%A7%94%E6%B4%BE%E6%A8%A1%E5%9E%8B.png">
+<meta property="og:image" content="http://paxblmm0h.bkt.clouddn.com/%E5%8F%8C%E4%BA%B2%E5%A7%94%E6%B4%BE%E6%A8%A1%E5%9E%8B%E5%AE%9E%E7%8E%B0%E6%B5%81%E7%A8%8B.png">
+<meta property="og:image" content="http://paxblmm0h.bkt.clouddn.com/%E7%BA%BF%E7%A8%8B%E3%80%81%E4%B8%BB%E5%86%85%E5%AD%98%E3%80%81%E5%B7%A5%E4%BD%9C%E5%86%85%E5%AD%98%E4%B8%89%E8%80%85%E4%BA%A4%E4%BA%92%E5%85%B3%E7%B3%BB.png">
+<meta property="og:updated_time" content="2018-08-02T14:34:37.515Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="JVM部分">
+<meta name="twitter:description" content="JVM部分##运行时数据区：  线程私有部分：三个1.程序计数器：可看作当前线程所执行的字节码的行号指示器。字节码解释器通过便便这个计数器的值来完成分支，循环、跳转、异常处理、线程恢复操作。 2.Java虚拟机栈（大部分所说的栈）：生命周期：同线程每个方法产生栈帧：存放存储局部变量表、操作数栈、动态链接、方法出口。存储局部变量表：各种基本数据类型，对象引用，returnAddress地址。 3.本">
+<meta name="twitter:image" content="http://paxblmm0h.bkt.clouddn.com/%E5%AF%B9%E8%B1%A1%E8%AE%BF%E9%97%AE%E6%96%B9%E5%BC%8F.jpg">
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var CONFIG = {
+    scheme: 'Mala',
+    sidebar: 'post'
+  };
+</script>
+
+  <title> JVM部分 | Jae's blog </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  <!--[if lte IE 8]>
+  <div style=' clear: both; height: 59px; padding:0 0 0 15px; position: relative;margin:0 auto;'>
+    <a href="http://windows.microsoft.com/en-US/internet-explorer/products/ie/home?ocid=ie6_countdown_bannercode">
+      <img src="http://7u2nvr.com1.z0.glb.clouddn.com/picouterie.jpg" border="0" height="42" width="820"
+           alt="You are using an outdated browser. For a faster, safer browsing experience, upgrade for free today or use other browser ,like chrome firefox safari."
+           style='margin-left:auto;margin-right:auto;display: block;'/>
+    </a>
+  </div>
+<![endif]-->
+  
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+  ga('create', 'xxx', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?xxx";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+  <div class="container one-column page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><h1 class="site-meta">
+  <span class="logo-line-before"><i></i></span>
+  <a href="/" class="brand" rel="start">
+      <span class="logo">
+        <i class="icon-next-logo"></i>
+      </span>
+      <span class="site-title">彭文杰的博客</span>
+  </a>
+  <span class="logo-line-after"><i></i></span>
+</h1>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu menu-left">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            <i class="menu-item-icon icon-next-home"></i> <br />
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            <i class="menu-item-icon icon-next-categories"></i> <br />
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            <i class="menu-item-icon icon-next-archives"></i> <br />
+            Archives
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            <i class="menu-item-icon icon-next-tags"></i> <br />
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            <i class="menu-item-icon icon-next-about"></i> <br />
+            About
+          </a>
+        </li>
+      
+
+      
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  
+  <form class="site-search-form">
+    <input type="text" id="st-search-input" class="st-search-input st-default-search-input" />
+  </form>
+
+
+<script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+    (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+    e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install', 'xxx','2.0.0');
+</script>
+
+
+
+    </div>
+  
+</nav>
+
+ </div>
+    </header>
+
+    
+      
+
+      
+        <style type="text/css">
+
+    .circle {
+        width: 40px;
+        height: 40px;
+        background: #555 no-repeat;
+        cursor: move;
+    }
+
+    .assist-btn {
+        position: fixed;
+        top: 50％;
+        left: 10px;
+        -moz-border-radius: 50px;
+        -webkit-border-radius: 50px;
+        border-radius: 50px;
+        outline: none;
+        border: none;
+        color: #87daff;
+    }
+
+</style>
+
+<script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+<script type="text/javascript">
+    // 浮动圆点展开与收缩
+    /*
+    $(function () {
+        var assist_box = $('.assist-box');
+        $('#assist_btn').hover(function () {
+            assist_box.stop().show(300);
+        }, function () {
+            assist_box.stop().hide(150);
+        })
+    });
+    */  
+    //浮动圆点拖动
+    $(function () {
+        var box = document.getElementById('assist_btn');
+        box.onmousedown = function (event) {
+            var e = event || window.event,
+                t = e.target || e.srcElement,
+                // 鼠标按下时的坐标x1,y1
+                x1 = e.clientX,
+                y1 = e.clientY,
+                //鼠标按下时的左右偏移量
+                dragLeft = this.offsetLeft,
+                dragTop = this.offsetTop;
+
+            document.onmousemove = function (event) {
+                var e = event || window.event,
+                    t = e.target || e.srcElement,
+                    // 鼠标移动时的动态坐标
+                    x2 = e.clientX,
+                    y2 = e.clientY,
+                    // 鼠标移动时的坐标的变化量
+                    x = x2 - x1,
+                    y = y2 - y1;
+                box.style.left = (dragLeft + x) + 'px';
+                box.style.top = (dragTop + y) + 'px';
+            }
+
+            document.onmouseup = function () {
+                this.onmousemove = null;
+            }
+        }
+    });
+
+/*
+    $whitesmoke   = #f5f5f5
+    $gainsboro    = #eee
+    $gray-lighter = #ddd
+    $grey-light   = #ccc
+    $grey         = #bbb
+    $grey-dark    = #999
+    $grey-dim     = #666
+    $black-light  = #555
+    $black-deep   = #222
+    $red          = #ff2a2a
+    $blue-bright  = #87daff
+    $blue         = #0684bd
+    $blue-deep    = #262a30
+*/
+    // white theme
+    var body = {color: "#555", background: "white"};
+    var a_tag = {color: "#222"};
+    var header = { background: "#f5f5f5"};
+    var logo_line_i = {background: "#222"};
+    // var post_code = {background: "#eee", color: "#222"};
+
+    function switch_theme() {
+        $("body").css(body);
+        $("a:not('.links-of-author-item a, .site-state-item a, .site-state-posts a, .feed-link a, .motion-element a, .post-tags a, .show-commit-cls a, #donate_board a')").css(a_tag);
+        $(".header, .footer").css(header);
+        $(".logo-line-before i, .logo-line-after i").css(logo_line_i);
+        //$(".post code").css(post_code);
+        $("#idhyt-surprise-ball #idhyt-surprise-ball-animation .drag").css(a_tag);
+        $(".post-title-link, .posts-expand .post-meta, .post-comments-count, .disqus-comment-count, .post-category a, .post-nav-next a, .post-nav-item a").css(a_tag);
+        
+        // $("code").css({color: '#c5c8c6', background: '#1d1f21'});
+        $("#assist_btn").hide(1500);
+    }
+
+    $(function () {
+        $("#assist_btn").dblclick(function() {
+            switch_theme();
+        });
+    });
+
+</script>
+
+<div>
+
+    <button class="assist-btn circle" id="assist_btn" title="双击切换">
+        亮
+    </button>
+
+</div>
+
+
+
+
+
+
+
+
+
+      
+
+    
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div id="content" class="content"> 
+
+  <div id="posts" class="posts-expand">
+    
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+
+      
+      
+        <h1 class="post-title" itemprop="name headline">
+          
+          
+            
+              JVM部分
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          Posted on
+          <time itemprop="dateCreated" datetime="2018-04-14T19:33:23+08:00" content="2018-04-14">
+            2018-04-14
+          </time>
+        </span>
+
+        
+          <span class="post-category" >
+            &nbsp; | &nbsp; In
+            
+              <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                <a href="/categories/面试题/" itemprop="url" rel="index">
+                  <span itemprop="name">面试题</span>
+                </a>
+              </span>
+
+              
+              
+
+            
+          </span>
+        
+
+        
+          
+            <span class="post-comments-count">
+            &nbsp; | &nbsp;
+            <a href="/2018/04/14/JVM部分/#comments" itemprop="discussionUrl">
+              <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2018/04/14/JVM部分/" itemprop="commentsCount"></span>
+            </a>
+          </span>
+          
+        
+      </div>
+    </header>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        <span itemprop="articleBody"><h1 id="JVM部分"><a href="#JVM部分" class="headerlink" title="JVM部分"></a>JVM部分</h1><p>##运行时数据区： </p>
+<h3 id="线程私有部分：三个"><a href="#线程私有部分：三个" class="headerlink" title="线程私有部分：三个"></a>线程私有部分：三个</h3><p>1.程序计数器：可看作当前线程所执行的字节码的行号指示器。<br>字节码解释器通过便便这个计数器的值来完成分支，循环、跳转、异常处理、线程恢复操作。</p>
+<p>2.Java虚拟机栈（大部分所说的栈）：<br>生命周期：同线程<br>每个方法产生栈帧：存放存储局部变量表、操作数栈、动态链接、方法出口。<br>存储局部变量表：各种基本数据类型，对象引用，returnAddress地址。</p>
+<p>3.本地方法栈：<br>与虚拟机栈区别：虚拟机栈为Java方法（字节码）服务。本地方法栈为虚拟机用到的Native方法服务。</p>
+<h3 id="线程共享部分：三个"><a href="#线程共享部分：三个" class="headerlink" title="线程共享部分：三个"></a>线程共享部分：三个</h3><p>1.Java堆<br>特点：内存最大，可不连续，可选定大小，可扩展。线程共享。</p>
+<p>唯一目的：存放对象实例及数组。（非绝对：有栈上分配和标量替换技术）</p>
+<p>区域细分：新生代、老年代。或是Eden空间、From Survivor空间、To Survivor空间。</p>
+<p>2.方法区<br>特点：线程共享。内存可不连续，可选定大小，可扩展。<br>不完全等同“永久代”。<br>目的：存放已被虚拟机加载的类信息、常量、静态变量、即使编译器编译后的代码。<br>2.1 <strong>运行时常量池</strong>（方法区一部分）</p>
+<p>Class文件的具体组成结构：类的版本、字段、方法、接口，常量池。常量池存放编译期生成的各种字面量和符号引用。在类加载后进入运行时常量池。<br>对比其他Class文件组成，它的重要特点：<strong>动态性</strong>。在运行时，也能添加到常量池。实例：String类的intern()方法</p>
+<h2 id="对象的创建-普通对象-不包括数组和Class对象）"><a href="#对象的创建-普通对象-不包括数组和Class对象）" class="headerlink" title="对象的创建(普通对象,不包括数组和Class对象）"></a>对象的创建(普通对象,不包括数组和Class对象）</h2><p>###1.接收new指令，<br>检查指令参数在常量池是否有类的符号引用。（存不存在这个类），并检查类是否被加载、解析和初始化。没有则请看<strong>类的初始化</strong>。</p>
+<h3 id="2-为新生对象分配内存。"><a href="#2-为新生对象分配内存。" class="headerlink" title="2.为新生对象分配内存。"></a>2.为新生对象分配内存。</h3><p>内存分配方式（由Java堆是否规整绝对（收集器，GC算法），请看压缩整理部分）：<br><code>1.指针碰撞</code>假设此时堆中内存规整（无碎片），分界指针向空闲部分移动对象大小距离。<br><code>2.空闲列表</code>JVM维护一个列表，记录空间位置。</p>
+<p>线程安全问题解决方式：<br>1.同步处理————CAS机制<br>2.本地线程分配缓冲：先分块区域给不同线程，在各自空间创建，用完再考虑同步锁定。</p>
+<h3 id="设置对象必要信息"><a href="#设置对象必要信息" class="headerlink" title="设置对象必要信息"></a>设置对象必要信息</h3><p>设置对象头内容：类信息，类元数据信息，对象哈希码，对象的GC分代年龄等<br>是否启用偏向锁。<br>接下来才是<code>&lt;init&gt;</code>方法，为对象设置各种属性</p>
+<h2 id="对象的内存布局，内容？"><a href="#对象的内存布局，内容？" class="headerlink" title="对象的内存布局，内容？"></a>对象的内存布局，内容？</h2><p><strong>对象头</strong>：包括<strong>对象自身的运行时数据</strong>(哈希码、GC年龄、锁状态、偏向线程ID、偏向时间戳）  、 <strong>类型指针</strong>（指向哪个类）<br><strong>实例数据</strong>：父类继承的、子类定义的。<br><strong>填充对齐</strong>：占位符作用，使对象大小必须是8字节的整数倍。</p>
+<h2 id="对象的访问与定位是怎样的？"><a href="#对象的访问与定位是怎样的？" class="headerlink" title="对象的访问与定位是怎样的？"></a>对象的访问与定位是怎样的？</h2><p><img src="http://paxblmm0h.bkt.clouddn.com/%E5%AF%B9%E8%B1%A1%E8%AE%BF%E9%97%AE%E6%96%B9%E5%BC%8F.jpg" alt="此处输入图片的描述"></p>
+<p><strong>使用句柄：</strong>堆中有个句柄池，栈的reference指向句柄地址，<br>特点：稳定，移动时只改句柄<br><strong>直接指针：</strong>堆对象内部有个对象类型数据指针。<br>特点: 快，一次引用</p>
+<h2 id="异常：OutOfMemoryError-精简版本"><a href="#异常：OutOfMemoryError-精简版本" class="headerlink" title="异常：OutOfMemoryError 精简版本"></a>异常：OutOfMemoryError 精简版本</h2><p>1.堆溢出</p>
+<p>区分：内存泄漏和内存溢出<br><strong>内存泄漏memory leak：</strong>程序在申请内存后，无法释放已申请的内存空间（游离）<br>解决：查看泄露对象到GC ROOTS 的引用链，造成的无法GC</p>
+<p><strong>内存溢出 out of memory</strong> :指程序申请内存时，没有足够的内存供申请者使用，或者说，给了你一块存储int类型数据的存储空间，但是你却存储long类型的数据，那么结果就是内存不够用，此时就会报错OOM,即所谓的内存溢出。 </p>
+<p>2.虚拟机栈和本地方法栈溢出<br>1.一般是StackOverFlowError</p>
+<p>有趣的现象：栈分配内存越大，越容易产生内存溢出。<br>原因：内存固定，每个栈的分配内存越大，总共的栈数（线程数）就越少。在多线程时更容易溢出。</p>
+<h1 id="第三章-垃圾收集器和内存分配策略"><a href="#第三章-垃圾收集器和内存分配策略" class="headerlink" title="第三章 垃圾收集器和内存分配策略"></a>第三章 垃圾收集器和内存分配策略</h1><h2 id="对象已死吗？是否可回收？"><a href="#对象已死吗？是否可回收？" class="headerlink" title="对象已死吗？是否可回收？"></a>对象已死吗？是否可回收？</h2><p>1.<strong>引用计数算法：</strong>添加一个计数器，被引用一次值+1<br>存在问题：循环引用问题，<br>2.<strong>可达性分析算法：</strong><br><img src="http://paxblmm0h.bkt.clouddn.com/JVM3-1%20%E5%8F%AF%E8%BE%BE%E6%80%A7%E5%88%86%E6%9E%90.png" alt="此处输入图片的描述"><br>原理：从GC ROOTS 开始向下通过引用链搜索，判断是否可达。<br>GC ROOTS： 虚拟机栈中（栈帧中的本地变量表）<strong>引用的</strong>对象。<br>方法区中类<strong>static属性</strong>引用的 对象<br>方法区中<strong>常量引用</strong>的对象<br>本地方法栈中 <strong>Native方法</strong>引用的对象</p>
+<h2 id="引用的类型"><a href="#引用的类型" class="headerlink" title="引用的类型"></a>引用的类型</h2><p>引用如果只是 0 1 那未免太绝对，故存在四种等级：强软弱虚</p>
+<p>强引用：代码之中普遍存在的。用 “=” 连接实例的，绝不会被回收<br>软引用：有用但非必须的对象。只有在内存溢出异常前才会加入回收。<br>弱引用：非必须，下次GC到来之时会回收。有内存时只回收弱引用。<br>虚引用：不影响对象生命周期，只作为系统通知而存在。 </p>
+<h2 id="leave-or-die"><a href="#leave-or-die" class="headerlink" title="leave or die"></a>leave or die</h2><p>必死对象：不可达对象会被标记（下通缉令），若对象没重写finalize()方法（免死金牌？），或者免死金牌用过了。 那么请die吧。</p>
+<p>非必死对象：有没用过的免死金牌，对象放到F-Queue中，等待Finalizer线程去执行，免死金牌finalizer要使用得当（重新与GC root建立连接），并第二次标记（解除通缉令），如果使用不当，那么还是得over。</p>
+<h3 id="方法区（永久代）的回收————条件严苛"><a href="#方法区（永久代）的回收————条件严苛" class="headerlink" title="方法区（永久代）的回收————条件严苛"></a>方法区（永久代）的回收————条件严苛</h3><p>对象：废弃常量和无用的类<br>废弃常量：String s = “abc”，当没有引用的时候，回收<br>无用的类（需同时满足）：1.该类所有实例被回收 2.该类的ClassLoader已被回收<br>3.该类对应的Class对象没有被引用，无法反射访问</p>
+<h2 id="垃圾收集算法"><a href="#垃圾收集算法" class="headerlink" title="垃圾收集算法"></a>垃圾收集算法</h2><p><strong>一、标记-清除算法（Mark-Sweep）算法</strong><br>原理：可达性分析，标记清除对象，清除。<br>缺点：1.效率低下。 2.产生大量不连续的内存碎片，浪费空间</p>
+<p><strong>二、复制算法（用于新生代）</strong><br>原理：将内存二分，每次用一块，不够用了就复制 有用对象 到另一块。然后本块全部清除。<br>优点：分配内存方便，直接用指针碰撞。<br>缺点：1.内存缩为一般。<br>应用：Eden和From Survivor空间的有用对象 复制到To Survivor空间，然后清除掉自生空间。E : FS : TS = 8 : 1 : :1<br>所以可用空间有9。</p>
+<p><strong>三、标记—整理算法（Mark-Compact）（年老代）</strong><br>原理：标记完，不是清除，而是整理，存活对象都向一端移动。清除边界外的对象。</p>
+<p><strong>四、目前商用————分代收集算法</strong><br>新生代（大量对象死去）用复制算法，年老代（存活率高）用标记—整理算法（或者标记—清除算法）</p>
+<h2 id="HotSpot的算法实现"><a href="#HotSpot的算法实现" class="headerlink" title="HotSpot的算法实现"></a>HotSpot的算法实现</h2><p><strong>枚举根节点：</strong>为了快速检查GC ROOTS的引用，采用了：OopMap数据结构，在类加载完成时，会记录下引用。<br><strong>安全点：</strong> hotspot在线程达到安全点的时候才会考虑一次OopMap，并且开始GC。<br>问题：若多线程下不在安全点怎么办？ 1.抢先式中断（没JVM在用）：停下所有线程，若发现线程不在安全点上，则恢复让其达到安全点并停止。<br><strong>2主动式中断：</strong>设置一个标志，让各线程去轮询这个标志，发现中断标志后就自己中断挂起。轮询标志与安全点位置重合。</p>
+<h2 id="多种GC收集器（仅讨论HotSpot的）"><a href="#多种GC收集器（仅讨论HotSpot的）" class="headerlink" title="多种GC收集器（仅讨论HotSpot的）"></a>多种GC收集器（仅讨论HotSpot的）</h2><p><img src="http://paxblmm0h.bkt.clouddn.com/HotSpot%E7%9A%84gc%E6%94%B6%E9%9B%86%E5%99%A8.png" alt="连线是配合"><br><strong>连线表示了两种收集器能否配合使用。</strong></p>
+<p>新生代：<br>1.Serial收集器：单线程，GC时暂停所有工作线程<br>2.parNew收集器：上述的多线程版本，其他区别不大<br>3.Parallel Scavaenge：平行扫描，新生代并行回收（无法配合<br>老年代：<br>1.Serial Old：那家伙的老年代版本，使用标记—整理算法<br>2.parNew Old:多线程，标记—整理算法，只能配合上面的3<br><strong>3.CMS（Concurrent Mark Sweep)收集器</strong>：并发收集，低停顿。<br>缺点：1.对CPU资源敏感2.无法处理浮动垃圾3.属于清除算法，会产生碎片</p>
+<p><strong>G1收集器</strong> 1.7开始<br>特点：<br>1.并行与并发：利用CPU、多核来减少StopTheWorld的时间<br>2.分代收集：可独立管理GC堆，不用其他收集器<br>3.空间整合:整体基于清除-整理算法，不同于CMS的清理。<br>4.可预测的停顿：可建立可预测的停顿模型</p>
+<h2 id="一图搞懂内存分配与回收策略"><a href="#一图搞懂内存分配与回收策略" class="headerlink" title="一图搞懂内存分配与回收策略"></a>一图搞懂内存分配与回收策略</h2><p><img src="http://paxblmm0h.bkt.clouddn.com/%E5%AF%B9%E8%B1%A1%E5%88%86%E9%85%8D%E5%8F%8A%E5%9E%83%E5%9C%BE%E6%B8%85%E7%90%86%E6%B5%81%E7%A8%8B%E5%9B%BE.png" alt="此处输入图片的描述"></p>
+<h1 id="第七章-虚拟机类加载机制"><a href="#第七章-虚拟机类加载机制" class="headerlink" title="第七章 虚拟机类加载机制"></a>第七章 虚拟机类加载机制</h1><h2 id="类的生命周期七阶段"><a href="#类的生命周期七阶段" class="headerlink" title="类的生命周期七阶段"></a>类的生命周期七阶段</h2><p>加载、验证、准备、解析、初始化、使用、卸载</p>
+<p><strong>什么会触发加载：</strong><br>1）遇到new（实例对象化）、getstatic（读取静态字段）、putstatic（设置静态字段）、invokestatic（调用静态方法）字节码时。<br>2）使用java.lang.reflect包的方法对类反射调用时<br>3）初始化一个类必须先初始化其父类<br>4）虚拟机启动，初始化主类。包含main()的类<br>5）java.lang,invoke.MethonHandle实例的方法句柄（这是个啥？？？）</p>
+<p>数组有虚拟机直接创建，不通过类加载器</p>
+<h2 id="类加载过程"><a href="#类加载过程" class="headerlink" title="类加载过程"></a>类加载过程</h2><p><strong>1.加载：虚拟机 ：类名→二进制字节流→静态结构变运行数据结构→Class对象作为入口</strong><br>1）通过一个类的全限定名来获取定义此类的二进制字节流。<br>2）将这个字节流所代表的<code>静态储存结构</code>转化为<strong>方法区</strong>的<code>运行时数据结构</code>，并储存在方法区。<br>3)在内存中产生这个类的java.lang.Class对象，储存在方法区，作为方法区的这个类的各种资源访问入口</p>
+<p><strong>2.验证：格式、元数据、字节码、符号</strong><br>确保Class文件的字节流符合当前虚拟机要求，防止有害字节流导致系统崩溃。会验证：<br>1）文件格式 （开头，版本，类型）2）元数据信息（父类，继承是否符合规定，是否矛盾）3）字节码（类型转换有效）4）符号引用</p>
+<p><strong>3.准备：</strong> 类变量分配内存<br>为<strong>类变量分配内存</strong> 并设置 <strong>类变量初始值</strong>的阶段，类变量也就是static变量都在方法区进行分配。不包括实例变量（只在对象实例化的时候随对象分配在Java堆中）<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> value = <span class="number">123</span>;</span><br></pre></td></tr></table></figure></p>
+<p>此时只会赋0值，因为复制的putStatic指令是编译后，存放在类构造器<code>&lt;client&gt;()</code>方法中，在初始化阶段才会进行。</p>
+<p><strong>4.解析：将常量值内<code>符号引用</code>转化为<code>直接引用</code></strong><br>类或接口的解析，字段解析，类方法解析，接口方法解析。</p>
+<p><strong>5.初始化 为静态属性初始化值</strong><br>前面均有虚拟机来完成，初始化才开始执行类中定义的字节码。执行类构造器<code>&lt;clinit&gt;()</code>方法，从java.oang.Object开始依次向下执行。由父到子。</p>
+<h2 id="类加载器-作用"><a href="#类加载器-作用" class="headerlink" title="类加载器 作用"></a>类加载器 作用</h2><p>1.加载 类</p>
+<ol start="2">
+<li>判别类，同类是由同一个类加载器加载出来的，比如同Class文件，同JVM，而不同类加载器。出来的类是不相等的</li>
+</ol>
+<p>你可以手写一个简单的类加载器，并加载一个Class文件，然后判断加载出来的类与系统加载出来的类是否相同，答案当然是不同的！！</p>
+<h2 id="双亲委派模型"><a href="#双亲委派模型" class="headerlink" title="双亲委派模型"></a>双亲委派模型</h2><p><strong>类加载器 从 JVM角度 分类：</strong><br>1.启动类加载器（JVM的一部分）<br>2.其他类加载器（独立于JVM，继承抽象类java.lang.ClassLoader）</p>
+<p>细分：</p>
+<ul>
+<li>启动类加载器：加载\lib中的<strong>类库</strong>到虚拟机内存中，无法被Java程序直接引用。</li>
+<li>扩展类加载器：加载\lib\ext目录中的，或者被指定路径中的所有类库</li>
+<li>应用程序类加载器：由ClassLoader实现，<code>ClassLoader.getSystemClassLoader()</code>，负责ClassPath上所制定的类库。若没有自定义类加载器，<strong>一般这个就是程序默认的加载器</strong>。</li>
+</ul>
+<p><img src="http://paxblmm0h.bkt.clouddn.com/%E5%9B%BE7-2%20%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8%E5%8F%8C%E4%BA%B2%E5%A7%94%E6%B4%BE%E6%A8%A1%E5%9E%8B.png" alt="双亲委派模型"></p>
+<p><strong>要求：</strong>除了顶层的启动类加载器外，其余的类加载器都用当有自己的父类加载器，这里不以继承关系而由组合实现复用父类加载器代码。</p>
+<p><strong>工作过程：</strong><br>1.类加载器 收到 加载类请求，先委派给 父类加载器完成<br>2.所以，所有类都是先由 <strong>启动类加载器</strong> 先尝试加载<br>3.当前类加载器无法完成加载（没找到所需的类），交由子加载器加载。</p>
+<p><strong>优点：</strong>使Java类随类加载器一起具备了带有优先级的层次关系。如java.lang.Object。他存放在rt.jar中。所以无论哪个加载器加载Object类，都会委托给启动类加载器加载，保证了Object唯一性。以免用户自己写一个Object类，避免混乱，你若自己写一个，你会发现可以正常编译，但无法被加载运行。</p>
+<p><strong>逻辑：</strong><br>1.先检查是否加载，没加载调用父类加载器的LoadClass()，若父类为空则调用启动类加载器。若加载失败，抛出<code>ClassNotFoundException</code>后调用自生的findClass()加载</p>
+<p><img src="http://paxblmm0h.bkt.clouddn.com/%E5%8F%8C%E4%BA%B2%E5%A7%94%E6%B4%BE%E6%A8%A1%E5%9E%8B%E5%AE%9E%E7%8E%B0%E6%B5%81%E7%A8%8B.png" alt="此处输入图片的描述"></p>
+<h2 id="破坏双亲委派模型"><a href="#破坏双亲委派模型" class="headerlink" title="破坏双亲委派模型"></a>破坏双亲委派模型</h2><p>双亲是推荐加载机制而非强制。曾有三次破坏。</p>
+<p>1.为了<strong>向前兼容JDK1.2以前的自定义类加载器</strong>，添加了一个findClass()方法，（这里有点晕）</p>
+<p><strong>2.模型的缺陷导致</strong>：若基础类（本由启动类加载器加载）要调用回用户代码（由应用程序加载器加载）咋办（启动类加载器不认ClassPath路径）。<br>比如：JNDI(命名和目录接口) 服务，目的是对资源进行集中和查找，需要调用 JNDI接口提供者的代码。</p>
+<p>不优雅的设计：<strong>线程上下文类加载器</strong>，线程若未设置则从父类继承，全局都没有则默认为应用程序类加载器。<br>使用：基础类程序（比如JNDI）可以<strong>使用这个加载器（未设定时为应用程序加载器）</strong>加载所需要的SPI代码，也就是父类加载器请亲子类加载器去完成类加载。<br>在JNDI、JDBC 、JCE、JAXB和JBI</p>
+<p>3.<strong>为了追求程序动态性：代码热替换（不关机的替换），模块热部署。</strong></p>
+<p>JSR-291(Java 规范提案) (即OSGi R4.2)时目前Java模块化的标准，实现模块化的热部署的关键是其自定义类加载器机制的实现。每一个程序模块（Bundle）都有一个自己的类加载器。更换bundle时连同类加载器一起替换掉以实现热替换。</p>
+<p>此时，类加载器不是双亲委派的树结构，而是网结构（即有双亲委派模式，又有平行的类加载器）</p>
+<h1 id="高效并发"><a href="#高效并发" class="headerlink" title="高效并发"></a>高效并发</h1><h2 id="Java内存模型"><a href="#Java内存模型" class="headerlink" title="Java内存模型"></a>Java内存模型</h2><p>用处：屏蔽各种硬件和操作系统的内存访问差异，让Java程序达到一致性。<br><img src="http://paxblmm0h.bkt.clouddn.com/%E7%BA%BF%E7%A8%8B%E3%80%81%E4%B8%BB%E5%86%85%E5%AD%98%E3%80%81%E5%B7%A5%E4%BD%9C%E5%86%85%E5%AD%98%E4%B8%89%E8%80%85%E4%BA%A4%E4%BA%92%E5%85%B3%E7%B3%BB.png" alt="此处输入图片的描述"><br>主内存：主要对应堆中对象实例数据部分。<br>工作内存：对应虚拟机栈的部分区域。<br>虚拟机回让工作内存有限存储于 寄存器和高速缓存中，因为主要访问读写的时工作内存。</p>
+<h2 id="volatile型变量"><a href="#volatile型变量" class="headerlink" title="volatile型变量"></a>volatile型变量</h2><p>轻量级同步机制，可保证可见性但是不能保证原子性。其在各个线程的工作内存中不存在一致性问题（在线程中不同，但是每次使用前要刷新）。但是不能保证原子性。</p>
+<h2 id="Java线程调度"><a href="#Java线程调度" class="headerlink" title="Java线程调度"></a>Java线程调度</h2><p>指的是系统为线程分配处理器使用权的过程。<br><strong>1.协同式调度：</strong>执行时间由线程本身控制。执行完自己后再通知系统切换<br>好处：实现简单，操作可知。<br>坏处：线程执行时间不可控，阻塞问题难以解决</p>
+<p><strong>2.抢占式调度：</strong>执行时间由系统来分配，线程的切换由系统控制，可以辅助设置线程优先级别，越高越易被系统执行。</p>
+<h1 id="第13章-线程安全与锁优化"><a href="#第13章-线程安全与锁优化" class="headerlink" title="第13章 线程安全与锁优化"></a>第13章 线程安全与锁优化</h1><p>定义：当多个线程访问一个对象时，如果不用考虑这些线程在运行时环境下的调度和交替执行，也不需要进行格外的同步，或者在调用方法进行任何其他的协调操作，都能得到正确的结果，那么是线程安全的。</p>
+<h2 id="线程安全的实现方法"><a href="#线程安全的实现方法" class="headerlink" title="线程安全的实现方法"></a>线程安全的实现方法</h2><p>1.互斥同步<br><strong>synchronized：</strong>JVM层面，经过编译后会在同步块前后产生monitorEnter和monitorExit两个字节码指令。根据虚拟机规范执行此Enter指令时，首先获取对象锁，获取到则计数器由0变1，获取失败则线程阻塞。<br>阻塞和唤醒一个线程，需要操作系统来帮忙，从用户态转换到核心态，需要消耗很多的处理器时间，所以synchronized是一个<strong>重量级的锁</strong>。<br><strong>ReentrantLock  三个新特性</strong><br><strong>等待可中断：</strong>lock可设置等待参数，没获取到则放弃获取<br><strong>可实现公平锁：</strong>同一个锁，线程按照排队顺序来获取。ReentrantLock虽然也是非公平，但是可以通过带布尔的构造函数显示公平<br><strong>可绑定多条件：</strong></p>
+<p>Class文件的具体组成结构：类的版本、字段、方法、接口，常量池。</p>
+</span>
+      
+    </div>
+    <div>
+  
+    ﻿
+  
+</div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/知识点整理/" rel="tag">#知识点整理</a>
+          
+            <a href="/tags/面试/" rel="tag">#面试</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/06/08/redis面试题及相关原理/" rel="prev">redis面试题及相关原理</a>
+            
+          </div>
+
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/02/18/操作系统面试题及相关原理/" rel="next">操作系统面试题及相关原理</a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div>
+      
+        <style type="text/css">
+
+    .donate_bar {
+        text-align: center;
+        margin-top : 5%;
+    }
+
+    .donate_bar.hidden {
+        display:none;
+    }
+/*
+    .donate_bar a.btn_donate {
+        display: inline-block;
+        width: 82px;
+        height: 82px;
+        margin-left:auto;
+        margin-right:auto;
+
+        background: url("http://img.t.sinajs.cn/t5/style/images/apps_PRF/e_media/btn_reward.gif") no-repeat;
+        _background: url("http://img.t.sinajs.cn/t5/style/images/apps_PRF/e_media/btn_reward.gif") no-repeat; 
+
+        -webkit-transition: background 0s;
+        -moz-transition: background 0s;
+        -o-transition: background 0s;
+        -ms-transition: background 0s;
+        transition: background 0s;
+    }
+*/
+    .donate_bar a.btn_donate:hover { 
+        // background-position: 0px -82px;
+        color: #87daff
+    }
+
+    .donate_bar .donate_txt {
+        display: block;
+        color: #9d9d9d;
+        font: 14px/2 "Microsoft Yahei";
+    }
+
+    .bold { 
+        font-weight: bold; 
+    }
+
+    .post-donate a {
+        border-bottom: 0px;
+    }
+
+    #donate_guide table {
+        border: none;
+    }
+
+    #donate_guide td {
+        border-bottom: none;
+        border-right: none;
+        background: #333333;
+        valign: top;
+    }
+
+</style>
+
+
+
+    
+
+    <div class ="post-donate">
+        <div id="donate_board" class="donate_bar center">
+              <a id="btn_donate" class="btn_donate" href="javascript:;" title="打赏">赏</a>
+              <span id="donate_txt" class="donate_txt">
+                   
+                        仅仅是一个功能
+                   
+              </span>
+            <br>
+        </div>  
+  
+        <div id="donate_guide" class="donate_bar center hidden">
+            <!--
+            
+                <a href="http://paxblmm0h.bkt.clouddn.com/ali_pay.jpg" title="支付宝打赏" class="fancybox" rel="article0" 
+                    style="float:left;margin-left:25%;margin-right:10px;">
+                    <img src="http://paxblmm0h.bkt.clouddn.com/ali_pay.jpg" title="" height="164px" width="164px">
+                </a> 
+              
+
+            
+                <a href="http://paxblmm0h.bkt.clouddn.com/wechat_pay.jpg" title="微信打赏" class="fancybox" rel="article0"
+                    style="margin-right:30%">
+                    <img src="http://paxblmm0h.bkt.clouddn.com/wechat_pay.jpg" title="" height="164px" width="164px">
+                </a>
+            
+            -->
+            <table>
+                <tr>
+                    <td>
+                        
+                            <a href="http://paxblmm0h.bkt.clouddn.com/ali_pay.jpg" title="支付宝打赏" class="fancybox" rel="article0" 
+                                style="float:left;margin-left:25%;margin-right:10px;">
+                                <img src="http://paxblmm0h.bkt.clouddn.com/ali_pay.jpg" title="" height="164px" width="164px">
+                            </a> 
+                         
+                    </td>
+                    <td>
+                        
+                            <a href="http://paxblmm0h.bkt.clouddn.com/wechat_pay.jpg" title="微信打赏" class="fancybox" rel="article0"
+                                style="margin-right:30%">
+                                <img src="http://paxblmm0h.bkt.clouddn.com/wechat_pay.jpg" title="" height="164px" width="164px">
+                            </a>
+                        
+                    </td>
+                </tr>
+            </table>
+
+        </div>
+
+        <script type="text/javascript">
+            document.getElementById('btn_donate').onclick = function() {
+                $('#donate_board').addClass('hidden');
+                // $('#donate_guide').removeClass('hidden');
+                $('#donate_guide').show(2000);
+            }
+
+        </script>
+    </div>
+
+    
+
+
+      
+    </div>
+
+    <div class="post-spread">
+      
+        <!-- JiaThis Button BEGIN -->
+<div class="jiathis_style">
+  <a class="jiathis_button_tsina"></a>
+  <a class="jiathis_button_tqq"></a>
+  <a class="jiathis_button_weixin"></a>
+  <a class="jiathis_button_cqq"></a>
+  <a class="jiathis_button_douban"></a>
+  <a class="jiathis_button_renren"></a>
+  <a class="jiathis_button_qzone"></a>
+  <a class="jiathis_button_kaixin001"></a>
+  <a class="jiathis_button_copy"></a>
+  <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jiathis_separator jtico jtico_jiathis" target="_blank"></a>
+  <a class="jiathis_counter_style"></a>
+</div>
+<script type="text/javascript" >
+  var jiathis_config={
+    hideMore:false
+  }
+</script>
+<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js" charset="utf-8"></script>
+<!-- JiaThis Button END -->
+
+      
+    </div>
+  </div>
+
+ </div>
+
+        
+          <div class="comments" id="comments">
+            
+              <div id="disqus_thread">
+                <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+              </div>
+            <!--
+            
+            -->
+        
+      </div>
+
+      
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            Table Of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" src="/images/default_avatar.jpg" alt="Jae Peng" itemprop="image"/>
+          <p class="site-author-name" itemprop="name">Jae Peng</p>
+        </div>
+        <p class="site-description motion-element" itemprop="description">A purchasing coder</p>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">38</span>
+              <span class="site-state-item-name">posts</span>
+            </a>
+          </div>
+
+          <div class="site-state-item site-state-categories">
+            <a href="/categories">
+              <span class="site-state-item-count">7</span>
+              <span class="site-state-item-name">categories</span>
+              </a>
+          </div>
+
+          <div class="site-state-item site-state-tags">
+            <a href="/tags">
+              <span class="site-state-item-count">23</span>
+              <span class="site-state-item-name">tags</span>
+              </a>
+          </div>
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="menu-item-icon icon-next-feed"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="http://github.com/jaecoding" target="_blank">GitHub</a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://twitter.com/xxx" target="_blank">Twitter</a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/" target="_blank">Weibo</a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://www.zhihu.com/people/peng-wen-jie-13" target="_blank">ZhiHu</a>
+              </span>
+            
+          
+        </div>
+
+        <div class="links-of-friendly motion-element">
+          
+            <p class="site-author-name">CSDNblog</p>
+            
+              <span class="links-of-author-item">
+              <a href="https://blog.csdn.net/Jae_Peng" target="_blank">About</a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+          <div class="cc-license motion-element" itemprop="license">
+            <a href="http://creativecommons.org/licenses/by-nc-sa/4.0" class="cc-opacity" target="_blank">
+              <img src="/images/cc-by-nc-sa.svg" alt="Creative Commons" />
+            </a>
+          </div>
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap sidebar-panel-active">
+          <div class="post-toc-indicator-top post-toc-indicator"></div>
+          <div class="post-toc">
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#JVM部分"><span class="nav-number">1.</span> <span class="nav-text">JVM部分</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#线程私有部分：三个"><span class="nav-number">1.0.1.</span> <span class="nav-text">线程私有部分：三个</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#线程共享部分：三个"><span class="nav-number">1.0.2.</span> <span class="nav-text">线程共享部分：三个</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#对象的创建-普通对象-不包括数组和Class对象）"><span class="nav-number">1.1.</span> <span class="nav-text">对象的创建(普通对象,不包括数组和Class对象）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-为新生对象分配内存。"><span class="nav-number">1.1.1.</span> <span class="nav-text">2.为新生对象分配内存。</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#设置对象必要信息"><span class="nav-number">1.1.2.</span> <span class="nav-text">设置对象必要信息</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#对象的内存布局，内容？"><span class="nav-number">1.2.</span> <span class="nav-text">对象的内存布局，内容？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#对象的访问与定位是怎样的？"><span class="nav-number">1.3.</span> <span class="nav-text">对象的访问与定位是怎样的？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#异常：OutOfMemoryError-精简版本"><span class="nav-number">1.4.</span> <span class="nav-text">异常：OutOfMemoryError 精简版本</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#第三章-垃圾收集器和内存分配策略"><span class="nav-number">2.</span> <span class="nav-text">第三章 垃圾收集器和内存分配策略</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#对象已死吗？是否可回收？"><span class="nav-number">2.1.</span> <span class="nav-text">对象已死吗？是否可回收？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#引用的类型"><span class="nav-number">2.2.</span> <span class="nav-text">引用的类型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#leave-or-die"><span class="nav-number">2.3.</span> <span class="nav-text">leave or die</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#方法区（永久代）的回收————条件严苛"><span class="nav-number">2.3.1.</span> <span class="nav-text">方法区（永久代）的回收————条件严苛</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#垃圾收集算法"><span class="nav-number">2.4.</span> <span class="nav-text">垃圾收集算法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#HotSpot的算法实现"><span class="nav-number">2.5.</span> <span class="nav-text">HotSpot的算法实现</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#多种GC收集器（仅讨论HotSpot的）"><span class="nav-number">2.6.</span> <span class="nav-text">多种GC收集器（仅讨论HotSpot的）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#一图搞懂内存分配与回收策略"><span class="nav-number">2.7.</span> <span class="nav-text">一图搞懂内存分配与回收策略</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#第七章-虚拟机类加载机制"><span class="nav-number">3.</span> <span class="nav-text">第七章 虚拟机类加载机制</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#类的生命周期七阶段"><span class="nav-number">3.1.</span> <span class="nav-text">类的生命周期七阶段</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#类加载过程"><span class="nav-number">3.2.</span> <span class="nav-text">类加载过程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#类加载器-作用"><span class="nav-number">3.3.</span> <span class="nav-text">类加载器 作用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#双亲委派模型"><span class="nav-number">3.4.</span> <span class="nav-text">双亲委派模型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#破坏双亲委派模型"><span class="nav-number">3.5.</span> <span class="nav-text">破坏双亲委派模型</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#高效并发"><span class="nav-number">4.</span> <span class="nav-text">高效并发</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Java内存模型"><span class="nav-number">4.1.</span> <span class="nav-text">Java内存模型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#volatile型变量"><span class="nav-number">4.2.</span> <span class="nav-text">volatile型变量</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Java线程调度"><span class="nav-number">4.3.</span> <span class="nav-text">Java线程调度</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#第13章-线程安全与锁优化"><span class="nav-number">5.</span> <span class="nav-text">第13章 线程安全与锁优化</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#线程安全的实现方法"><span class="nav-number">5.1.</span> <span class="nav-text">线程安全的实现方法</span></a></li></ol></li></ol></div>
+            
+          </div>
+          <div class="post-toc-indicator-bottom post-toc-indicator"></div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner"> <div class="copyright" >
+  
+  &copy; &nbsp;  2011 - 
+  <span itemprop="copyrightYear">2019
+  </span>
+  <span class="with-love">
+    <i class="icon-next-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Jae Peng
+  </span>
+</div>
+
+<div class="powered-by">
+  Powered by <a class="theme-link" href="http://hexo.io">Hexo</a>
+</div>
+
+<div class="theme-info">
+  Theme by <a class="theme-link" href="http://Jaecoding.github.io">Jae</a>.<a class="theme-link" href="https://github.com/idhyt/hexo-theme-next/tree/magiclamp">Mala</a>
+</div>
+
+<!-- busuanzi -->
+
+  <div class="busuanzi-info">
+    <div class="theme-info">
+    <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+    </script>
+    <span id="busuanzi_container_site_pv">
+        本站总访问量<a class="theme-link"><span id="busuanzi_value_site_pv"></span></a>次
+    </span>
+</div>
+  </div>
+
+
+
+ </div>
+    </footer>
+
+    <div class="back-to-top"></div>
+  </div>
+
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  
+  
+    
+
+  <script type="text/javascript">
+    var disqus_shortname = 'xxx';
+    var disqus_identifier = '2018/04/14/JVM部分/';
+    var disqus_title = 'JVM部分';
+    var disqus_url = 'http://jaecoding.github.io/2018/04/14/JVM部分/';
+
+    function run_disqus_script(disqus_script){
+      var dsq = document.createElement('script');
+      dsq.type = 'text/javascript';
+      dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }
+
+    run_disqus_script('count.js');
+    
+      run_disqus_script('embed.js');
+    
+  </script>
+
+  
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js"></script>
+  <script type="text/javascript" src="/js/fancy-box.js?v=0.4.5.1"></script>
+
+
+  <script type="text/javascript" src="/js/helpers.js?v=0.4.5.1"></script>
+  
+
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js"></script>
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js"></script>
+
+  <script type="text/javascript" src="/js/motion_global.js?v=0.4.5.1" id="motion.global"></script>
+
+
+
+
+  <script type="text/javascript" src="/js/nav-toggle.js?v=0.4.5.1"></script>
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  
+<script type="text/javascript" src="/js/bootstrap.scrollspy.js?v=0.4.5.1" id="bootstrap.scrollspy.custom"></script>
+
+
+<script type="text/javascript" id="sidebar.toc.highlight">
+  $(document).ready(function () {
+    var tocSelector = '.post-toc';
+    var $tocSelector = $(tocSelector);
+    var activeCurrentSelector = '.active-current';
+
+    $tocSelector
+      .on('activate.bs.scrollspy', function () {
+        var $currentActiveElement = $(tocSelector + ' .active').last();
+
+        removeCurrentActiveClass();
+        $currentActiveElement.addClass('active-current');
+
+        $tocSelector[0].scrollTop = $currentActiveElement.position().top;
+      })
+      .on('clear.bs.scrollspy', function () {
+        removeCurrentActiveClass();
+      });
+
+    function removeCurrentActiveClass () {
+      $(tocSelector + ' ' + activeCurrentSelector)
+        .removeClass(activeCurrentSelector.substring(1));
+    }
+
+    function processTOC () {
+      getTOCMaxHeight();
+      toggleTOCOverflowIndicators();
+    }
+
+    function getTOCMaxHeight () {
+      var height = $('.sidebar').height() -
+                   $tocSelector.position().top -
+                   $('.post-toc-indicator-bottom').height();
+
+      $tocSelector.css('height', height);
+
+      return height;
+    }
+
+    function toggleTOCOverflowIndicators () {
+      tocOverflowIndicator(
+        '.post-toc-indicator-top',
+        $tocSelector.scrollTop() > 0 ? 'show' : 'hide'
+      );
+
+      tocOverflowIndicator(
+        '.post-toc-indicator-bottom',
+        $tocSelector.scrollTop() >= $tocSelector.find('ol').height() - $tocSelector.height() ? 'hide' : 'show'
+      )
+    }
+
+    $(document).on('sidebar.motion.complete', function () {
+      processTOC();
+    });
+
+    $('body').scrollspy({ target: tocSelector });
+    $(window).on('resize', function () {
+      if ( $('.sidebar').hasClass('sidebar-active') ) {
+        processTOC();
+      }
+    });
+
+    onScroll($tocSelector);
+
+    function onScroll (element) {
+      element.on('mousewheel DOMMouseScroll', function (event) {
+          var oe = event.originalEvent;
+          var delta = oe.wheelDelta || -oe.detail;
+
+          this.scrollTop += ( delta < 0 ? 1 : -1 ) * 30;
+          event.preventDefault();
+
+          toggleTOCOverflowIndicators();
+      });
+    }
+
+    function tocOverflowIndicator (indicator, action) {
+      var $indicator = $(indicator);
+      var opacity = action === 'show' ? 0.4 : 0;
+      $indicator.velocity ?
+        $indicator.velocity('stop').velocity({
+          opacity: opacity
+        }, { duration: 100 }) :
+        $indicator.stop().animate({
+          opacity: opacity
+        }, 100);
+    }
+
+  });
+</script>
+
+<script type="text/javascript" id="sidebar.nav">
+  $(document).ready(function () {
+    var html = $('html');
+    var TAB_ANIMATE_DURATION = 200;
+    var hasVelocity = $.isFunction(html.velocity);
+
+    $('.sidebar-nav li').on('click', function () {
+      var item = $(this);
+      var activeTabClassName = 'sidebar-nav-active';
+      var activePanelClassName = 'sidebar-panel-active';
+      if (item.hasClass(activeTabClassName)) {
+        return;
+      }
+
+      var currentTarget = $('.' + activePanelClassName);
+      var target = $('.' + item.data('target'));
+
+      hasVelocity ?
+        currentTarget.velocity('transition.slideUpOut', TAB_ANIMATE_DURATION, function () {
+          target
+            .velocity('stop')
+            .velocity('transition.slideDownIn', TAB_ANIMATE_DURATION)
+            .addClass(activePanelClassName);
+        }) :
+        currentTarget.animate({ opacity: 0 }, TAB_ANIMATE_DURATION, function () {
+          currentTarget.hide();
+          target
+            .stop()
+            .css({'opacity': 0, 'display': 'block'})
+            .animate({ opacity: 1 }, TAB_ANIMATE_DURATION, function () {
+              currentTarget.removeClass(activePanelClassName);
+              target.addClass(activePanelClassName);
+            });
+        });
+
+      item.siblings().removeClass(activeTabClassName);
+      item.addClass(activeTabClassName);
+    });
+
+    $('.post-toc a').on('click', function (e) {
+      e.preventDefault();
+      var targetSelector = escapeSelector(this.getAttribute('href'));
+      var offset = $(targetSelector).offset().top;
+      hasVelocity ?
+        html.velocity('stop').velocity('scroll', {
+          offset: offset  + 'px',
+          mobileHA: false
+        }) :
+        $('html, body').stop().animate({
+          scrollTop: offset
+        }, 500);
+    });
+
+    // Expand sidebar on post detail page by default, when post has a toc.
+    var $tocContent = $('.post-toc-content');
+    if (isDesktop() && CONFIG.sidebar === 'post') {
+      if ($tocContent.length > 0 && $tocContent.html().trim().length > 0) {
+        displaySidebar();
+      }
+    }
+  });
+</script>
+
+
+
+  <script type="text/javascript">
+    $(document).ready(function () {
+      if (CONFIG.sidebar === 'always') {
+        displaySidebar();
+      }
+      if (isMobile()) {
+        FastClick.attach(document.body);
+      }
+    });
+  </script>
+
+  
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/lazyload.js"></script>
+  <script type="text/javascript">
+    $(function () {
+      $("#posts").find('img').lazyload({
+        placeholder: "/images/loading.gif",
+        effect: "fadeIn"
+      });
+    });
+  </script>
+</body>
+</html>

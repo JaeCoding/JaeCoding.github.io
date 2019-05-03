@@ -1,0 +1,1135 @@
+
+<!doctype html>
+<html class="theme-next use-motion theme-next-mala">
+<head>
+  
+
+<meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+  <meta name="google-site-verification" content="xxx" />
+
+
+
+
+
+  <link rel="stylesheet" type="text/css" href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5"/>
+
+
+
+  <link href='//fonts.googleapis.com/css?family=Lato:300,400,700,400italic&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
+
+
+<link rel="stylesheet" type="text/css" href="/css/main.css?v=0.4.5.1"/>
+
+
+    <meta name="description" content="A purchasing coder" />
+
+
+
+  <meta name="keywords" content="知识点整理,面试," />
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Jae's blog" type="application/atom+xml" />
+
+
+
+  <link rel="shorticon icon" type="image/x-icon" href="/favicon.ico?v=0.4.5.1" />
+
+
+<meta name="description" content="redis面试题及相关原理redisredis为什么这么快1、完全基于内存，绝大部分请求是纯粹的内存操作。 2、数据结构简单，对数据操作也简单，Redis中的数据结构是专门进行设计的； 3、采用单线程，避免了不必要的上下文切换和竞争条件，也不存在多进程或者多线程导致的切换而消耗 CPU，不用去考虑各种锁的问题，不存在加锁释放锁操作，没有因为可能出现死锁而导致的性能消耗； 4、使用多路I/O复用模型">
+<meta name="keywords" content="知识点整理,面试">
+<meta property="og:type" content="article">
+<meta property="og:title" content="redis面试题及相关原理">
+<meta property="og:url" content="http://jaecoding.github.io/2018/06/08/redis面试题及相关原理/index.html">
+<meta property="og:site_name" content="Jae&#39;s blog">
+<meta property="og:description" content="redis面试题及相关原理redisredis为什么这么快1、完全基于内存，绝大部分请求是纯粹的内存操作。 2、数据结构简单，对数据操作也简单，Redis中的数据结构是专门进行设计的； 3、采用单线程，避免了不必要的上下文切换和竞争条件，也不存在多进程或者多线程导致的切换而消耗 CPU，不用去考虑各种锁的问题，不存在加锁释放锁操作，没有因为可能出现死锁而导致的性能消耗； 4、使用多路I/O复用模型">
+<meta property="og:locale" content="en">
+<meta property="og:image" content="http://paxblmm0h.bkt.clouddn.com/redis%E4%BA%8B%E5%8A%A1%E6%89%A7%E8%A1%8C%E9%80%BB%E8%BE%91.png">
+<meta property="og:image" content="http://paxblmm0h.bkt.clouddn.com/%E4%B8%BB%E4%BB%8E%E6%9C%8D%E5%8A%A1%E5%99%A8%E6%89%A7%E8%A1%8CSYNC%E5%91%BD%E4%BB%A4.png">
+<meta property="og:image" content="http://paxblmm0h.bkt.clouddn.com/redis%20PSYNC%E6%89%A7%E8%A1%8C%E5%AE%8C%E6%95%B4%E9%87%8D%E5%90%8C%E6%AD%A5%E5%92%8C%E9%83%A8%E5%88%86%E9%87%8D%E5%90%8C%E6%AD%A5.png">
+<meta property="og:image" content="http://paxblmm0h.bkt.clouddn.com/redis%E5%93%A8%E5%85%B5.png">
+<meta property="og:image" content="http://paxblmm0h.bkt.clouddn.com/redis%E5%93%A8%E5%85%B5%E6%95%85%E9%9A%9C%E8%BD%AC%E7%A7%BB.png">
+<meta property="og:image" content="http://paxblmm0h.bkt.clouddn.com/%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%88%A4%E6%96%AD%E6%98%AF%E5%90%A6%E5%BC%80%E5%90%AF%E9%9B%86%E7%BE%A4.png">
+<meta property="og:updated_time" content="2018-08-02T14:34:37.550Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="redis面试题及相关原理">
+<meta name="twitter:description" content="redis面试题及相关原理redisredis为什么这么快1、完全基于内存，绝大部分请求是纯粹的内存操作。 2、数据结构简单，对数据操作也简单，Redis中的数据结构是专门进行设计的； 3、采用单线程，避免了不必要的上下文切换和竞争条件，也不存在多进程或者多线程导致的切换而消耗 CPU，不用去考虑各种锁的问题，不存在加锁释放锁操作，没有因为可能出现死锁而导致的性能消耗； 4、使用多路I/O复用模型">
+<meta name="twitter:image" content="http://paxblmm0h.bkt.clouddn.com/redis%E4%BA%8B%E5%8A%A1%E6%89%A7%E8%A1%8C%E9%80%BB%E8%BE%91.png">
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var CONFIG = {
+    scheme: 'Mala',
+    sidebar: 'post'
+  };
+</script>
+
+  <title> redis面试题及相关原理 | Jae's blog </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  <!--[if lte IE 8]>
+  <div style=' clear: both; height: 59px; padding:0 0 0 15px; position: relative;margin:0 auto;'>
+    <a href="http://windows.microsoft.com/en-US/internet-explorer/products/ie/home?ocid=ie6_countdown_bannercode">
+      <img src="http://7u2nvr.com1.z0.glb.clouddn.com/picouterie.jpg" border="0" height="42" width="820"
+           alt="You are using an outdated browser. For a faster, safer browsing experience, upgrade for free today or use other browser ,like chrome firefox safari."
+           style='margin-left:auto;margin-right:auto;display: block;'/>
+    </a>
+  </div>
+<![endif]-->
+  
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+  ga('create', 'xxx', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?xxx";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+  <div class="container one-column page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><h1 class="site-meta">
+  <span class="logo-line-before"><i></i></span>
+  <a href="/" class="brand" rel="start">
+      <span class="logo">
+        <i class="icon-next-logo"></i>
+      </span>
+      <span class="site-title">彭文杰的博客</span>
+  </a>
+  <span class="logo-line-after"><i></i></span>
+</h1>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu menu-left">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            <i class="menu-item-icon icon-next-home"></i> <br />
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            <i class="menu-item-icon icon-next-categories"></i> <br />
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            <i class="menu-item-icon icon-next-archives"></i> <br />
+            Archives
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            <i class="menu-item-icon icon-next-tags"></i> <br />
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            <i class="menu-item-icon icon-next-about"></i> <br />
+            About
+          </a>
+        </li>
+      
+
+      
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  
+  <form class="site-search-form">
+    <input type="text" id="st-search-input" class="st-search-input st-default-search-input" />
+  </form>
+
+
+<script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+    (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+    e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install', 'xxx','2.0.0');
+</script>
+
+
+
+    </div>
+  
+</nav>
+
+ </div>
+    </header>
+
+    
+      
+
+      
+        <style type="text/css">
+
+    .circle {
+        width: 40px;
+        height: 40px;
+        background: #555 no-repeat;
+        cursor: move;
+    }
+
+    .assist-btn {
+        position: fixed;
+        top: 50％;
+        left: 10px;
+        -moz-border-radius: 50px;
+        -webkit-border-radius: 50px;
+        border-radius: 50px;
+        outline: none;
+        border: none;
+        color: #87daff;
+    }
+
+</style>
+
+<script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+<script type="text/javascript">
+    // 浮动圆点展开与收缩
+    /*
+    $(function () {
+        var assist_box = $('.assist-box');
+        $('#assist_btn').hover(function () {
+            assist_box.stop().show(300);
+        }, function () {
+            assist_box.stop().hide(150);
+        })
+    });
+    */  
+    //浮动圆点拖动
+    $(function () {
+        var box = document.getElementById('assist_btn');
+        box.onmousedown = function (event) {
+            var e = event || window.event,
+                t = e.target || e.srcElement,
+                // 鼠标按下时的坐标x1,y1
+                x1 = e.clientX,
+                y1 = e.clientY,
+                //鼠标按下时的左右偏移量
+                dragLeft = this.offsetLeft,
+                dragTop = this.offsetTop;
+
+            document.onmousemove = function (event) {
+                var e = event || window.event,
+                    t = e.target || e.srcElement,
+                    // 鼠标移动时的动态坐标
+                    x2 = e.clientX,
+                    y2 = e.clientY,
+                    // 鼠标移动时的坐标的变化量
+                    x = x2 - x1,
+                    y = y2 - y1;
+                box.style.left = (dragLeft + x) + 'px';
+                box.style.top = (dragTop + y) + 'px';
+            }
+
+            document.onmouseup = function () {
+                this.onmousemove = null;
+            }
+        }
+    });
+
+/*
+    $whitesmoke   = #f5f5f5
+    $gainsboro    = #eee
+    $gray-lighter = #ddd
+    $grey-light   = #ccc
+    $grey         = #bbb
+    $grey-dark    = #999
+    $grey-dim     = #666
+    $black-light  = #555
+    $black-deep   = #222
+    $red          = #ff2a2a
+    $blue-bright  = #87daff
+    $blue         = #0684bd
+    $blue-deep    = #262a30
+*/
+    // white theme
+    var body = {color: "#555", background: "white"};
+    var a_tag = {color: "#222"};
+    var header = { background: "#f5f5f5"};
+    var logo_line_i = {background: "#222"};
+    // var post_code = {background: "#eee", color: "#222"};
+
+    function switch_theme() {
+        $("body").css(body);
+        $("a:not('.links-of-author-item a, .site-state-item a, .site-state-posts a, .feed-link a, .motion-element a, .post-tags a, .show-commit-cls a, #donate_board a')").css(a_tag);
+        $(".header, .footer").css(header);
+        $(".logo-line-before i, .logo-line-after i").css(logo_line_i);
+        //$(".post code").css(post_code);
+        $("#idhyt-surprise-ball #idhyt-surprise-ball-animation .drag").css(a_tag);
+        $(".post-title-link, .posts-expand .post-meta, .post-comments-count, .disqus-comment-count, .post-category a, .post-nav-next a, .post-nav-item a").css(a_tag);
+        
+        // $("code").css({color: '#c5c8c6', background: '#1d1f21'});
+        $("#assist_btn").hide(1500);
+    }
+
+    $(function () {
+        $("#assist_btn").dblclick(function() {
+            switch_theme();
+        });
+    });
+
+</script>
+
+<div>
+
+    <button class="assist-btn circle" id="assist_btn" title="双击切换">
+        亮
+    </button>
+
+</div>
+
+
+
+
+
+
+
+
+
+      
+
+    
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div id="content" class="content"> 
+
+  <div id="posts" class="posts-expand">
+    
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+
+      
+      
+        <h1 class="post-title" itemprop="name headline">
+          
+          
+            
+              redis面试题及相关原理
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          Posted on
+          <time itemprop="dateCreated" datetime="2018-06-08T16:23:35+08:00" content="2018-06-08">
+            2018-06-08
+          </time>
+        </span>
+
+        
+          <span class="post-category" >
+            &nbsp; | &nbsp; In
+            
+              <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                <a href="/categories/面试题/" itemprop="url" rel="index">
+                  <span itemprop="name">面试题</span>
+                </a>
+              </span>
+
+              
+              
+
+            
+          </span>
+        
+
+        
+          
+            <span class="post-comments-count">
+            &nbsp; | &nbsp;
+            <a href="/2018/06/08/redis面试题及相关原理/#comments" itemprop="discussionUrl">
+              <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2018/06/08/redis面试题及相关原理/" itemprop="commentsCount"></span>
+            </a>
+          </span>
+          
+        
+      </div>
+    </header>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        <span itemprop="articleBody"><h1 id="redis面试题及相关原理"><a href="#redis面试题及相关原理" class="headerlink" title="redis面试题及相关原理"></a>redis面试题及相关原理</h1><h1 id="redis"><a href="#redis" class="headerlink" title="redis"></a>redis</h1><h2 id="redis为什么这么快"><a href="#redis为什么这么快" class="headerlink" title="redis为什么这么快"></a>redis为什么这么快</h2><p>1、<strong>完全基于内存</strong>，绝大部分请求是纯粹的<strong>内存</strong>操作。</p>
+<p>2、<strong>数据结构简单</strong>，对数据操作也简单，Redis中的数据结构是专门进行设计的；</p>
+<p>3、采用<strong>单线程</strong>，避免了不必要的上下文切换和竞争条件，也不存在多进程或者多线程导致的<strong>切换而消耗 CPU</strong>，不用去考虑各种锁的问题，不存在加锁释放锁操作，没有因为可能出现死锁而导致的性能消耗；</p>
+<p>4、使用<strong>多路I/O复用模型</strong>，<strong>非阻塞IO</strong>；</p>
+<p>5、使用<strong>底层模型</strong>不同，它们之间底层实现方式以及与客户端之间通信的应用协议不一样，Redis直接自己<strong>构建了VM 机制</strong><br>（<strong>原因：</strong>1.redis对象远小于一个page（4k），所以不能用OS的内存交换，并且list类型，set类型可能位于多个page上,不利于换出。2.redis可以将对象压缩后再IO操作 3.OS交换会阻塞线程，redis可以设置让工作线程完成，主线程可以继续接受请求 )<br>因为用一般的系统调用系统函数的话，会浪费一定的时间去移动和请求。</p>
+<h2 id="多路-I-O-复用模型"><a href="#多路-I-O-复用模型" class="headerlink" title="多路 I/O 复用模型"></a>多路 I/O 复用模型</h2><p>详细细节见我另一篇博客。</p>
+<p>多路I/O复用模型是利用 select、poll、epoll等系统调用函数。可以同时监控多个描述符的读写就绪情况。</p>
+<p>可以同时<strong>监察多个流的 I/O事件</strong>的能力。<br>在空闲的时候，会把当前线程阻塞掉，当有一个或多个流有 I/O 事件时，就从阻塞态中唤醒，于是程序就会<strong>轮询一遍所有的流</strong>（epoll 是只轮询那些真正发出了事件的流），并且只依次顺序的处理就绪的流，这种做法就避免了大量的无用操作。</p>
+<p>这里“多路”指的是多个网络连接，“复用”指的是复用同一个线程。采用多路 I/O 复用技术可以让 单个线程高效的处理多个连接请求（只处理真正事件的流，尽量减少网络 IO 的时间消耗），且 Redis 在内存中操作数据的速度非常快，也就是说内存内的操作不会成为影响Redis性能的瓶颈，主要由以上几点造就了 Redis 具有很高的吞吐量。</p>
+<h2 id="redis为什么要使用单线程（指的是处理网络请求的线程）"><a href="#redis为什么要使用单线程（指的是处理网络请求的线程）" class="headerlink" title="redis为什么要使用单线程（指的是处理网络请求的线程）"></a>redis为什么要使用单线程（指的是处理网络请求的线程）</h2><p>官方QA:<br>Redis是基于内存的操作，瓶颈不是CPU，最有可能是<strong>机器内存的大小或者网络带宽</strong>。<br>既然单线程容易实现，而且CPU不会成为瓶颈，那就顺理成章地采用单线程的方案了（毕竟采用多线程会有很多麻烦！）。<br>多线程还要考虑原子性，考虑同步，考虑线程间的配合。单线程已经这么快，就没必要了。多核CPU 的问题，可以通过在单机开多个Redis 实例来完善！</p>
+<h2 id="redis有哪些常用的数据结构"><a href="#redis有哪些常用的数据结构" class="headerlink" title="redis有哪些常用的数据结构"></a>redis有哪些常用的数据结构</h2><p>String、List、Set、Hash、ZSet这5种。有序集合（Sorted Set或者是ZSet）与范围查询，Bitmaps，Hyperloglogs 和地理空间（Geospatial）</p>
+<p>设计一个缓存，你该怎么设计，get和set的时间复杂度怎么算的（答了用LinkedHashMap实现，分析了一下LinkedHashMap但是也没怎么说清）</p>
+<p>Redis有哪些方法</p>
+<h2 id="Redis事务"><a href="#Redis事务" class="headerlink" title="Redis事务"></a>Redis事务</h2><p><strong>使用：</strong><br>以 <strong>MULTI</strong> 开始一个事务， 然后将多个命令入队到事务中，中途可以使用<strong>DISCARD</strong>放弃事务，表示不玩了最后由 <strong>EXEC</strong> 命令触发事务，一并执行事务中的所有命令。</p>
+<p><strong>特性：</strong><br>事务中有语句执行错误了，不会影响上下文的执行，不回滚。<br>MYSQL的原子性：中途执行失败，回滚保证原子性。<br>redis的原子性：中途执行失败，不管，继续执行完所有的命令。保证原子性。<br><strong>一致性：</strong>添加了错误命令到事务队列中，事务会被拒绝执行。执行事务时停机，会根据AOF文件恢复。<br><strong>隔离性：</strong>事务之间不会相互影响，是因为redis是单线程的方式执行事务，并且执行事务中不会中断，事务总是以串行的方式运行。</p>
+<p><strong>持久性：</strong><br>因为redis事务不过是简单的用队列包裹起来一组redis命令,redis并没有为事务提供任何额外的持久化功能,所以redis事务的耐久性由redis使用的模式决定。</p>
+<h2 id="redis的持久化模式"><a href="#redis的持久化模式" class="headerlink" title="redis的持久化模式"></a><strong>redis的持久化模式</strong></h2><p>通过fork子进程来协助完成持久化</p>
+<ul>
+<li><strong>无持久化</strong>：事务不具有耐久性,一旦服务器停机,包括事务数据在内的所有服务器数据都将丢失 </li>
+<li><strong>RDB持久化模式（bgsave做镜像全量持久化）</strong>： <strong>特点：</strong>耗时长，需要配合aof。原理：fock和cow，fock创建子进程，cow用来copy on write 服务器只会在<strong>特定的保存条件</strong>（定时或者定点保存）满足的时候才会执行BGSAVE命令,对数据库进行保存操作,并且异步执行的BGSAVE 不能保证事务数据被第一时间保存到硬盘里面,因此RDB持久化模式下的事务也不具有耐久性 （ 相比于AOF机制，如果数据集很大，RDB的启动效率会更高。）</li>
+<li><strong>AOF持久化模式，appedfsync的选项的值为always</strong>：程序总会在执行命令之后调用同步函数,将命令数据真正的保存到硬盘里面,因此<br>这种配置下的事务是具有耐久性的。 （每修改同步，消耗性能）</li>
+<li><strong>AOF持久化模式,并且appedfsync的选项的值为everysec</strong>：程序会<strong>每秒</strong>同步一次命令数据到磁盘因为停机可能会恰好发生在等待同步的那一秒内,这种可能造成事务数据丢失,所以这种配置下的事务不具有耐久性</li>
+</ul>
+<p><strong>作用：</strong></p>
+<ul>
+<li><strong>批量操作</strong>  在发送 EXEC 命令前被放入队列缓存。</li>
+<li>在事务执行过程，其他<strong>客户端提交的命令请求不会插入</strong>到事务执行命令序列中。（主要作用）</li>
+</ul>
+<h2 id="Redis和Kafka区别"><a href="#Redis和Kafka区别" class="headerlink" title="Redis和Kafka区别"></a>Redis和Kafka区别</h2><ul>
+<li>kafka用于对于一些常规的消息系统，</li>
+<li>“网站活性跟踪”将网页/用户操作等信息发送到kafka中.并实时监控,或者离线统计分析等</li>
+<li>kafka的特性决定它非常适合作为”日志收集中心”</li>
+</ul>
+<h2 id="redis事务锁-（WATCH，监视数据）"><a href="#redis事务锁-（WATCH，监视数据）" class="headerlink" title="redis事务锁 （WATCH，监视数据）"></a>redis事务锁 （WATCH，监视数据）</h2><p>场景：你想防止某个字段不被修改。WATCH “name”。然后开启事务，若修改了name，在执行EXCT的时候，会拒绝事务操作，返回空值。</p>
+<p>WATCH是一个乐观锁，可以在EXEC命令执行之前，监视任意数量的数据库键，并且在执行时，检查被监视的键是否有至少一个被修改了，是的话就拒绝执行事务。（保护 数据库键，拒绝修改，拒绝事务）<br><img src="http://paxblmm0h.bkt.clouddn.com/redis%E4%BA%8B%E5%8A%A1%E6%89%A7%E8%A1%8C%E9%80%BB%E8%BE%91.png" alt="此处输入图片的描述"></p>
+<ul>
+<li>如果name被修改，那么所有监视键name的客户端的<code>REDIS_DIRTY_CAS</code>标识将会被打开，表示该客户的事务安全性已经被 表示事务已经不再安全。客户端会拒绝事务的执行。</li>
+</ul>
+<p>Redis的底层的单线程模型和持久化的方式，再深入一点自己模拟实现一个简单的Redis可以吗（LRU算法，再自己想想时间复杂度）</p>
+<h1 id="主从复制-分布式"><a href="#主从复制-分布式" class="headerlink" title="主从复制 分布式"></a>主从复制 分布式</h1><h2 id="为什么要主从复制"><a href="#为什么要主从复制" class="headerlink" title="为什么要主从复制"></a>为什么要主从复制</h2><p><strong>原则：</strong> Master会将数据同步到slave，而slave不会将数据同步到master。Slave启动时会连接master来同步数据。</p>
+<p>这是一个典型的分布式<strong>读写分离</strong>模型。<br>利用master来插入数据<br>slave提供检索服务。这样可以有效减少单个机器的并发访问数量</p>
+<p>通过slaveof命令复制，主→从。从服务器上：<code>SLAVEOF 127.0.0.1 6379</code><br><strong>旧版主从复制</strong><br><strong>1.同步</strong>：将<strong>从服务器</strong>的数据库状态更新至<strong>主服务器</strong>当前所处状态<br>1）发送SYNC命令<br>2）主服务器执行BGSAVE命令，在后头生成RDB文件，并使用一个缓冲区几率从现在驾驶执行的所有写命令<br>3）完成BGSAVE后，将RDB发送给从服务器，从服务器更新。<br>4）缓冲区写命令发送给从服务器，更新。<br><img src="http://paxblmm0h.bkt.clouddn.com/%E4%B8%BB%E4%BB%8E%E6%9C%8D%E5%8A%A1%E5%99%A8%E6%89%A7%E8%A1%8CSYNC%E5%91%BD%E4%BB%A4.png" alt="此处输入图片的描述"><br><strong>2.命令传播：</strong>同步之后可能会因请求又导致主从不同，故主服务器会将自己执行的命令，同时发给从服务器执行。<br><strong>旧版缺陷：</strong>当主从服务器断线，从服务器需要重新SYNC，很消耗性能。</p>
+<p><strong>新版主从复制：</strong> 2.8版本之后，使用PSYNC替代SYNC<br>PSYNC命令具有<strong>完整重同步</strong>和<strong>部分重同步</strong>两种模式：<br><strong>完整重同步：</strong>处理初次复制情况，和SYNC基本相同<br><strong>部分重同步：</strong>处理断线问题，当断线重连后，<strong>不是执行同步，而主服务器将断线期间命令发送给从服务器</strong>。通过复制偏移量、复制积压缓冲区、服务器运行ID实现。<br>命令传播程序在发送写命令给从服务器时，也会备份一份到积压缓冲区队列。<br>当重连时，根据从服务器提供的复制偏移量来选择执行何种操作。如果偏移量存在于缓存区，那么则部分重同步，如果偏移量之后不存在缓冲区，则执行完整重同步。<br><img src="http://paxblmm0h.bkt.clouddn.com/redis%20PSYNC%E6%89%A7%E8%A1%8C%E5%AE%8C%E6%95%B4%E9%87%8D%E5%90%8C%E6%AD%A5%E5%92%8C%E9%83%A8%E5%88%86%E9%87%8D%E5%90%8C%E6%AD%A5.png" alt="此处输入图片的描述"></p>
+<h2 id="读写分离模型"><a href="#读写分离模型" class="headerlink" title="读写分离模型"></a>读写分离模型</h2><p>通过增加Slave DB的数量，读的性能可以线性增长。为了避免Master DB的单点故障，集群一般都会采用两台Master DB做双机热备，所以整个集群的读和写的可用性都非常高。</p>
+<p><strong>缺陷：</strong>不管是Master还是Slave，每个节点<strong>都必须保存完整的数据</strong>，如果在<strong>数据量很大</strong>的情况下，集群的扩展能力还是受限于单个节点的存储能力，而且对于Write-intensive类型的应用，读写分离架构并不适合。</p>
+<h2 id="数据分片模型"><a href="#数据分片模型" class="headerlink" title="数据分片模型"></a>数据分片模型</h2><p>将每个节点看成都是<strong>独立的master</strong>，然后通过业务实现数据分片。<br>结合上面两种模型，可以将每个master设计成由一个master和多个slave组成的模型。</p>
+<h2 id="Redis哨兵：高可用性解决方案"><a href="#Redis哨兵：高可用性解决方案" class="headerlink" title="Redis哨兵：高可用性解决方案"></a>Redis哨兵：高可用性解决方案</h2><p>由一个或多个哨兵实例组成的系统 监视任意多个主服务器。<br>当主服务器下线时，自动将被监视服务器 下属 某个服务器（从服务器）升级为新主服务器，代替下线服务器处理请求。<br><img src="http://paxblmm0h.bkt.clouddn.com/redis%E5%93%A8%E5%85%B5.png" alt="此处输入图片的描述"><br>当server1的下线时长超过用户设定的下线时长上限，哨兵系统就会对其进行<strong>故障转移操作</strong>。<br>1.挑选一个从服务器成为主服务器<br>2.Sentinel系统发送指令让其他从服务器成为新主服务器的从服务器<br>3.Sentinel系统继续监控下限的server1，重新上线后让其成为新主服务器的从服务器。<br><img src="http://paxblmm0h.bkt.clouddn.com/redis%E5%93%A8%E5%85%B5%E6%95%85%E9%9A%9C%E8%BD%AC%E7%A7%BB.png" alt="此处输入图片的描述"></p>
+<p>Sentinel本质上只是一个运行在特殊模式下的Redis服务器，只是初始化过程不同，执行其专用代码。<br>1.获取主服务器信息，哨兵每十秒一次，以及其从服务器信息<br>2.当发现主服务器有新从服务器出现时，也会向从服务器创建订阅及命令连接。<br>3.发送以及接收主从服务器消息。<br>4.监测主服务器主观下线状态（从主服务器获取），检查主服务器客观下线状态（从其从服务获取是否真的下线）<br>5.选取领头Sentinel去解决下线服务器故障转移：都有可能，先到先得。</p>
+<h2 id="redis集群"><a href="#redis集群" class="headerlink" title="redis集群"></a>redis集群</h2><p>作用：提供的分布式数据库方案，通过分片来进行数据共享，提供复制和故障转移操作。</p>
+<p>开始的节点是分散在各自独立集群。向节点发送CLUSTER MEET，让节点进行握手，形成集群。<br>1.启动节点<br><img src="http://paxblmm0h.bkt.clouddn.com/%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%88%A4%E6%96%AD%E6%98%AF%E5%90%A6%E5%BC%80%E5%90%AF%E9%9B%86%E7%BE%A4.png" alt="此处输入图片的描述"><br>节点可以使用所有单机模式组件。</p>
+<p>优势：自动分割数据到不同的节点上。<br>整个集群的部分节点失败或者不可达的情况下能够继续处理命令。</p>
+<h1 id="分布式锁"><a href="#分布式锁" class="headerlink" title="分布式锁"></a>分布式锁</h1><p><strong>线程锁（JVM)：</strong>主要用来给<strong>方法、代码块</strong>加锁。当某个方法或代码使用锁，在同一时刻仅有一个线程执行该方法或该代码段。线程锁只在同一JVM中有效果，因为线程锁的实现在根本上是依靠<strong>线程之间共享内存</strong>实现的，比如synchronized是共享<strong>对象头</strong>，显示锁Lock是共享某个变量（state）。<br><strong>进程锁：</strong>为了控制同一操作系统中多个进程访问某个<strong>共享资源</strong>，因为进程具有独立性，各个进程无法访问其他进程的资源，因此无法通过synchronized等线程锁实现进程锁。<br><strong>分布式锁：</strong>当多个进程不在同一个系统中，用分布式锁控制多个进程对资源的访问。</p>
+<p>分布式锁一般有三种实现方式：</p>
+<ul>
+<li>数据库乐观锁；</li>
+<li>基于Redis的分布式锁；</li>
+<li>基于ZooKeeper的分布式锁。<h2 id="redis分布锁"><a href="#redis分布锁" class="headerlink" title="redis分布锁"></a><strong>redis分布锁</strong></h2><strong>特性：</strong></li>
+<li>1.互斥性。在任意时刻，只有一个客户端能持有锁。</li>
+<li>不会发生死锁。即使有一个客户端在持有锁的期间崩溃而没有主动解锁，也能保证后续其他客户端能加锁。</li>
+<li>具有容错性。 只要大部分的Redis节点正常运行，客户端就可以加锁和解锁。</li>
+<li>解铃还须系铃人。加锁和解锁必须是同一个客户端，客户端自己不能把别人加的锁给解了。</li>
+</ul>
+<p><strong>代码实现</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">RedisTool</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> String LOCK_SUCCESS = <span class="string">"OK"</span>;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> String SET_IF_NOT_EXIST = <span class="string">"NX"</span>;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> String SET_WITH_EXPIRE_TIME = <span class="string">"PX"</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 尝试获取分布式锁</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> jedis Redis客户端</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> lockKey 锁</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> requestId 请求标识</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> expireTime 超期时间</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> 是否获取成功</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">boolean</span> <span class="title">tryGetDistributedLock</span><span class="params">(Jedis jedis, String lockKey, String requestId, <span class="keyword">int</span> expireTime)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">        String result = jedis.set(lockKey, requestId, SET_IF_NOT_EXIST, SET_WITH_EXPIRE_TIME, expireTime);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (LOCK_SUCCESS.equals(result)) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>可以看到，我们加锁就一行代码：<code>jedis.set(String key, String value, String nxxx, String expx, int time)</code>，这个set()方法一共有五个形参：<br><strong>锁，钥匙，存在则不操作，设置过期时间，时间长度</strong></p>
+<ol>
+<li>key：我们使用key来当锁，因为key是唯一的。</li>
+<li>value：我们传的是requestId，有key作为锁不就够了吗，为什么还要用到value？原因就是我们在上面讲到可靠性时，分布式锁要满足第四个条件解铃还须系铃人，通过给value赋值为requestId，我们就知道这把锁是哪个请求加的了，在解锁的时候就可以有依据。requestId可以使用UUID.randomUUID().toString()方法生成。（也就是requestId是加锁客户端独有的）</li>
+<li>nxxx，这个参数我们填的是NX，意思是<code>SET IF NOT EXIST</code>，即当key不存在时，我们进行set操作；若key已经存在，则不做任何操作；</li>
+<li>expx，这个参数我们传的是PX，意思是我们要给这个key加一个<strong>过期的设置</strong>，具体时间由第五个参数决定。(我们不允许有永久的锁）</li>
+<li>time，与第四个参数相呼应，代表key的过期时间。</li>
+</ol>
+<p>总的来说，执行上面的set()方法就只会导致两种结果：1. 当前没有锁（key不存在），那么就进行加锁操作，并对锁设置个有效期，同时value表示加锁的客户端。2. 已有锁存在，不做任何操作。</p>
+<p>满足了上述的所有特性，不会发生死锁</p>
+<p><strong>解锁代码</strong><br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">RedisTool</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> Long RELEASE_SUCCESS = <span class="number">1L</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 释放分布式锁</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> jedis Redis客户端</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> lockKey 锁</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> requestId 请求标识</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> 是否释放成功</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">boolean</span> <span class="title">releaseDistributedLock</span><span class="params">(Jedis jedis, String lockKey, String requestId)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">        String script = <span class="string">"if redis.call('get', KEYS[1]) == ARGV[1] then return redis.call('del', KEYS[1]) else return 0 end"</span>;</span><br><span class="line">        Object result = jedis.eval(script, Collections.singletonList(lockKey), Collections.singletonList(requestId));</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (RELEASE_SUCCESS.equals(result)) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>第一行代码，我们写了一个简单的Lua脚本代码(能够在服务器端 <strong>原子地</strong>执行多个Redis命令）详细介绍见《redis原理和实战》一书第20章。    </p>
+<p>第二行代码，我们将Lua代码传到jedis.eval()方法里，并使参数KEYS<a href="http://paxblmm0h.bkt.clouddn.com/redis%E4%BA%8B%E5%8A%A1%E6%89%A7%E8%A1%8C%E9%80%BB%E8%BE%91.png" target="_blank" rel="noopener">1</a>赋值为lockKey，ARGV<a href="http://paxblmm0h.bkt.clouddn.com/redis%E4%BA%8B%E5%8A%A1%E6%89%A7%E8%A1%8C%E9%80%BB%E8%BE%91.png" target="_blank" rel="noopener">1</a>赋值为requestId。<strong>eval()方法</strong>是将Lua代码交给Redis服务端执行。</p>
+<p>首先获取锁对应的value值，检查是否与requestId相等，如果相等则删除锁（解锁）。<br>Lua语言能确保上述操作是<strong>原子性</strong>的。</p>
+<p>关于非原子性会带来什么问题，一个场景举例：<br>在判断判断锁和解锁中间，插入了锁过期和其他设置锁。<br>问题在于如果调用jedis.del()方法的时候，这把锁已经不属于当前客户端的时候会解除他人加的锁。<br>比如客户端A加锁，一段时间之后客户端A解锁，在执行jedis.del()之前，锁突然过期了，此时客户端B尝试加锁成功，然后客户端A再执行del()方法，则将客户端B的锁给解除了。</p>
+<h2 id="一系列问题"><a href="#一系列问题" class="headerlink" title="一系列问题"></a>一系列问题</h2><h3 id="缓存雪崩"><a href="#缓存雪崩" class="headerlink" title="缓存雪崩"></a>缓存雪崩</h3><p><strong>解释：</strong>由于原有缓存失效，新缓存未到期。这俩时间段之间，大量访问数据库。<br><strong>造成原因：</strong>设置缓存时采用了相同的过期时间，某一时间点大量缓存过期。<br><strong>解决方案：</strong></p>
+<ol>
+<li>分析用户行为，尽量让失效时间点均匀分布。避免缓存雪崩的出现。</li>
+<li>并发量小时，加锁排队，治标不治本的方法</li>
+<li>并发量大时，为缓存加标记记录缓存是否失效，失效则重新更新数据。</li>
+<li>二级缓存：做二级缓存，A1为原始缓存，A2为拷贝缓存，A1失效时，可以访问A2，A1缓存失效时间设置为短期，A2设置为长期</li>
+</ol>
+<h3 id="缓存穿透"><a href="#缓存穿透" class="headerlink" title="缓存穿透"></a>缓存穿透</h3><p><strong>造成原因：</strong>狂TM查询缓存和数据库都没有的东西。穿透攻击。缓存命中率极低。<br><strong>解决方案：</strong></p>
+<ol>
+<li><p><strong>布隆过滤器</strong>，将所有可能存在的数据哈希到一个足够大的bitmap中，一个一定不存在的数据会被这个bitmap拦截掉，从而避免了对底层存储系统的查询压力。（多个has算法，验证所有bitmap对应位置上是不是都是1，都是的话才存在，会误伤正确访问，但是绝不会通过无效访问）节省空间。</p>
+</li>
+<li><p><strong>快速过期的空值也放到缓存中</strong>！如果一个查询返回的数据为空（不管是数据不存在，还是系统故障），我们仍然把这个<strong>空结果进行缓存</strong>，但它的过期时间会很短，最长不超过五分钟。通过这个直接设置的默认值存放到缓存，这样第二次到缓存中获取就有值了，而不会继续访问数据库，这种办法最简单粗暴！</p>
+</li>
+</ol>
+<h3 id="缓存预热（开机或者挂了重启加缓存）"><a href="#缓存预热（开机或者挂了重启加缓存）" class="headerlink" title="缓存预热（开机或者挂了重启加缓存）"></a>缓存预热（开机或者挂了重启加缓存）</h3><p>系统上线后，提前将相关的缓存数据直接加载到缓存系统。<br>解决方案：</p>
+<ol>
+<li>直接写个缓存刷新页面，上线时手工添加缓存</li>
+<li>定时刷新缓存</li>
+</ol>
+<h3 id="缓存更新"><a href="#缓存更新" class="headerlink" title="缓存更新"></a>缓存更新</h3><p>除了缓存服务器自带的缓存失效策略之外（Redis默认的有6中策略可供选择），我们还可以根据具体的业务需求进行自定义的缓存淘汰，常见的策略有两种：<br>（1）<strong>定时</strong>去清理过期的缓存；（适合少量缓存<br>（2）当有用户请求过来时，再判断这个<strong>请求所用到的缓存是否过期</strong>，过期的话就去底层系统得到新数据并更新缓存。</p>
+<p>两者各有优劣，第一种的缺点是维护大量缓存的key是比较麻烦的，第二种的缺点就是每次用户请求过来都要判断缓存失效，逻辑相对比较复杂！</p>
+<p>缓存降级</p>
+</span>
+      
+    </div>
+    <div>
+  
+    ﻿
+  
+</div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/知识点整理/" rel="tag">#知识点整理</a>
+          
+            <a href="/tags/面试/" rel="tag">#面试</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/06/08/复习整理——redis/" rel="prev">复习整理————redis</a>
+            
+          </div>
+
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/04/14/JVM部分/" rel="next">JVM部分</a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div>
+      
+        <style type="text/css">
+
+    .donate_bar {
+        text-align: center;
+        margin-top : 5%;
+    }
+
+    .donate_bar.hidden {
+        display:none;
+    }
+/*
+    .donate_bar a.btn_donate {
+        display: inline-block;
+        width: 82px;
+        height: 82px;
+        margin-left:auto;
+        margin-right:auto;
+
+        background: url("http://img.t.sinajs.cn/t5/style/images/apps_PRF/e_media/btn_reward.gif") no-repeat;
+        _background: url("http://img.t.sinajs.cn/t5/style/images/apps_PRF/e_media/btn_reward.gif") no-repeat; 
+
+        -webkit-transition: background 0s;
+        -moz-transition: background 0s;
+        -o-transition: background 0s;
+        -ms-transition: background 0s;
+        transition: background 0s;
+    }
+*/
+    .donate_bar a.btn_donate:hover { 
+        // background-position: 0px -82px;
+        color: #87daff
+    }
+
+    .donate_bar .donate_txt {
+        display: block;
+        color: #9d9d9d;
+        font: 14px/2 "Microsoft Yahei";
+    }
+
+    .bold { 
+        font-weight: bold; 
+    }
+
+    .post-donate a {
+        border-bottom: 0px;
+    }
+
+    #donate_guide table {
+        border: none;
+    }
+
+    #donate_guide td {
+        border-bottom: none;
+        border-right: none;
+        background: #333333;
+        valign: top;
+    }
+
+</style>
+
+
+
+    
+
+    <div class ="post-donate">
+        <div id="donate_board" class="donate_bar center">
+              <a id="btn_donate" class="btn_donate" href="javascript:;" title="打赏">赏</a>
+              <span id="donate_txt" class="donate_txt">
+                   
+                        仅仅是一个功能
+                   
+              </span>
+            <br>
+        </div>  
+  
+        <div id="donate_guide" class="donate_bar center hidden">
+            <!--
+            
+                <a href="http://paxblmm0h.bkt.clouddn.com/ali_pay.jpg" title="支付宝打赏" class="fancybox" rel="article0" 
+                    style="float:left;margin-left:25%;margin-right:10px;">
+                    <img src="http://paxblmm0h.bkt.clouddn.com/ali_pay.jpg" title="" height="164px" width="164px">
+                </a> 
+              
+
+            
+                <a href="http://paxblmm0h.bkt.clouddn.com/wechat_pay.jpg" title="微信打赏" class="fancybox" rel="article0"
+                    style="margin-right:30%">
+                    <img src="http://paxblmm0h.bkt.clouddn.com/wechat_pay.jpg" title="" height="164px" width="164px">
+                </a>
+            
+            -->
+            <table>
+                <tr>
+                    <td>
+                        
+                            <a href="http://paxblmm0h.bkt.clouddn.com/ali_pay.jpg" title="支付宝打赏" class="fancybox" rel="article0" 
+                                style="float:left;margin-left:25%;margin-right:10px;">
+                                <img src="http://paxblmm0h.bkt.clouddn.com/ali_pay.jpg" title="" height="164px" width="164px">
+                            </a> 
+                         
+                    </td>
+                    <td>
+                        
+                            <a href="http://paxblmm0h.bkt.clouddn.com/wechat_pay.jpg" title="微信打赏" class="fancybox" rel="article0"
+                                style="margin-right:30%">
+                                <img src="http://paxblmm0h.bkt.clouddn.com/wechat_pay.jpg" title="" height="164px" width="164px">
+                            </a>
+                        
+                    </td>
+                </tr>
+            </table>
+
+        </div>
+
+        <script type="text/javascript">
+            document.getElementById('btn_donate').onclick = function() {
+                $('#donate_board').addClass('hidden');
+                // $('#donate_guide').removeClass('hidden');
+                $('#donate_guide').show(2000);
+            }
+
+        </script>
+    </div>
+
+    
+
+
+      
+    </div>
+
+    <div class="post-spread">
+      
+        <!-- JiaThis Button BEGIN -->
+<div class="jiathis_style">
+  <a class="jiathis_button_tsina"></a>
+  <a class="jiathis_button_tqq"></a>
+  <a class="jiathis_button_weixin"></a>
+  <a class="jiathis_button_cqq"></a>
+  <a class="jiathis_button_douban"></a>
+  <a class="jiathis_button_renren"></a>
+  <a class="jiathis_button_qzone"></a>
+  <a class="jiathis_button_kaixin001"></a>
+  <a class="jiathis_button_copy"></a>
+  <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jiathis_separator jtico jtico_jiathis" target="_blank"></a>
+  <a class="jiathis_counter_style"></a>
+</div>
+<script type="text/javascript" >
+  var jiathis_config={
+    hideMore:false
+  }
+</script>
+<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js" charset="utf-8"></script>
+<!-- JiaThis Button END -->
+
+      
+    </div>
+  </div>
+
+ </div>
+
+        
+          <div class="comments" id="comments">
+            
+              <div id="disqus_thread">
+                <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+              </div>
+            <!--
+            
+            -->
+        
+      </div>
+
+      
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            Table Of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" src="/images/default_avatar.jpg" alt="Jae Peng" itemprop="image"/>
+          <p class="site-author-name" itemprop="name">Jae Peng</p>
+        </div>
+        <p class="site-description motion-element" itemprop="description">A purchasing coder</p>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">38</span>
+              <span class="site-state-item-name">posts</span>
+            </a>
+          </div>
+
+          <div class="site-state-item site-state-categories">
+            <a href="/categories">
+              <span class="site-state-item-count">7</span>
+              <span class="site-state-item-name">categories</span>
+              </a>
+          </div>
+
+          <div class="site-state-item site-state-tags">
+            <a href="/tags">
+              <span class="site-state-item-count">23</span>
+              <span class="site-state-item-name">tags</span>
+              </a>
+          </div>
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="menu-item-icon icon-next-feed"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="http://github.com/jaecoding" target="_blank">GitHub</a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://twitter.com/xxx" target="_blank">Twitter</a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/" target="_blank">Weibo</a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://www.zhihu.com/people/peng-wen-jie-13" target="_blank">ZhiHu</a>
+              </span>
+            
+          
+        </div>
+
+        <div class="links-of-friendly motion-element">
+          
+            <p class="site-author-name">CSDNblog</p>
+            
+              <span class="links-of-author-item">
+              <a href="https://blog.csdn.net/Jae_Peng" target="_blank">About</a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+          <div class="cc-license motion-element" itemprop="license">
+            <a href="http://creativecommons.org/licenses/by-nc-sa/4.0" class="cc-opacity" target="_blank">
+              <img src="/images/cc-by-nc-sa.svg" alt="Creative Commons" />
+            </a>
+          </div>
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap sidebar-panel-active">
+          <div class="post-toc-indicator-top post-toc-indicator"></div>
+          <div class="post-toc">
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#redis面试题及相关原理"><span class="nav-number">1.</span> <span class="nav-text">redis面试题及相关原理</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#redis"><span class="nav-number">2.</span> <span class="nav-text">redis</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#redis为什么这么快"><span class="nav-number">2.1.</span> <span class="nav-text">redis为什么这么快</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#多路-I-O-复用模型"><span class="nav-number">2.2.</span> <span class="nav-text">多路 I/O 复用模型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#redis为什么要使用单线程（指的是处理网络请求的线程）"><span class="nav-number">2.3.</span> <span class="nav-text">redis为什么要使用单线程（指的是处理网络请求的线程）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#redis有哪些常用的数据结构"><span class="nav-number">2.4.</span> <span class="nav-text">redis有哪些常用的数据结构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Redis事务"><span class="nav-number">2.5.</span> <span class="nav-text">Redis事务</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#redis的持久化模式"><span class="nav-number">2.6.</span> <span class="nav-text">redis的持久化模式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Redis和Kafka区别"><span class="nav-number">2.7.</span> <span class="nav-text">Redis和Kafka区别</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#redis事务锁-（WATCH，监视数据）"><span class="nav-number">2.8.</span> <span class="nav-text">redis事务锁 （WATCH，监视数据）</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#主从复制-分布式"><span class="nav-number">3.</span> <span class="nav-text">主从复制 分布式</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#为什么要主从复制"><span class="nav-number">3.1.</span> <span class="nav-text">为什么要主从复制</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#读写分离模型"><span class="nav-number">3.2.</span> <span class="nav-text">读写分离模型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数据分片模型"><span class="nav-number">3.3.</span> <span class="nav-text">数据分片模型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Redis哨兵：高可用性解决方案"><span class="nav-number">3.4.</span> <span class="nav-text">Redis哨兵：高可用性解决方案</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#redis集群"><span class="nav-number">3.5.</span> <span class="nav-text">redis集群</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#分布式锁"><span class="nav-number">4.</span> <span class="nav-text">分布式锁</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#redis分布锁"><span class="nav-number">4.1.</span> <span class="nav-text">redis分布锁</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#一系列问题"><span class="nav-number">4.2.</span> <span class="nav-text">一系列问题</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#缓存雪崩"><span class="nav-number">4.2.1.</span> <span class="nav-text">缓存雪崩</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#缓存穿透"><span class="nav-number">4.2.2.</span> <span class="nav-text">缓存穿透</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#缓存预热（开机或者挂了重启加缓存）"><span class="nav-number">4.2.3.</span> <span class="nav-text">缓存预热（开机或者挂了重启加缓存）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#缓存更新"><span class="nav-number">4.2.4.</span> <span class="nav-text">缓存更新</span></a></li></ol></li></ol></li></ol></div>
+            
+          </div>
+          <div class="post-toc-indicator-bottom post-toc-indicator"></div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner"> <div class="copyright" >
+  
+  &copy; &nbsp;  2011 - 
+  <span itemprop="copyrightYear">2019
+  </span>
+  <span class="with-love">
+    <i class="icon-next-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Jae Peng
+  </span>
+</div>
+
+<div class="powered-by">
+  Powered by <a class="theme-link" href="http://hexo.io">Hexo</a>
+</div>
+
+<div class="theme-info">
+  Theme by <a class="theme-link" href="http://Jaecoding.github.io">Jae</a>.<a class="theme-link" href="https://github.com/idhyt/hexo-theme-next/tree/magiclamp">Mala</a>
+</div>
+
+<!-- busuanzi -->
+
+  <div class="busuanzi-info">
+    <div class="theme-info">
+    <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+    </script>
+    <span id="busuanzi_container_site_pv">
+        本站总访问量<a class="theme-link"><span id="busuanzi_value_site_pv"></span></a>次
+    </span>
+</div>
+  </div>
+
+
+
+ </div>
+    </footer>
+
+    <div class="back-to-top"></div>
+  </div>
+
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  
+  
+    
+
+  <script type="text/javascript">
+    var disqus_shortname = 'xxx';
+    var disqus_identifier = '2018/06/08/redis面试题及相关原理/';
+    var disqus_title = 'redis面试题及相关原理';
+    var disqus_url = 'http://jaecoding.github.io/2018/06/08/redis面试题及相关原理/';
+
+    function run_disqus_script(disqus_script){
+      var dsq = document.createElement('script');
+      dsq.type = 'text/javascript';
+      dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }
+
+    run_disqus_script('count.js');
+    
+      run_disqus_script('embed.js');
+    
+  </script>
+
+  
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js"></script>
+  <script type="text/javascript" src="/js/fancy-box.js?v=0.4.5.1"></script>
+
+
+  <script type="text/javascript" src="/js/helpers.js?v=0.4.5.1"></script>
+  
+
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js"></script>
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js"></script>
+
+  <script type="text/javascript" src="/js/motion_global.js?v=0.4.5.1" id="motion.global"></script>
+
+
+
+
+  <script type="text/javascript" src="/js/nav-toggle.js?v=0.4.5.1"></script>
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  
+<script type="text/javascript" src="/js/bootstrap.scrollspy.js?v=0.4.5.1" id="bootstrap.scrollspy.custom"></script>
+
+
+<script type="text/javascript" id="sidebar.toc.highlight">
+  $(document).ready(function () {
+    var tocSelector = '.post-toc';
+    var $tocSelector = $(tocSelector);
+    var activeCurrentSelector = '.active-current';
+
+    $tocSelector
+      .on('activate.bs.scrollspy', function () {
+        var $currentActiveElement = $(tocSelector + ' .active').last();
+
+        removeCurrentActiveClass();
+        $currentActiveElement.addClass('active-current');
+
+        $tocSelector[0].scrollTop = $currentActiveElement.position().top;
+      })
+      .on('clear.bs.scrollspy', function () {
+        removeCurrentActiveClass();
+      });
+
+    function removeCurrentActiveClass () {
+      $(tocSelector + ' ' + activeCurrentSelector)
+        .removeClass(activeCurrentSelector.substring(1));
+    }
+
+    function processTOC () {
+      getTOCMaxHeight();
+      toggleTOCOverflowIndicators();
+    }
+
+    function getTOCMaxHeight () {
+      var height = $('.sidebar').height() -
+                   $tocSelector.position().top -
+                   $('.post-toc-indicator-bottom').height();
+
+      $tocSelector.css('height', height);
+
+      return height;
+    }
+
+    function toggleTOCOverflowIndicators () {
+      tocOverflowIndicator(
+        '.post-toc-indicator-top',
+        $tocSelector.scrollTop() > 0 ? 'show' : 'hide'
+      );
+
+      tocOverflowIndicator(
+        '.post-toc-indicator-bottom',
+        $tocSelector.scrollTop() >= $tocSelector.find('ol').height() - $tocSelector.height() ? 'hide' : 'show'
+      )
+    }
+
+    $(document).on('sidebar.motion.complete', function () {
+      processTOC();
+    });
+
+    $('body').scrollspy({ target: tocSelector });
+    $(window).on('resize', function () {
+      if ( $('.sidebar').hasClass('sidebar-active') ) {
+        processTOC();
+      }
+    });
+
+    onScroll($tocSelector);
+
+    function onScroll (element) {
+      element.on('mousewheel DOMMouseScroll', function (event) {
+          var oe = event.originalEvent;
+          var delta = oe.wheelDelta || -oe.detail;
+
+          this.scrollTop += ( delta < 0 ? 1 : -1 ) * 30;
+          event.preventDefault();
+
+          toggleTOCOverflowIndicators();
+      });
+    }
+
+    function tocOverflowIndicator (indicator, action) {
+      var $indicator = $(indicator);
+      var opacity = action === 'show' ? 0.4 : 0;
+      $indicator.velocity ?
+        $indicator.velocity('stop').velocity({
+          opacity: opacity
+        }, { duration: 100 }) :
+        $indicator.stop().animate({
+          opacity: opacity
+        }, 100);
+    }
+
+  });
+</script>
+
+<script type="text/javascript" id="sidebar.nav">
+  $(document).ready(function () {
+    var html = $('html');
+    var TAB_ANIMATE_DURATION = 200;
+    var hasVelocity = $.isFunction(html.velocity);
+
+    $('.sidebar-nav li').on('click', function () {
+      var item = $(this);
+      var activeTabClassName = 'sidebar-nav-active';
+      var activePanelClassName = 'sidebar-panel-active';
+      if (item.hasClass(activeTabClassName)) {
+        return;
+      }
+
+      var currentTarget = $('.' + activePanelClassName);
+      var target = $('.' + item.data('target'));
+
+      hasVelocity ?
+        currentTarget.velocity('transition.slideUpOut', TAB_ANIMATE_DURATION, function () {
+          target
+            .velocity('stop')
+            .velocity('transition.slideDownIn', TAB_ANIMATE_DURATION)
+            .addClass(activePanelClassName);
+        }) :
+        currentTarget.animate({ opacity: 0 }, TAB_ANIMATE_DURATION, function () {
+          currentTarget.hide();
+          target
+            .stop()
+            .css({'opacity': 0, 'display': 'block'})
+            .animate({ opacity: 1 }, TAB_ANIMATE_DURATION, function () {
+              currentTarget.removeClass(activePanelClassName);
+              target.addClass(activePanelClassName);
+            });
+        });
+
+      item.siblings().removeClass(activeTabClassName);
+      item.addClass(activeTabClassName);
+    });
+
+    $('.post-toc a').on('click', function (e) {
+      e.preventDefault();
+      var targetSelector = escapeSelector(this.getAttribute('href'));
+      var offset = $(targetSelector).offset().top;
+      hasVelocity ?
+        html.velocity('stop').velocity('scroll', {
+          offset: offset  + 'px',
+          mobileHA: false
+        }) :
+        $('html, body').stop().animate({
+          scrollTop: offset
+        }, 500);
+    });
+
+    // Expand sidebar on post detail page by default, when post has a toc.
+    var $tocContent = $('.post-toc-content');
+    if (isDesktop() && CONFIG.sidebar === 'post') {
+      if ($tocContent.length > 0 && $tocContent.html().trim().length > 0) {
+        displaySidebar();
+      }
+    }
+  });
+</script>
+
+
+
+  <script type="text/javascript">
+    $(document).ready(function () {
+      if (CONFIG.sidebar === 'always') {
+        displaySidebar();
+      }
+      if (isMobile()) {
+        FastClick.attach(document.body);
+      }
+    });
+  </script>
+
+  
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/lazyload.js"></script>
+  <script type="text/javascript">
+    $(function () {
+      $("#posts").find('img').lazyload({
+        placeholder: "/images/loading.gif",
+        effect: "fadeIn"
+      });
+    });
+  </script>
+</body>
+</html>
