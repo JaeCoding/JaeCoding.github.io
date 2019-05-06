@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>netty（一） 之 i/o通信 | Jae&#39;s blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  
+  <meta name="keywords" content="IONetty" />
+  
+  
+  
+  
+  <meta name="description" content="Netty（一） 之 I/O通信IO类型介绍BIO通信 一个线程负责连接  一请求一应答  缺乏弹性伸缩能力  由于线程是宝贵的资源，会造成宕机。请求来到，由accpter去针对每个请求申请线程 伪异步IO通信 线程池负责连接 M请求N应答 超过线程池会阻塞，由于限制不会宕机  由线程池来处理所有客户端的接入， NIO通信 加入了缓冲区Buffer：所有数据由缓冲区处理，读入缓冲区，写入缓冲区。">
+<meta name="keywords" content="IO,Netty">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Netty（一） 之 I&#x2F;O通信">
+<meta property="og:url" content="http://jaecoding.github.io/2018/08/15/Netty（一） 之 I-O通信/index.html">
+<meta property="og:site_name" content="Jae&#39;s blog">
+<meta property="og:description" content="Netty（一） 之 I/O通信IO类型介绍BIO通信 一个线程负责连接  一请求一应答  缺乏弹性伸缩能力  由于线程是宝贵的资源，会造成宕机。请求来到，由accpter去针对每个请求申请线程 伪异步IO通信 线程池负责连接 M请求N应答 超过线程池会阻塞，由于限制不会宕机  由线程池来处理所有客户端的接入， NIO通信 加入了缓冲区Buffer：所有数据由缓冲区处理，读入缓冲区，写入缓冲区。">
+<meta property="og:locale" content="en">
+<meta property="og:updated_time" content="2019-05-03T13:44:55.825Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Netty（一） 之 I&#x2F;O通信">
+<meta name="twitter:description" content="Netty（一） 之 I/O通信IO类型介绍BIO通信 一个线程负责连接  一请求一应答  缺乏弹性伸缩能力  由于线程是宝贵的资源，会造成宕机。请求来到，由accpter去针对每个请求申请线程 伪异步IO通信 线程池负责连接 M请求N应答 超过线程池会阻塞，由于限制不会宕机  由线程池来处理所有客户端的接入， NIO通信 加入了缓冲区Buffer：所有数据由缓冲区处理，读入缓冲区，写入缓冲区。">
+  
+    <link rel="alternate" href="/atom.xml" title="Jae&#39;s blog" type="application/atom+xml">
+  
+
+  
+
+  <link rel="icon" href="/css/images/mylogo.jpg">
+  <link rel="apple-touch-icon" href="/css/images/mylogo.jpg">
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans|Montserrat:700" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Roboto:400,300,300italic,400italic" rel="stylesheet" type="text/css">
+  <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+  <style type="text/css">
+    @font-face{font-family:futura-pt; src:url("css/fonts/FuturaPTBold.otf") format("woff");font-weight:500;font-style:normal;}
+    @font-face{font-family:futura-pt-light; src:url("css/fonts/FuturaPTBook.otf") format("woff");font-weight:lighter;font-style:normal;}
+    @font-face{font-family:futura-pt-italic; src:url("css/fonts/FuturaPTBookOblique.otf") format("woff");font-weight:400;font-style:italic;}
+}
+
+  </style>
+  <link rel="stylesheet" href="../../../../css/style.css">
+
+  <script src="../../../../js/jquery-3.1.1.min.js"></script>
+  <script src="../../../../js/bootstrap.js"></script>
+
+  <!-- Bootstrap core CSS -->
+  <link rel="stylesheet" href="/css/bootstrap.css" >
+
+  
+    <link rel="stylesheet" href="../../../../css/dialog.css">
+  
+
+  
+
+  
+    <link rel="stylesheet" href="/css/header-post.css" >
+  
+
+  
+  
+  
+    <link rel="stylesheet" href="/css/vdonate.css" >
+  
+
+</head>
+
+
+
+  <body data-spy="scroll" data-target="#toc" data-offset="50">
+
+
+  
+  <div id="container">
+    <div id="wrap">
+      
+        <header>
+
+    <div id="allheader" class="navbar navbar-default navbar-static-top" role="navigation">
+        <div class="navbar-inner">
+          
+          <div class="container"> 
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+
+            
+              <a class="brand" style="
+                 margin-top: 0px;"  
+                href="#" data-toggle="modal" data-target="#myModal" >
+                  <img width="124px" height="124px" alt="Hike News" src="/css/images/mylogo.jpg">
+              </a>
+            
+            
+            <div class="navbar-collapse collapse">
+              <ul class="hnav navbar-nav">
+                
+                  <li> <a class="main-nav-link" href="../../../../index.html">Home</a> </li>
+                
+                  <li> <a class="main-nav-link" href="../../../../archives">Archives</a> </li>
+                
+                  <li> <a class="main-nav-link" href="../../../../categories">Categories</a> </li>
+                
+                  <li> <a class="main-nav-link" href="../../../../tags">Tags</a> </li>
+                
+                  <li> <a class="main-nav-link" href="../../../../about">About</a> </li>
+                
+                  <li><div id="search-form-wrap">
+
+    <form class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="" />
+        <button type="submit" class="search-form-submit"></button>
+    </form>
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="Type something..." />
+            <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: 'Posts',
+            PAGES: 'Pages',
+            CATEGORIES: 'Categories',
+            TAGS: 'Tags',
+            UNTITLED: '(Untitled)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '../../../../content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+<script src="../../../../js/insight.js"></script>
+
+</div></li>
+            </div>
+          </div>
+                
+      </div>
+    </div>
+
+</header>
+
+
+
+      
+            
+      <div id="content" class="outer">
+        
+          <section id="main" style="float:none;"><article id="post-Netty（一） 之 I-O通信" style="width: 75%; float:left;" class="article article-type-post" itemscope itemprop="blogPost" >
+  <div id="articleInner" class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="thumb" class="article-title" itemprop="name">
+      Netty（一） 之 I/O通信
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      
+	<a href="" class="article-date">
+	  <time datetime="2018-08-15T03:36:31.000Z" itemprop="datePublished">2018-08-15</time>
+	</a>
+
+      
+    <a class="article-category-link" href="../../../../categories/原理/">原理</a>
+
+      
+	<a class="article-views">
+	<span id="busuanzi_container_page_pv">
+		PV:<span id="busuanzi_value_page_pv"></span>
+	</span>
+	</a>
+
+      
+
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="Netty（一）-之-I-O通信"><a href="#Netty（一）-之-I-O通信" class="headerlink" title="Netty（一） 之 I/O通信"></a>Netty（一） 之 I/O通信</h1><h1 id="IO类型介绍"><a href="#IO类型介绍" class="headerlink" title="IO类型介绍"></a>IO类型介绍</h1><h2 id="BIO通信"><a href="#BIO通信" class="headerlink" title="BIO通信"></a>BIO通信</h2><ul>
+<li>一个线程负责连接 </li>
+<li>一请求一应答 </li>
+<li>缺乏弹性伸缩能力</li>
+</ul>
+<p>由于线程是宝贵的资源，会造成宕机。<br>请求来到，由accpter去针对每个请求申请线程</p>
+<h2 id="伪异步IO通信"><a href="#伪异步IO通信" class="headerlink" title="伪异步IO通信"></a>伪异步IO通信</h2><ul>
+<li>线程池负责连接</li>
+<li>M请求N应答</li>
+<li>超过线程池会阻塞，由于限制不会宕机</li>
+</ul>
+<p>由线程池来处理所有客户端的接入，</p>
+<h2 id="NIO通信"><a href="#NIO通信" class="headerlink" title="NIO通信"></a>NIO通信</h2><ul>
+<li>加入了缓冲区Buffer：所有数据由缓冲区处理，读入缓冲区，写入缓冲区。</li>
+<li>通道Channel：是双向的，读写可以同时进行</li>
+<li>多路复用器Selector：会不断轮询注册在Selector上的Channel，当发现Channel发生了读写事件，选中它，根据SelectionKey，获取就绪Channel集合，进行IO操作。   由于JDK使用了epoll，代替传统的seletc实现，没有最大连接数限制，可以介入无线客户端。</li>
+</ul>
+<h2 id="AIO通信-异步通信Io"><a href="#AIO通信-异步通信Io" class="headerlink" title="AIO通信 异步通信Io"></a>AIO通信 异步通信Io</h2><ul>
+<li>连接注册读写事件和回调函数</li>
+<li>读写方法异步</li>
+<li>主动通知程序。一、通过future类表示异步操作结果  二是传入Channel.completion.handle接口的实现类，作为操作完成回调。</li>
+<li>它不需要多路复用器Selector进行轮询，是被动回调的</li>
+</ul>
+<h2 id="四种IO对比"><a href="#四种IO对比" class="headerlink" title="四种IO对比"></a>四种IO对比</h2><p> 客户端个数：<br> | 类型        | BIO   |  伪异步IO  | NIO| AIO<br>| ——–   | :—–:  | :—-:  |:—-:|:—-:<br>|  客户端：线程个数     | 1:1 |  m：n     |m：1|m：0<br>| IO类型        |  阻塞同步   |   阻塞同步   |  非阻塞同步|非阻塞异步<br>| 使用难度        |    简单    |  简单  | 最复杂|复杂<br>| 调试难度        |    简单    |  简单  | 复杂|复杂<br>| 可靠性        |  低      |  低  | 可靠|可靠<br>| 吞吐量        |    低    |  较低  | 较高|高 </p>
+<h1 id="Netty入门"><a href="#Netty入门" class="headerlink" title="Netty入门"></a>Netty入门</h1><h2 id="原生NIO缺陷"><a href="#原生NIO缺陷" class="headerlink" title="原生NIO缺陷"></a>原生NIO缺陷</h2><ul>
+<li>类库和API繁杂：</li>
+<li>入门门槛高：熟悉多线程，网络编程</li>
+<li>工作量和难度大：面临断连重连，网络闪断，断包读写，失败缓存</li>
+<li>JDK NIO些许BUG  如著名的epoll BUG，会导致空轮询，导致cpu占用满</li>
+</ul>
+<h2 id="Netty优势"><a href="#Netty优势" class="headerlink" title="Netty优势"></a>Netty优势</h2><p>duboo使用Netty作为底层通信框架，其他RPC框架也使用Netty构建高性能异步通信能力</p>
+<ul>
+<li>API简单，扩展灵活</li>
+<li>入门门槛低，支持多种主流协议</li>
+<li>性能高，成熟稳定，处理了所有JDKbug，经受了大量商用考验</li>
+</ul>
+<h1 id="WebSocket-基于TCP"><a href="#WebSocket-基于TCP" class="headerlink" title="WebSocket 基于TCP"></a>WebSocket 基于TCP</h1><ul>
+<li>是一个H5协议规范</li>
+<li>握手机制， 建立TCP连接，进行实时通信</li>
+<li>解决客户端于服务端实现通信 的技术</li>
+</ul>
+<p>优点：</p>
+<ul>
+<li>节省通信开销：原本的WebService是，间隔若干秒，发送请求将服务器消息拉回来，需要不断发送请求，header是很长的，内容很小，会很占用资源</li>
+<li>服务器主动 传送数据 给客户端</li>
+<li>实时通信，不需要发送请求，不仅限于Ajax方式通信，可以彼此相互推送，实现实时通信。</li>
+</ul>
+<p>建立连接</p>
+<ul>
+<li>客户端发起握手请求  附加头 UpgradeWebSocket</li>
+<li>服务器端相应请求  解析附加头 生成应答消息相应 </li>
+<li>连接建立</li>
+</ul>
+<p>生命周期</p>
+<ul>
+<li>打开事件：发生在连接时，WebSocket Session对象（表示已经建立好的连接）  、配置对象（包含配置端点信息）、一组路径参数（握手时，入栈匹配的url）</li>
+<li>消息事件：三种基本消息（文本消息，二进制消息，pown消息），对应的使用String，byte，pomMessage实例</li>
+<li>错误事件：连接发生错误时，处理入栈任何异常（连接建立错误SessionException、WebSocket将消息解码成开发人员所需要时，DecodeException）</li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      
+        <div id="donation_div"></div>
+
+<script src="../../../../js/vdonate.js"></script>
+<script>
+var a = new Donate({
+  title: '如果觉得我的文章对您有用，请随意打赏。您的支持将鼓励我继续创作!', // 可选参数，打赏标题
+  btnText: 'Donate', // 可选参数，打赏按钮文字
+  el: document.getElementById('donation_div'),
+  wechatImage: 'https://raw.githubusercontent.com/JaeCoding/JaeCoding.github.io/hexo/source/about/donate/images/wechat.jpg',
+  alipayImage: 'https://raw.githubusercontent.com/JaeCoding/JaeCoding.github.io/hexo/source/about/donate/images/alipay.jpg'
+});
+</script>
+      
+      
+      <div>
+        <ul class="post-copyright">
+          <li class="post-copyright-author">
+          <strong>Post author:  </strong>Jae Peng</a>
+          </li>
+          <li class="post-copyright-link">
+          <strong>Post link:  </strong>
+          <a href="/2018/08/15/Netty（一） 之 I-O通信/" target="_blank" title="Netty（一） 之 I/O通信">http://jaecoding.github.io/2018/08/15/Netty（一） 之 I-O通信/</a>
+          </li>
+          <li class="post-copyright-license">
+            <strong>Copyright Notice:   </strong>
+            All articles in this blog are licensed under <a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank" title="Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0)">CC BY-NC-ND 4.0</a>
+            unless stating additionally.
+          </li>
+         
+        </ul>
+<div>
+
+      
+      
+        
+	<div id="comment">
+		<!-- 来必力City版安装代码 -->
+		<div id="lv-container" data-id="city" data-uid="MTAyMC8yOTQ4MS82MDQ5">
+		<script type="text/javascript">
+		   (function(d, s) {
+		       var j, e = d.getElementsByTagName(s)[0];
+
+		       if (typeof LivereTower === 'function') { return; }
+
+		       j = d.createElement(s);
+		       j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+		       j.async = true;
+
+		       e.parentNode.insertBefore(j, e);
+		   })(document, 'script');
+		</script>
+		<noscript>为正常使用来必力评论功能请激活JavaScript</noscript>
+		</div>
+		<!-- City版安装代码已完成 -->
+	</div>
+
+
+
+      
+      
+        
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../../../tags/IO/">IO</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../../../tags/Netty/">Netty</a></li></ul>
+
+      
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="../../19/Spring实战/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Spring
+        
+      </div>
+    </a>
+  
+  
+    <a href="../../14/【Machine Learning】机器学习：简明入门指南/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">【Machine Learning】机器学习：简明入门指南</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+<!-- Table of Contents -->
+
+  <aside id="toc-sidebar">
+    <div id="toc" class="toc-article">
+    <strong class="toc-title">Contents</strong>
+    
+        <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Netty（一）-之-I-O通信"><span class="nav-number">1.</span> <span class="nav-text">Netty（一） 之 I/O通信</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#IO类型介绍"><span class="nav-number">2.</span> <span class="nav-text">IO类型介绍</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#BIO通信"><span class="nav-number">2.1.</span> <span class="nav-text">BIO通信</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#伪异步IO通信"><span class="nav-number">2.2.</span> <span class="nav-text">伪异步IO通信</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#NIO通信"><span class="nav-number">2.3.</span> <span class="nav-text">NIO通信</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#AIO通信-异步通信Io"><span class="nav-number">2.4.</span> <span class="nav-text">AIO通信 异步通信Io</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#四种IO对比"><span class="nav-number">2.5.</span> <span class="nav-text">四种IO对比</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Netty入门"><span class="nav-number">3.</span> <span class="nav-text">Netty入门</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#原生NIO缺陷"><span class="nav-number">3.1.</span> <span class="nav-text">原生NIO缺陷</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Netty优势"><span class="nav-number">3.2.</span> <span class="nav-text">Netty优势</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#WebSocket-基于TCP"><span class="nav-number">4.</span> <span class="nav-text">WebSocket 基于TCP</span></a></li></ol>
+    
+    </div>
+  </aside>
+
+</section>
+        
+      </div>
+      
+      <footer id="footer">
+  
+
+  <div class="container">
+      	<div class="row">
+	      <p> Powered by <a href="http://hexo.io/" target="_blank">Hexo</a> and <a href="https://github.com/iTimeTraveler/hexo-theme-hiker" target="_blank">Hexo-theme-hiker</a> </p>
+	      <p id="copyRightEn">Copyright &copy; 2017 - 2019 Jae&#39;s blog All Rights Reserved.</p>
+	      
+	      
+    		<p class="busuanzi_uv">
+				UV : <span id="busuanzi_value_site_uv"></span> |  
+				PV : <span id="busuanzi_value_site_pv"></span>
+		    </p>
+  		   
+		</div>
+
+		
+  </div>
+</footer>
+
+
+<!-- min height -->
+
+<script>
+    var wrapdiv = document.getElementById("wrap");
+    var contentdiv = document.getElementById("content");
+    var allheader = document.getElementById("allheader");
+
+    wrapdiv.style.minHeight = document.body.offsetHeight + "px";
+    if (allheader != null) {
+      contentdiv.style.minHeight = document.body.offsetHeight - allheader.offsetHeight - document.getElementById("footer").offsetHeight + "px";
+    } else {
+      contentdiv.style.minHeight = document.body.offsetHeight - document.getElementById("footer").offsetHeight + "px";
+    }
+</script>
+    </div>
+    <!-- <nav id="mobile-nav">
+  
+    <a href="../../../../index.html" class="mobile-nav-link">Home</a>
+  
+    <a href="../../../../archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="../../../../categories" class="mobile-nav-link">Categories</a>
+  
+    <a href="../../../../tags" class="mobile-nav-link">Tags</a>
+  
+    <a href="../../../../about" class="mobile-nav-link">About</a>
+  
+</nav> -->
+    
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+  <link rel="stylesheet" href="../../../../fancybox/jquery.fancybox.css">
+  <script src="../../../../fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="../../../../js/scripts.js"></script>
+
+
+
+
+  <script src="../../../../js/dialog.js"></script>
+
+
+
+
+
+
+
+
+	<div style="display: none;">
+    <script src="https://s95.cnzz.com/z_stat.php?id=1260716016&web_id=1260716016" language="JavaScript"></script>
+  </div>
+
+
+
+	<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js">
+	</script>
+
+
+
+
+
+
+  </div>
+
+  <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 class="modal-title" id="myModalLabel">设置</h2>
+      </div>
+      <hr style="margin-top:0px; margin-bottom:0px; width:80%; border-top: 3px solid #000;">
+      <hr style="margin-top:2px; margin-bottom:0px; width:80%; border-top: 1px solid #000;">
+
+
+      <div class="modal-body">
+          <div style="margin:6px;">
+            <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" onclick="javascript:setFontSize();" aria-expanded="true" aria-controls="collapseOne">
+              正文字号大小
+            </a>
+          </div>
+          <div id="collapseOne" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+          <div class="panel-body">
+            您已调整页面字体大小
+          </div>
+        </div>
+      
+
+
+          <div style="margin:6px;">
+            <a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" onclick="javascript:setBackground();" aria-expanded="true" aria-controls="collapseTwo">
+              夜间护眼模式
+            </a>
+        </div>
+          <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
+          <div class="panel-body">
+            夜间模式已经开启，再次单击按钮即可关闭 
+          </div>
+        </div>
+
+        <div>
+            <a data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="true" aria-controls="collapseThree">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;关 于&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a>
+        </div>
+         <div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
+          <div class="panel-body">
+            Jae&#39;s blog
+          </div>
+          <div class="panel-body">
+            Copyright © 2019 Jae Peng All Rights Reserved.
+          </div>
+        </div>
+      </div>
+
+
+      <hr style="margin-top:0px; margin-bottom:0px; width:80%; border-top: 1px solid #000;">
+      <hr style="margin-top:2px; margin-bottom:0px; width:80%; border-top: 3px solid #000;">
+      <div class="modal-footer">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+      </div>
+    </div>
+  </div>
+</div>
+  
+  <a id="rocket" href="#top" class=""></a>
+  <script type="text/javascript" src="/js/totop.js?v=1.0.0" async=""></script>
+  
+    <a id="menu-switch"><i class="fa fa-bars fa-lg"></i></a>
+  
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+</body>
+</html>

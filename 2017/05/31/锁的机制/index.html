@@ -1,50 +1,17 @@
-
-<!doctype html>
-<html class="theme-next use-motion theme-next-mala">
+<!DOCTYPE html>
+<html>
 <head>
+  <meta charset="utf-8">
   
-
-<meta charset="UTF-8"/>
-<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
-
-
-<meta http-equiv="Cache-Control" content="no-transform" />
-<meta http-equiv="Cache-Control" content="no-siteapp" />
-
-
-  <meta name="google-site-verification" content="xxx" />
-
-
-
-
-
-  <link rel="stylesheet" type="text/css" href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5"/>
-
-
-
-  <link href='//fonts.googleapis.com/css?family=Lato:300,400,700,400italic&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
-
-
-<link rel="stylesheet" type="text/css" href="/css/main.css?v=0.4.5.1"/>
-
-
-    <meta name="description" content="A purchasing coder" />
-
-
-
-  <meta name="keywords" content="mysql,锁," />
-
-
-
-  <link rel="alternate" href="/atom.xml" title="Jae's blog" type="application/atom+xml" />
-
-
-
-  <link rel="shorticon icon" type="image/x-icon" href="/favicon.ico?v=0.4.5.1" />
-
-
-<meta name="description" content="锁的机制数据库锁定机制目的：保证数据的一致性，而使各种共享资源在被并发访问变得有序所设计的一种规则。对于任何一种数据库来说都需要有相应的锁定机制，所以MySQL自然也不能例外。MySQL数据库由于其自身架构的特点，存在多种数据存储引擎，每种存储引擎所针对的应用场景特点都不太一样，为了满足各自特定应用场景的需求，每种存储引擎的锁定机制都是为各自所面对的特定场景而优化设计，所以各存储引擎的锁定机制也有">
+  <title>mysql 锁的机制 | Jae&#39;s blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  
+  <meta name="keywords" content="mysql锁" />
+  
+  
+  
+  
+  <meta name="description" content="锁的机制数据库锁定机制目的：保证数据的一致性，而使各种共享资源在被并发访问变得有序所设计的一种规则。对于任何一种数据库来说都需要有相应的锁定机制，所以MySQL自然也不能例外。MySQL数据库由于其自身架构的特点，存在多种数据存储引擎，每种存储引擎所针对的应用场景特点都不太一样，为了满足各自特定应用场景的需求，每种存储引擎的锁定机制都是为各自所面对的特定场景而优化设计，所以各存储引擎的锁定机制也有">
 <meta name="keywords" content="mysql,锁">
 <meta property="og:type" content="article">
 <meta property="og:title" content="mysql 锁的机制">
@@ -58,356 +25,183 @@
 <meta name="twitter:title" content="mysql 锁的机制">
 <meta name="twitter:description" content="锁的机制数据库锁定机制目的：保证数据的一致性，而使各种共享资源在被并发访问变得有序所设计的一种规则。对于任何一种数据库来说都需要有相应的锁定机制，所以MySQL自然也不能例外。MySQL数据库由于其自身架构的特点，存在多种数据存储引擎，每种存储引擎所针对的应用场景特点都不太一样，为了满足各自特定应用场景的需求，每种存储引擎的锁定机制都是为各自所面对的特定场景而优化设计，所以各存储引擎的锁定机制也有">
 <meta name="twitter:image" content="https://img-blog.csdn.net/20180619160318738?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0phZV9QZW5n/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70">
+  
+    <link rel="alternate" href="/atom.xml" title="Jae&#39;s blog" type="application/atom+xml">
+  
 
+  
 
-<script type="text/javascript" id="hexo.configuration">
-  var CONFIG = {
-    scheme: 'Mala',
-    sidebar: 'post'
-  };
-</script>
+  <link rel="icon" href="/css/images/mylogo.jpg">
+  <link rel="apple-touch-icon" href="/css/images/mylogo.jpg">
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans|Montserrat:700" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Roboto:400,300,300italic,400italic" rel="stylesheet" type="text/css">
+  <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+  <style type="text/css">
+    @font-face{font-family:futura-pt; src:url("css/fonts/FuturaPTBold.otf") format("woff");font-weight:500;font-style:normal;}
+    @font-face{font-family:futura-pt-light; src:url("css/fonts/FuturaPTBook.otf") format("woff");font-weight:lighter;font-style:normal;}
+    @font-face{font-family:futura-pt-italic; src:url("css/fonts/FuturaPTBookOblique.otf") format("woff");font-weight:400;font-style:italic;}
+}
 
-  <title> mysql 锁的机制 | Jae's blog </title>
+  </style>
+  <link rel="stylesheet" href="../../../../css/style.css">
+
+  <script src="../../../../js/jquery-3.1.1.min.js"></script>
+  <script src="../../../../js/bootstrap.js"></script>
+
+  <!-- Bootstrap core CSS -->
+  <link rel="stylesheet" href="/css/bootstrap.css" >
+
+  
+    <link rel="stylesheet" href="../../../../css/dialog.css">
+  
+
+  
+
+  
+    <link rel="stylesheet" href="/css/header-post.css" >
+  
+
+  
+  
+  
+    <link rel="stylesheet" href="/css/vdonate.css" >
+  
+
 </head>
 
-<body itemscope itemtype="http://schema.org/WebPage" lang="en">
 
-  <!--[if lte IE 8]>
-  <div style=' clear: both; height: 59px; padding:0 0 0 15px; position: relative;margin:0 auto;'>
-    <a href="http://windows.microsoft.com/en-US/internet-explorer/products/ie/home?ocid=ie6_countdown_bannercode">
-      <img src="http://7u2nvr.com1.z0.glb.clouddn.com/picouterie.jpg" border="0" height="42" width="820"
-           alt="You are using an outdated browser. For a faster, safer browsing experience, upgrade for free today or use other browser ,like chrome firefox safari."
-           style='margin-left:auto;margin-right:auto;display: block;'/>
-    </a>
-  </div>
-<![endif]-->
+
+  <body data-spy="scroll" data-target="#toc" data-offset="50">
+
+
   
-<script>
-  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-  ga('create', 'xxx', 'auto');
-  ga('send', 'pageview');
-</script>
+  <div id="container">
+    <div id="wrap">
+      
+        <header>
 
+    <div id="allheader" class="navbar navbar-default navbar-static-top" role="navigation">
+        <div class="navbar-inner">
+          
+          <div class="container"> 
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
 
-  <script type="text/javascript">
-    var _hmt = _hmt || [];
-    (function() {
-      var hm = document.createElement("script");
-      hm.src = "//hm.baidu.com/hm.js?xxx";
-      var s = document.getElementsByTagName("script")[0];
-      s.parentNode.insertBefore(hm, s);
-    })();
-  </script>
+            
+              <a class="brand" style="
+                 margin-top: 0px;"  
+                href="#" data-toggle="modal" data-target="#myModal" >
+                  <img width="124px" height="124px" alt="Hike News" src="/css/images/mylogo.jpg">
+              </a>
+            
+            
+            <div class="navbar-collapse collapse">
+              <ul class="hnav navbar-nav">
+                
+                  <li> <a class="main-nav-link" href="../../../../index.html">Home</a> </li>
+                
+                  <li> <a class="main-nav-link" href="../../../../archives">Archives</a> </li>
+                
+                  <li> <a class="main-nav-link" href="../../../../categories">Categories</a> </li>
+                
+                  <li> <a class="main-nav-link" href="../../../../tags">Tags</a> </li>
+                
+                  <li> <a class="main-nav-link" href="../../../../about">About</a> </li>
+                
+                  <li><div id="search-form-wrap">
 
-
-
-  <div class="container one-column page-post-detail">
-    <div class="headband"></div>
-
-    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
-      <div class="header-inner"><h1 class="site-meta">
-  <span class="logo-line-before"><i></i></span>
-  <a href="/" class="brand" rel="start">
-      <span class="logo">
-        <i class="icon-next-logo"></i>
-      </span>
-      <span class="site-title">彭文杰的博客</span>
-  </a>
-  <span class="logo-line-after"><i></i></span>
-</h1>
-
-<div class="site-nav-toggle">
-  <button>
-    <span class="btn-bar"></span>
-    <span class="btn-bar"></span>
-    <span class="btn-bar"></span>
-  </button>
+    <form class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="" />
+        <button type="submit" class="search-form-submit"></button>
+    </form>
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="Type something..." />
+            <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
 </div>
-
-<nav class="site-nav">
-  
-
-  
-    <ul id="menu" class="menu menu-left">
-      
-        
-        <li class="menu-item menu-item-home">
-          <a href="/" rel="section">
-            <i class="menu-item-icon icon-next-home"></i> <br />
-            Home
-          </a>
-        </li>
-      
-        
-        <li class="menu-item menu-item-categories">
-          <a href="/categories" rel="section">
-            <i class="menu-item-icon icon-next-categories"></i> <br />
-            Categories
-          </a>
-        </li>
-      
-        
-        <li class="menu-item menu-item-archives">
-          <a href="/archives" rel="section">
-            <i class="menu-item-icon icon-next-archives"></i> <br />
-            Archives
-          </a>
-        </li>
-      
-        
-        <li class="menu-item menu-item-tags">
-          <a href="/tags" rel="section">
-            <i class="menu-item-icon icon-next-tags"></i> <br />
-            Tags
-          </a>
-        </li>
-      
-        
-        <li class="menu-item menu-item-about">
-          <a href="/about" rel="section">
-            <i class="menu-item-icon icon-next-about"></i> <br />
-            About
-          </a>
-        </li>
-      
-
-      
-      
-    </ul>
-  
-
-  
-    <div class="site-search">
-      
-  
-  <form class="site-search-form">
-    <input type="text" id="st-search-input" class="st-search-input st-default-search-input" />
-  </form>
-
-
-<script type="text/javascript">
-  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
-    (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
-    e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
-  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
-
-  _st('install', 'xxx','2.0.0');
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: 'Posts',
+            PAGES: 'Pages',
+            CATEGORIES: 'Categories',
+            TAGS: 'Tags',
+            UNTITLED: '(Untitled)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '../../../../content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
 </script>
+<script src="../../../../js/insight.js"></script>
+
+</div></li>
+            </div>
+          </div>
+                
+      </div>
+    </div>
+
+</header>
 
 
+
+      
+            
+      <div id="content" class="outer">
+        
+          <section id="main" style="float:none;"><article id="post-锁的机制" style="width: 75%; float:left;" class="article article-type-post" itemscope itemprop="blogPost" >
+  <div id="articleInner" class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="thumb" class="article-title" itemprop="name">
+      mysql 锁的机制
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      
+	<a href="" class="article-date">
+	  <time datetime="2017-05-31T02:05:56.000Z" itemprop="datePublished">2017-05-31</time>
+	</a>
+
+      
+    <a class="article-category-link" href="../../../../categories/技术原理/">技术原理</a>
+
+      
+	<a class="article-views">
+	<span id="busuanzi_container_page_pv">
+		PV:<span id="busuanzi_value_page_pv"></span>
+	</span>
+	</a>
+
+      
 
     </div>
-  
-</nav>
-
- </div>
-    </header>
-
-    
+    <div class="article-entry" itemprop="articleBody">
       
-
-      
-        <style type="text/css">
-
-    .circle {
-        width: 40px;
-        height: 40px;
-        background: #555 no-repeat;
-        cursor: move;
-    }
-
-    .assist-btn {
-        position: fixed;
-        top: 50％;
-        left: 10px;
-        -moz-border-radius: 50px;
-        -webkit-border-radius: 50px;
-        border-radius: 50px;
-        outline: none;
-        border: none;
-        color: #87daff;
-    }
-
-</style>
-
-<script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
-<script type="text/javascript">
-    // 浮动圆点展开与收缩
-    /*
-    $(function () {
-        var assist_box = $('.assist-box');
-        $('#assist_btn').hover(function () {
-            assist_box.stop().show(300);
-        }, function () {
-            assist_box.stop().hide(150);
-        })
-    });
-    */  
-    //浮动圆点拖动
-    $(function () {
-        var box = document.getElementById('assist_btn');
-        box.onmousedown = function (event) {
-            var e = event || window.event,
-                t = e.target || e.srcElement,
-                // 鼠标按下时的坐标x1,y1
-                x1 = e.clientX,
-                y1 = e.clientY,
-                //鼠标按下时的左右偏移量
-                dragLeft = this.offsetLeft,
-                dragTop = this.offsetTop;
-
-            document.onmousemove = function (event) {
-                var e = event || window.event,
-                    t = e.target || e.srcElement,
-                    // 鼠标移动时的动态坐标
-                    x2 = e.clientX,
-                    y2 = e.clientY,
-                    // 鼠标移动时的坐标的变化量
-                    x = x2 - x1,
-                    y = y2 - y1;
-                box.style.left = (dragLeft + x) + 'px';
-                box.style.top = (dragTop + y) + 'px';
-            }
-
-            document.onmouseup = function () {
-                this.onmousemove = null;
-            }
-        }
-    });
-
-/*
-    $whitesmoke   = #f5f5f5
-    $gainsboro    = #eee
-    $gray-lighter = #ddd
-    $grey-light   = #ccc
-    $grey         = #bbb
-    $grey-dark    = #999
-    $grey-dim     = #666
-    $black-light  = #555
-    $black-deep   = #222
-    $red          = #ff2a2a
-    $blue-bright  = #87daff
-    $blue         = #0684bd
-    $blue-deep    = #262a30
-*/
-    // white theme
-    var body = {color: "#555", background: "white"};
-    var a_tag = {color: "#222"};
-    var header = { background: "#f5f5f5"};
-    var logo_line_i = {background: "#222"};
-    // var post_code = {background: "#eee", color: "#222"};
-
-    function switch_theme() {
-        $("body").css(body);
-        $("a:not('.links-of-author-item a, .site-state-item a, .site-state-posts a, .feed-link a, .motion-element a, .post-tags a, .show-commit-cls a, #donate_board a')").css(a_tag);
-        $(".header, .footer").css(header);
-        $(".logo-line-before i, .logo-line-after i").css(logo_line_i);
-        //$(".post code").css(post_code);
-        $("#idhyt-surprise-ball #idhyt-surprise-ball-animation .drag").css(a_tag);
-        $(".post-title-link, .posts-expand .post-meta, .post-comments-count, .disqus-comment-count, .post-category a, .post-nav-next a, .post-nav-item a").css(a_tag);
-        
-        // $("code").css({color: '#c5c8c6', background: '#1d1f21'});
-        $("#assist_btn").hide(1500);
-    }
-
-    $(function () {
-        $("#assist_btn").dblclick(function() {
-            switch_theme();
-        });
-    });
-
-</script>
-
-<div>
-
-    <button class="assist-btn circle" id="assist_btn" title="双击切换">
-        亮
-    </button>
-
-</div>
-
-
-
-
-
-
-
-
-
-      
-
-    
-
-    <main id="main" class="main">
-      <div class="main-inner">
-        <div id="content" class="content"> 
-
-  <div id="posts" class="posts-expand">
-    
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      
-      
-        <h1 class="post-title" itemprop="name headline">
-          
-          
-            
-              mysql 锁的机制
-            
-          
-        </h1>
-      
-
-      <div class="post-meta">
-        <span class="post-time">
-          Posted on
-          <time itemprop="dateCreated" datetime="2017-05-31T10:05:56+08:00" content="2017-05-31">
-            2017-05-31
-          </time>
-        </span>
-
-        
-          <span class="post-category" >
-            &nbsp; | &nbsp; In
-            
-              <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                <a href="/categories/技术原理/" itemprop="url" rel="index">
-                  <span itemprop="name">技术原理</span>
-                </a>
-              </span>
-
-              
-              
-
-            
-          </span>
-        
-
-        
-          
-            <span class="post-comments-count">
-            &nbsp; | &nbsp;
-            <a href="/2017/05/31/锁的机制/#comments" itemprop="discussionUrl">
-              <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2017/05/31/锁的机制/" itemprop="commentsCount"></span>
-            </a>
-          </span>
-          
-        
-      </div>
-    </header>
-
-    <div class="post-body">
-
-      
-      
-
-      
-        <span itemprop="articleBody"><h1 id="锁的机制"><a href="#锁的机制" class="headerlink" title="锁的机制"></a>锁的机制</h1><p>数据库锁定机制目的：保证数据的一致性，而使各种共享资源在被并发访问变得有序所设计的一种规则。<br>对于任何一种数据库来说都需要有相应的锁定机制，所以MySQL自然也不能例外。<br>MySQL数据库由于其自身架构的特点，<strong>存在多种数据存储引擎</strong>，每种存储引擎所针对的应用场景特点都不太一样，为了满足各自特定应用场景的需求，每种存储引擎的锁定机制都是<strong>为各自所面对的特定场景而优化设计</strong>，所以各存储引擎的锁定机制也有较大区别。<br>MySQL各存储引擎使用了<strong>三种类型（级别）的锁定机制</strong>：表级锁定，行级锁定和页级锁定。</p>
+        <h1 id="锁的机制"><a href="#锁的机制" class="headerlink" title="锁的机制"></a>锁的机制</h1><p>数据库锁定机制目的：保证数据的一致性，而使各种共享资源在被并发访问变得有序所设计的一种规则。<br>对于任何一种数据库来说都需要有相应的锁定机制，所以MySQL自然也不能例外。<br>MySQL数据库由于其自身架构的特点，<strong>存在多种数据存储引擎</strong>，每种存储引擎所针对的应用场景特点都不太一样，为了满足各自特定应用场景的需求，每种存储引擎的锁定机制都是<strong>为各自所面对的特定场景而优化设计</strong>，所以各存储引擎的锁定机制也有较大区别。<br>MySQL各存储引擎使用了<strong>三种类型（级别）的锁定机制</strong>：表级锁定，行级锁定和页级锁定。</p>
 <h2 id="表级锁定（table-level）"><a href="#表级锁定（table-level）" class="headerlink" title="表级锁定（table-level）"></a>表级锁定（table-level）</h2><p>表级别的锁定是MySQL各存储引擎中<strong>最大颗粒度的锁定机制</strong>。该锁定机制最大的</p>
 <font color="ff0000" size="4"><strong>特点：实现逻辑非常简单，带来的系统负面影响最小。</strong></font><br>获取锁和释放锁的速度很<strong>快</strong>。由于表级锁一次会将整个表锁定，所以可以很好的避免困扰我们的死锁问题。<br><strong>缺点</strong>：锁定颗粒度大所带来最大的<strong>负面影响就是出现锁定资源争用的概率也会最高，致使并大度大打折扣</strong>。<br>使用表级锁定的主要是<strong>MyISAM，MEMORY，CSV</strong>等一些<strong>非事务性</strong>存储引擎。<br>## 行级锁定（row-level）<br>行级锁定最大的特点就是锁定对象的颗粒度很小，也是目前各大数据库管理软件所实现的<strong>锁定颗粒度最小</strong>的。由于锁定颗粒度很小，所以发生<strong>锁定资源争用的概率也最小</strong>，能够给予应用程序尽可能大的并发处理能力而提高一些需要高并发应用系统的整体性能。<br>优势：在并发处理能力较强<br>弊端：由于锁定资源的颗粒度很小，所以每次获取锁和释放锁需要<strong>做的事情也更多，带来的消耗自然也就更大</strong>了。此外，行级锁定也<strong>最容易发生死锁</strong>。<br>使用行级锁定的主要是<strong>InnoDB</strong>存储引擎。<br>##  页级锁定（page-level）<br>页级锁定是MySQL中比较独特的一种锁定级别，在其他数据库管理软件中也并不是太常见。<br>特点：<strong>1.锁定颗粒度介于行级锁定与表级锁之间</strong>，<br><strong>2.获取锁定所需要的资源开销</strong>，<br>以及<strong>所能提供的并发处理能力</strong>也同样是介于上面二者之间。<br><br>另外，页级锁定和行级锁定一样，<strong>会发生死锁</strong>。<br>在数据库实现资源锁定的过程中，随着锁定资源<strong>颗粒度的减小</strong>，锁定相同数据量的数据所需要<strong>消耗的内存数量是越来越多</strong>的，实现算法也会越来越复杂。不过，随着锁定资源颗粒度的减小，应用程序的访问请求遇到<strong>锁等待的可能性也会随之降低</strong>，系统整体<strong>并发度</strong>也随之提升。<br>使用页级锁定的主要是<strong>BerkeleyDB</strong>存储引擎。<br><br><font color="ff0000">总的来说，MySQL这3种锁的特性可大致归纳如下：</font><br><strong>表</strong>级锁：开销小，加锁快；不会出现死锁；锁定粒度大，发生锁冲突的概率最高，并发度最低；<br><strong>行</strong>级锁：开销大，加锁慢；会出现死锁；锁定粒度最小，发生锁冲突的概率最低，并发度也最高；<br><strong>页面</strong>锁：开销和加锁时间界于表锁和行锁之间；会出现死锁；锁定粒度界于表锁和行锁之间，并发度一般。<br><br>适用：从锁的角度来说，表级锁更适合于以查询为主，只有少量按索引条件更新数据的应用，如Web应用；而行级锁则更适合于有大量按索引条件并发更新少量不同数据，同时又有并发查询的应用，如一些在线事务处理（OLTP）系统。<br># 表级锁定<br>由于MyISAM存储引擎使用的锁定机制完全是由MySQL提供的表级锁定实现，所以下面我们将以MyISAM存储引擎作为示例存储引擎。<br><br>## MySQL表级锁的锁模式<br>MySQL的表级锁有两种模式：<strong>表共享读锁</strong>（Table Read Lock）和<strong>表独占写锁</strong>（Table Write Lock）。<br>锁模式的兼容性：<br>对MyISAM表的读操作，不会阻塞其他用户对同一表的读请求，但会阻塞对同一表的写请求；<strong>(读阻塞写）</strong><br>对MyISAM表的写操作，则会阻塞其他用户对同一表的读和写操作；<strong>（写阻塞读写）</strong><br>MyISAM表的读操作与写操作之间，以及写操作之间是<strong>串行</strong>的。当一个线程获得对一个表的写锁后，只有持有锁的线程可以对表进行更新操作。其他线程的读、写操作都会等待，直到锁被释放为止。<br><br>## 如何加表锁（MyISAM引擎）<br>MyISAM在执行查询语句<strong>（SELECT）前</strong>，会<font color="ff0000">自动</font>给涉及的所有表<strong>加读锁</strong>，在执行更新操作<strong>（UPDATE、DELETE、INSERT等）前</strong>，会自动给涉及的表加<strong>写锁</strong>，这个过程并不需要用户干预，因此，用户一般不需要直接用LOCK TABLE命令给MyISAM表显式加锁。<br><br>## MyISAM表锁优化建议<br>对于MyISAM存储引擎，虽然使用表级锁定在锁定实现的过程中比实现行级锁定或者页级锁所带来的附加成本都要小，锁定本身所消耗的资源也是最少。但是由于锁定的<strong>颗粒度比较大</strong>，所以造成<strong>锁定资源的争用</strong>情况也会比其他的锁定级别都要多，从而在较大程度上会<strong>降低并发处理能力</strong>。所以，在优化MyISAM存储引擎锁定问题的时候，最关键的就是如何让其<strong>提高并发度</strong>。由于锁定级别是不可能改变的了，所以我们首先需要尽可能让<strong>锁定的时间变短</strong>，然后就是让可能并发进行的操作尽可能的并发。<br>（1）查询表级锁争用情况<br>MySQL内部有<strong>两组专门的状态变量</strong>记录系统内部锁资源争用情况：<br><br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; show status like 'table%';</span><br><span class="line">+<span class="comment">----------------------------+---------+</span></span><br><span class="line">| Variable_name              | Value   |</span><br><span class="line">+<span class="comment">----------------------------+---------+</span></span><br><span class="line">| Table_locks_immediate      | 100     |</span><br><span class="line">| Table_locks_waited         | 11      |</span><br><span class="line">+<span class="comment">----------------------------+---------+</span></span><br></pre></td></tr></table></figure><br><br>这里有两个状态变量记录MySQL内部表级锁定的情况，两个变量说明如下：<br>Table_locks_immediate：产生<strong>表级锁定的次数</strong>；<br>Table_locks_waited：<strong>出现表级锁定争用而发生等待的次数</strong>；<br>两个状态值都是从系统启动后开始记录，出现一次对应的事件则数量加1。如果这里的Table_locks_waited状态值比较高，那么说明系统中表级锁定争用现象比较严重，就需要进一步分析为什么会有较多的锁定资源争用了。<br><br>（2）缩短锁定时间<br>如何让锁定时间尽可能的短呢？唯一的办法就是让我们的Query执行时间尽可能的短。<br>a)尽两<strong>减少大的复杂Query</strong>，将复杂Query分<strong>拆成几个小的Query</strong>分布进行；<br>b)尽可能的建立<strong>足够高效的索引</strong>，让数据检索更迅速；<br>c)尽量让MyISAM存储引擎的表<strong>只存放必要的信息</strong>，控制字段类型；<br>d)利用合适的机会优化MyISAM表数据文件。<br><br>（3）分离能并行的操作<br>说到MyISAM的表锁，而且是读写互相阻塞的表锁，可能有些人会认为在MyISAM存储引擎的表上就只能是完全的串行化，没办法再并行了。大家不要忘记了，<font color="ff0000">MyISAM的存储引擎还有一个非常有用的特性，那就是Concurrent Insert（并发插入）的特性。</font>
 
@@ -447,621 +241,306 @@
 <p>监视器可以通过发出下列语句来停止查看：</p>
 <figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; drop table InnoDB_monitor;</span><br></pre></td></tr></table></figure>
 <p>设置监视器后，会有详细的当前锁等待的信息，包括表名、锁类型、锁定记录的情况等，便于进行进一步的分析和问题的确定。为什么要先创建一个叫InnoDB_monitor的表呢？因为创建该表实际上就是告诉InnoDB我们开始要监控他的细节状态了，然后InnoDB就会将比较详细的事务以及锁定信息记录进入MySQL的errorlog中，以便我们后面做进一步分析使用。打开监视器以后，默认情况下每15秒会向日志中记录监控的内容，如果长时间打开会导致.err文件变得非常的巨大，所以用户在确认问题原因之后，要记得删除监控表以关闭监视器，或者通过使用“–console”选项来启动服务器以关闭写日志文件。</p>
-</span>
-      
-    </div>
-    <div>
-  
-    ﻿
-  
-</div>
-
-    <footer class="post-footer">
-      
-        <div class="post-tags">
-          
-            <a href="/tags/mysql/" rel="tag">#mysql</a>
-          
-            <a href="/tags/锁/" rel="tag">#锁</a>
-          
-        </div>
-      
-
-      
-        <div class="post-nav">
-          <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2017/08/20/设计模式沉思录（八）之 桥接(梁）模式/" rel="prev">设计模式沉思录（八）之 桥接(梁）模式</a>
-            
-          </div>
-
-          <div class="post-nav-next post-nav-item">
-            
-          </div>
-        </div>
-      
-
-      
-      
-    </footer>
-  </article>
-
-
-
-    <div>
-      
-        <style type="text/css">
-
-    .donate_bar {
-        text-align: center;
-        margin-top : 5%;
-    }
-
-    .donate_bar.hidden {
-        display:none;
-    }
-/*
-    .donate_bar a.btn_donate {
-        display: inline-block;
-        width: 82px;
-        height: 82px;
-        margin-left:auto;
-        margin-right:auto;
-
-        background: url("http://img.t.sinajs.cn/t5/style/images/apps_PRF/e_media/btn_reward.gif") no-repeat;
-        _background: url("http://img.t.sinajs.cn/t5/style/images/apps_PRF/e_media/btn_reward.gif") no-repeat; 
-
-        -webkit-transition: background 0s;
-        -moz-transition: background 0s;
-        -o-transition: background 0s;
-        -ms-transition: background 0s;
-        transition: background 0s;
-    }
-*/
-    .donate_bar a.btn_donate:hover { 
-        // background-position: 0px -82px;
-        color: #87daff
-    }
-
-    .donate_bar .donate_txt {
-        display: block;
-        color: #9d9d9d;
-        font: 14px/2 "Microsoft Yahei";
-    }
-
-    .bold { 
-        font-weight: bold; 
-    }
-
-    .post-donate a {
-        border-bottom: 0px;
-    }
-
-    #donate_guide table {
-        border: none;
-    }
-
-    #donate_guide td {
-        border-bottom: none;
-        border-right: none;
-        background: #333333;
-        valign: top;
-    }
-
-</style>
-
-
-
-    
-
-    <div class ="post-donate">
-        <div id="donate_board" class="donate_bar center">
-              <a id="btn_donate" class="btn_donate" href="javascript:;" title="打赏">赏</a>
-              <span id="donate_txt" class="donate_txt">
-                   
-                        仅仅是一个功能
-                   
-              </span>
-            <br>
-        </div>  
-  
-        <div id="donate_guide" class="donate_bar center hidden">
-            <!--
-            
-                <a href="http://paxblmm0h.bkt.clouddn.com/ali_pay.jpg" title="支付宝打赏" class="fancybox" rel="article0" 
-                    style="float:left;margin-left:25%;margin-right:10px;">
-                    <img src="http://paxblmm0h.bkt.clouddn.com/ali_pay.jpg" title="" height="164px" width="164px">
-                </a> 
-              
-
-            
-                <a href="http://paxblmm0h.bkt.clouddn.com/wechat_pay.jpg" title="微信打赏" class="fancybox" rel="article0"
-                    style="margin-right:30%">
-                    <img src="http://paxblmm0h.bkt.clouddn.com/wechat_pay.jpg" title="" height="164px" width="164px">
-                </a>
-            
-            -->
-            <table>
-                <tr>
-                    <td>
-                        
-                            <a href="http://paxblmm0h.bkt.clouddn.com/ali_pay.jpg" title="支付宝打赏" class="fancybox" rel="article0" 
-                                style="float:left;margin-left:25%;margin-right:10px;">
-                                <img src="http://paxblmm0h.bkt.clouddn.com/ali_pay.jpg" title="" height="164px" width="164px">
-                            </a> 
-                         
-                    </td>
-                    <td>
-                        
-                            <a href="http://paxblmm0h.bkt.clouddn.com/wechat_pay.jpg" title="微信打赏" class="fancybox" rel="article0"
-                                style="margin-right:30%">
-                                <img src="http://paxblmm0h.bkt.clouddn.com/wechat_pay.jpg" title="" height="164px" width="164px">
-                            </a>
-                        
-                    </td>
-                </tr>
-            </table>
-
-        </div>
-
-        <script type="text/javascript">
-            document.getElementById('btn_donate').onclick = function() {
-                $('#donate_board').addClass('hidden');
-                // $('#donate_guide').removeClass('hidden');
-                $('#donate_guide').show(2000);
-            }
-
-        </script>
-    </div>
-
-    
-
 
       
     </div>
-
-    <div class="post-spread">
+    <footer class="article-footer">
       
-        <!-- JiaThis Button BEGIN -->
-<div class="jiathis_style">
-  <a class="jiathis_button_tsina"></a>
-  <a class="jiathis_button_tqq"></a>
-  <a class="jiathis_button_weixin"></a>
-  <a class="jiathis_button_cqq"></a>
-  <a class="jiathis_button_douban"></a>
-  <a class="jiathis_button_renren"></a>
-  <a class="jiathis_button_qzone"></a>
-  <a class="jiathis_button_kaixin001"></a>
-  <a class="jiathis_button_copy"></a>
-  <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jiathis_separator jtico jtico_jiathis" target="_blank"></a>
-  <a class="jiathis_counter_style"></a>
-</div>
-<script type="text/javascript" >
-  var jiathis_config={
-    hideMore:false
-  }
+        <div id="donation_div"></div>
+
+<script src="../../../../js/vdonate.js"></script>
+<script>
+var a = new Donate({
+  title: '如果觉得我的文章对您有用，请随意打赏。您的支持将鼓励我继续创作!', // 可选参数，打赏标题
+  btnText: 'Donate', // 可选参数，打赏按钮文字
+  el: document.getElementById('donation_div'),
+  wechatImage: 'https://raw.githubusercontent.com/JaeCoding/JaeCoding.github.io/hexo/source/about/donate/images/wechat.jpg',
+  alipayImage: 'https://raw.githubusercontent.com/JaeCoding/JaeCoding.github.io/hexo/source/about/donate/images/alipay.jpg'
+});
 </script>
-<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js" charset="utf-8"></script>
-<!-- JiaThis Button END -->
+      
+      
+      <div>
+        <ul class="post-copyright">
+          <li class="post-copyright-author">
+          <strong>Post author:  </strong>Jae Peng</a>
+          </li>
+          <li class="post-copyright-link">
+          <strong>Post link:  </strong>
+          <a href="/2017/05/31/锁的机制/" target="_blank" title="mysql 锁的机制">http://jaecoding.github.io/2017/05/31/锁的机制/</a>
+          </li>
+          <li class="post-copyright-license">
+            <strong>Copyright Notice:   </strong>
+            All articles in this blog are licensed under <a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank" title="Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0)">CC BY-NC-ND 4.0</a>
+            unless stating additionally.
+          </li>
+         
+        </ul>
+<div>
 
       
-    </div>
-  </div>
-
- </div>
-
+      
         
-          <div class="comments" id="comments">
-            
-              <div id="disqus_thread">
-                <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-              </div>
-            <!--
-            
-            -->
+	<div id="comment">
+		<!-- 来必力City版安装代码 -->
+		<div id="lv-container" data-id="city" data-uid="MTAyMC8yOTQ4MS82MDQ5">
+		<script type="text/javascript">
+		   (function(d, s) {
+		       var j, e = d.getElementsByTagName(s)[0];
+
+		       if (typeof LivereTower === 'function') { return; }
+
+		       j = d.createElement(s);
+		       j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+		       j.async = true;
+
+		       e.parentNode.insertBefore(j, e);
+		   })(document, 'script');
+		</script>
+		<noscript>为正常使用来必力评论功能请激活JavaScript</noscript>
+		</div>
+		<!-- City版安装代码已完成 -->
+	</div>
+
+
+
+      
+      
+        
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../../../tags/mysql/">mysql</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../../../tags/锁/">锁</a></li></ul>
+
+      
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="../../../08/20/设计模式沉思录（六）之 适配器模式/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          设计模式沉思录（六）之 适配器模式
         
       </div>
-
-      
+    </a>
   
-  <div class="sidebar-toggle">
-    <div class="sidebar-toggle-line-wrap">
-      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
-      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
-      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
-    </div>
-  </div>
+  
+</nav>
 
-  <aside id="sidebar" class="sidebar">
-    <div class="sidebar-inner">
+  
+</article>
 
-      
-        <ul class="sidebar-nav motion-element">
-          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
-            Table Of Contents
-          </li>
-          <li class="sidebar-nav-overview" data-target="site-overview">
-            Overview
-          </li>
-        </ul>
-      
+<!-- Table of Contents -->
 
-      <section class="site-overview">
-        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
-          <img class="site-author-image" src="/images/default_avatar.jpg" alt="Jae Peng" itemprop="image"/>
-          <p class="site-author-name" itemprop="name">Jae Peng</p>
-        </div>
-        <p class="site-description motion-element" itemprop="description">A purchasing coder</p>
-        <nav class="site-state motion-element">
-          <div class="site-state-item site-state-posts">
-            <a href="/archives">
-              <span class="site-state-item-count">38</span>
-              <span class="site-state-item-name">posts</span>
-            </a>
-          </div>
-
-          <div class="site-state-item site-state-categories">
-            <a href="/categories">
-              <span class="site-state-item-count">7</span>
-              <span class="site-state-item-name">categories</span>
-              </a>
-          </div>
-
-          <div class="site-state-item site-state-tags">
-            <a href="/tags">
-              <span class="site-state-item-count">23</span>
-              <span class="site-state-item-name">tags</span>
-              </a>
-          </div>
-
-        </nav>
-
-        
-          <div class="feed-link motion-element">
-            <a href="/atom.xml" rel="alternate">
-              <i class="menu-item-icon icon-next-feed"></i>
-              RSS
-            </a>
-          </div>
-        
-
-        <div class="links-of-author motion-element">
-          
-            
-              <span class="links-of-author-item">
-                <a href="http://github.com/jaecoding" target="_blank">GitHub</a>
-              </span>
-            
-              <span class="links-of-author-item">
-                <a href="https://twitter.com/xxx" target="_blank">Twitter</a>
-              </span>
-            
-              <span class="links-of-author-item">
-                <a href="http://weibo.com/" target="_blank">Weibo</a>
-              </span>
-            
-              <span class="links-of-author-item">
-                <a href="http://www.zhihu.com/people/peng-wen-jie-13" target="_blank">ZhiHu</a>
-              </span>
-            
-          
-        </div>
-
-        <div class="links-of-friendly motion-element">
-          
-            <p class="site-author-name">CSDNblog</p>
-            
-              <span class="links-of-author-item">
-              <a href="https://blog.csdn.net/Jae_Peng" target="_blank">About</a>
-              </span>
-            
-          
-        </div>
-
-        
-        
-          <div class="cc-license motion-element" itemprop="license">
-            <a href="http://creativecommons.org/licenses/by-nc-sa/4.0" class="cc-opacity" target="_blank">
-              <img src="/images/cc-by-nc-sa.svg" alt="Creative Commons" />
-            </a>
-          </div>
-        
-
-      </section>
-
-      
-        <section class="post-toc-wrap sidebar-panel-active">
-          <div class="post-toc-indicator-top post-toc-indicator"></div>
-          <div class="post-toc">
-            
-            
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#锁的机制"><span class="nav-number">1.</span> <span class="nav-text">锁的机制</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#表级锁定（table-level）"><span class="nav-number">1.1.</span> <span class="nav-text">表级锁定（table-level）</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#行级锁定-InnoDB存储引擎"><span class="nav-number">2.</span> <span class="nav-text">行级锁定(InnoDB存储引擎)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#InnoDB锁定模式及实现机制"><span class="nav-number">2.1.</span> <span class="nav-text">InnoDB锁定模式及实现机制</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#InnoDB行锁实现方式（给索引上的索引项加锁）"><span class="nav-number">2.2.</span> <span class="nav-text">InnoDB行锁实现方式（给索引上的索引项加锁）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#间隙锁（Next-Key锁）（键值在条件范围内但并不存在的记录）"><span class="nav-number">2.3.</span> <span class="nav-text">间隙锁（Next-Key锁）（键值在条件范围内但并不存在的记录）</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#死锁"><span class="nav-number">3.</span> <span class="nav-text">死锁</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#什么时候使用表锁"><span class="nav-number">4.</span> <span class="nav-text">什么时候使用表锁</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#InnoDB行锁优化建议"><span class="nav-number">5.</span> <span class="nav-text">InnoDB行锁优化建议</span></a></li></ol></div>
-            
-          </div>
-          <div class="post-toc-indicator-bottom post-toc-indicator"></div>
-        </section>
-      
-
+  <aside id="toc-sidebar">
+    <div id="toc" class="toc-article">
+    <strong class="toc-title">Contents</strong>
+    
+        <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#锁的机制"><span class="nav-number">1.</span> <span class="nav-text">锁的机制</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#表级锁定（table-level）"><span class="nav-number">1.1.</span> <span class="nav-text">表级锁定（table-level）</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#行级锁定-InnoDB存储引擎"><span class="nav-number">2.</span> <span class="nav-text">行级锁定(InnoDB存储引擎)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#InnoDB锁定模式及实现机制"><span class="nav-number">2.1.</span> <span class="nav-text">InnoDB锁定模式及实现机制</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#InnoDB行锁实现方式（给索引上的索引项加锁）"><span class="nav-number">2.2.</span> <span class="nav-text">InnoDB行锁实现方式（给索引上的索引项加锁）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#间隙锁（Next-Key锁）（键值在条件范围内但并不存在的记录）"><span class="nav-number">2.3.</span> <span class="nav-text">间隙锁（Next-Key锁）（键值在条件范围内但并不存在的记录）</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#死锁"><span class="nav-number">3.</span> <span class="nav-text">死锁</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#什么时候使用表锁"><span class="nav-number">4.</span> <span class="nav-text">什么时候使用表锁</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#InnoDB行锁优化建议"><span class="nav-number">5.</span> <span class="nav-text">InnoDB行锁优化建议</span></a></li></ol>
+    
     </div>
   </aside>
 
-
-    </main>
-
-    <footer id="footer" class="footer">
-      <div class="footer-inner"> <div class="copyright" >
+</section>
+        
+      </div>
+      
+      <footer id="footer">
   
-  &copy; &nbsp;  2011 - 
-  <span itemprop="copyrightYear">2019
-  </span>
-  <span class="with-love">
-    <i class="icon-next-heart"></i>
-  </span>
-  <span class="author" itemprop="copyrightHolder">Jae Peng
-  </span>
-</div>
 
-<div class="powered-by">
-  Powered by <a class="theme-link" href="http://hexo.io">Hexo</a>
-</div>
+  <div class="container">
+      	<div class="row">
+	      <p> Powered by <a href="http://hexo.io/" target="_blank">Hexo</a> and <a href="https://github.com/iTimeTraveler/hexo-theme-hiker" target="_blank">Hexo-theme-hiker</a> </p>
+	      <p id="copyRightEn">Copyright &copy; 2017 - 2019 Jae&#39;s blog All Rights Reserved.</p>
+	      
+	      
+    		<p class="busuanzi_uv">
+				UV : <span id="busuanzi_value_site_uv"></span> |  
+				PV : <span id="busuanzi_value_site_pv"></span>
+		    </p>
+  		   
+		</div>
 
-<div class="theme-info">
-  Theme by <a class="theme-link" href="http://Jaecoding.github.io">Jae</a>.<a class="theme-link" href="https://github.com/idhyt/hexo-theme-next/tree/magiclamp">Mala</a>
-</div>
-
-<!-- busuanzi -->
-
-  <div class="busuanzi-info">
-    <div class="theme-info">
-    <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
-    </script>
-    <span id="busuanzi_container_site_pv">
-        本站总访问量<a class="theme-link"><span id="busuanzi_value_site_pv"></span></a>次
-    </span>
-</div>
+		
   </div>
+</footer>
 
 
+<!-- min height -->
 
- </div>
-    </footer>
+<script>
+    var wrapdiv = document.getElementById("wrap");
+    var contentdiv = document.getElementById("content");
+    var allheader = document.getElementById("allheader");
 
-    <div class="back-to-top"></div>
-  </div>
-
-  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
-
-  
-  
-  
-    
-
-  <script type="text/javascript">
-    var disqus_shortname = 'xxx';
-    var disqus_identifier = '2017/05/31/锁的机制/';
-    var disqus_title = 'mysql 锁的机制';
-    var disqus_url = 'http://jaecoding.github.io/2017/05/31/锁的机制/';
-
-    function run_disqus_script(disqus_script){
-      var dsq = document.createElement('script');
-      dsq.type = 'text/javascript';
-      dsq.async = true;
-      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
-      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    wrapdiv.style.minHeight = document.body.offsetHeight + "px";
+    if (allheader != null) {
+      contentdiv.style.minHeight = document.body.offsetHeight - allheader.offsetHeight - document.getElementById("footer").offsetHeight + "px";
+    } else {
+      contentdiv.style.minHeight = document.body.offsetHeight - document.getElementById("footer").offsetHeight + "px";
     }
-
-    run_disqus_script('count.js');
-    
-      run_disqus_script('embed.js');
-    
-  </script>
-
-  
-  
-  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js"></script>
-  <script type="text/javascript" src="/js/fancy-box.js?v=0.4.5.1"></script>
-
-
-  <script type="text/javascript" src="/js/helpers.js?v=0.4.5.1"></script>
-  
-
-  <script type="text/javascript" src="/vendors/velocity/velocity.min.js"></script>
-  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js"></script>
-
-  <script type="text/javascript" src="/js/motion_global.js?v=0.4.5.1" id="motion.global"></script>
-
-
-
-
-  <script type="text/javascript" src="/js/nav-toggle.js?v=0.4.5.1"></script>
-  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
-
-  
-  
-<script type="text/javascript" src="/js/bootstrap.scrollspy.js?v=0.4.5.1" id="bootstrap.scrollspy.custom"></script>
-
-
-<script type="text/javascript" id="sidebar.toc.highlight">
-  $(document).ready(function () {
-    var tocSelector = '.post-toc';
-    var $tocSelector = $(tocSelector);
-    var activeCurrentSelector = '.active-current';
-
-    $tocSelector
-      .on('activate.bs.scrollspy', function () {
-        var $currentActiveElement = $(tocSelector + ' .active').last();
-
-        removeCurrentActiveClass();
-        $currentActiveElement.addClass('active-current');
-
-        $tocSelector[0].scrollTop = $currentActiveElement.position().top;
-      })
-      .on('clear.bs.scrollspy', function () {
-        removeCurrentActiveClass();
-      });
-
-    function removeCurrentActiveClass () {
-      $(tocSelector + ' ' + activeCurrentSelector)
-        .removeClass(activeCurrentSelector.substring(1));
-    }
-
-    function processTOC () {
-      getTOCMaxHeight();
-      toggleTOCOverflowIndicators();
-    }
-
-    function getTOCMaxHeight () {
-      var height = $('.sidebar').height() -
-                   $tocSelector.position().top -
-                   $('.post-toc-indicator-bottom').height();
-
-      $tocSelector.css('height', height);
-
-      return height;
-    }
-
-    function toggleTOCOverflowIndicators () {
-      tocOverflowIndicator(
-        '.post-toc-indicator-top',
-        $tocSelector.scrollTop() > 0 ? 'show' : 'hide'
-      );
-
-      tocOverflowIndicator(
-        '.post-toc-indicator-bottom',
-        $tocSelector.scrollTop() >= $tocSelector.find('ol').height() - $tocSelector.height() ? 'hide' : 'show'
-      )
-    }
-
-    $(document).on('sidebar.motion.complete', function () {
-      processTOC();
-    });
-
-    $('body').scrollspy({ target: tocSelector });
-    $(window).on('resize', function () {
-      if ( $('.sidebar').hasClass('sidebar-active') ) {
-        processTOC();
-      }
-    });
-
-    onScroll($tocSelector);
-
-    function onScroll (element) {
-      element.on('mousewheel DOMMouseScroll', function (event) {
-          var oe = event.originalEvent;
-          var delta = oe.wheelDelta || -oe.detail;
-
-          this.scrollTop += ( delta < 0 ? 1 : -1 ) * 30;
-          event.preventDefault();
-
-          toggleTOCOverflowIndicators();
-      });
-    }
-
-    function tocOverflowIndicator (indicator, action) {
-      var $indicator = $(indicator);
-      var opacity = action === 'show' ? 0.4 : 0;
-      $indicator.velocity ?
-        $indicator.velocity('stop').velocity({
-          opacity: opacity
-        }, { duration: 100 }) :
-        $indicator.stop().animate({
-          opacity: opacity
-        }, 100);
-    }
-
-  });
 </script>
+    </div>
+    <!-- <nav id="mobile-nav">
+  
+    <a href="../../../../index.html" class="mobile-nav-link">Home</a>
+  
+    <a href="../../../../archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="../../../../categories" class="mobile-nav-link">Categories</a>
+  
+    <a href="../../../../tags" class="mobile-nav-link">Tags</a>
+  
+    <a href="../../../../about" class="mobile-nav-link">About</a>
+  
+</nav> -->
+    
 
-<script type="text/javascript" id="sidebar.nav">
-  $(document).ready(function () {
-    var html = $('html');
-    var TAB_ANIMATE_DURATION = 200;
-    var hasVelocity = $.isFunction(html.velocity);
+<!-- mathjax config similar to math.stackexchange -->
 
-    $('.sidebar-nav li').on('click', function () {
-      var item = $(this);
-      var activeTabClassName = 'sidebar-nav-active';
-      var activePanelClassName = 'sidebar-panel-active';
-      if (item.hasClass(activeTabClassName)) {
-        return;
-      }
-
-      var currentTarget = $('.' + activePanelClassName);
-      var target = $('.' + item.data('target'));
-
-      hasVelocity ?
-        currentTarget.velocity('transition.slideUpOut', TAB_ANIMATE_DURATION, function () {
-          target
-            .velocity('stop')
-            .velocity('transition.slideDownIn', TAB_ANIMATE_DURATION)
-            .addClass(activePanelClassName);
-        }) :
-        currentTarget.animate({ opacity: 0 }, TAB_ANIMATE_DURATION, function () {
-          currentTarget.hide();
-          target
-            .stop()
-            .css({'opacity': 0, 'display': 'block'})
-            .animate({ opacity: 1 }, TAB_ANIMATE_DURATION, function () {
-              currentTarget.removeClass(activePanelClassName);
-              target.addClass(activePanelClassName);
-            });
-        });
-
-      item.siblings().removeClass(activeTabClassName);
-      item.addClass(activeTabClassName);
-    });
-
-    $('.post-toc a').on('click', function (e) {
-      e.preventDefault();
-      var targetSelector = escapeSelector(this.getAttribute('href'));
-      var offset = $(targetSelector).offset().top;
-      hasVelocity ?
-        html.velocity('stop').velocity('scroll', {
-          offset: offset  + 'px',
-          mobileHA: false
-        }) :
-        $('html, body').stop().animate({
-          scrollTop: offset
-        }, 500);
-    });
-
-    // Expand sidebar on post detail page by default, when post has a toc.
-    var $tocContent = $('.post-toc-content');
-    if (isDesktop() && CONFIG.sidebar === 'post') {
-      if ($tocContent.length > 0 && $tocContent.html().trim().length > 0) {
-        displaySidebar();
-      }
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
     }
   });
 </script>
 
-
-
-  <script type="text/javascript">
-    $(document).ready(function () {
-      if (CONFIG.sidebar === 'always') {
-        displaySidebar();
-      }
-      if (isMobile()) {
-        FastClick.attach(document.body);
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
       }
     });
-  </script>
+</script>
 
-  
-
-  
-  
-
-  
-  <script type="text/javascript" src="/js/lazyload.js"></script>
-  <script type="text/javascript">
-    $(function () {
-      $("#posts").find('img').lazyload({
-        placeholder: "/images/loading.gif",
-        effect: "fadeIn"
-      });
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
     });
-  </script>
+</script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+  <link rel="stylesheet" href="../../../../fancybox/jquery.fancybox.css">
+  <script src="../../../../fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="../../../../js/scripts.js"></script>
+
+
+
+
+  <script src="../../../../js/dialog.js"></script>
+
+
+
+
+
+
+
+
+	<div style="display: none;">
+    <script src="https://s95.cnzz.com/z_stat.php?id=1260716016&web_id=1260716016" language="JavaScript"></script>
+  </div>
+
+
+
+	<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js">
+	</script>
+
+
+
+
+
+
+  </div>
+
+  <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 class="modal-title" id="myModalLabel">设置</h2>
+      </div>
+      <hr style="margin-top:0px; margin-bottom:0px; width:80%; border-top: 3px solid #000;">
+      <hr style="margin-top:2px; margin-bottom:0px; width:80%; border-top: 1px solid #000;">
+
+
+      <div class="modal-body">
+          <div style="margin:6px;">
+            <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" onclick="javascript:setFontSize();" aria-expanded="true" aria-controls="collapseOne">
+              正文字号大小
+            </a>
+          </div>
+          <div id="collapseOne" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+          <div class="panel-body">
+            您已调整页面字体大小
+          </div>
+        </div>
+      
+
+
+          <div style="margin:6px;">
+            <a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" onclick="javascript:setBackground();" aria-expanded="true" aria-controls="collapseTwo">
+              夜间护眼模式
+            </a>
+        </div>
+          <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
+          <div class="panel-body">
+            夜间模式已经开启，再次单击按钮即可关闭 
+          </div>
+        </div>
+
+        <div>
+            <a data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="true" aria-controls="collapseThree">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;关 于&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a>
+        </div>
+         <div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
+          <div class="panel-body">
+            Jae&#39;s blog
+          </div>
+          <div class="panel-body">
+            Copyright © 2019 Jae Peng All Rights Reserved.
+          </div>
+        </div>
+      </div>
+
+
+      <hr style="margin-top:0px; margin-bottom:0px; width:80%; border-top: 1px solid #000;">
+      <hr style="margin-top:2px; margin-bottom:0px; width:80%; border-top: 3px solid #000;">
+      <div class="modal-footer">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+      </div>
+    </div>
+  </div>
+</div>
+  
+  <a id="rocket" href="#top" class=""></a>
+  <script type="text/javascript" src="/js/totop.js?v=1.0.0" async=""></script>
+  
+    <a id="menu-switch"><i class="fa fa-bars fa-lg"></i></a>
+  
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 </body>
 </html>

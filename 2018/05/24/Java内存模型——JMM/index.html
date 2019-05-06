@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>java内存模型——jmm | Jae&#39;s blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  
+  <meta name="keywords" content="Java" />
+  
+  
+  
+  
+  <meta name="description" content="Java内存模型——JMM转载自http://www.cs.umd.edu/~pugh/java/memoryModel/jsr-133-faq.htmlhttps://www.cnblogs.com/jiangds/p/6510583.htmlhttps://blog.csdn.net/javazejian/article/details/72772461 多任务和高并发的内存交互多任务和高并发">
+<meta name="keywords" content="Java">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java内存模型——JMM">
+<meta property="og:url" content="http://jaecoding.github.io/2018/05/24/Java内存模型——JMM/index.html">
+<meta property="og:site_name" content="Jae&#39;s blog">
+<meta property="og:description" content="Java内存模型——JMM转载自http://www.cs.umd.edu/~pugh/java/memoryModel/jsr-133-faq.htmlhttps://www.cnblogs.com/jiangds/p/6510583.htmlhttps://blog.csdn.net/javazejian/article/details/72772461 多任务和高并发的内存交互多任务和高并发">
+<meta property="og:locale" content="en">
+<meta property="og:image" content="http://pbw0qqogs.bkt.clouddn.com/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B.jpg">
+<meta property="og:image" content="http://paxblmm0h.bkt.clouddn.com/JMM%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B.png">
+<meta property="og:image" content="http://paxblmm0h.bkt.clouddn.com/JMM%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B.png">
+<meta property="og:image" content="http://paxblmm0h.bkt.clouddn.com/JMM%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B.png">
+<meta property="og:image" content="http://paxblmm0h.bkt.clouddn.com/%E4%B8%89%E7%A7%8D%E6%8C%87%E4%BB%A4%E9%87%8D%E6%8E%92%E5%BA%8F.jpg">
+<meta property="og:updated_time" content="2019-05-03T13:44:55.807Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Java内存模型——JMM">
+<meta name="twitter:description" content="Java内存模型——JMM转载自http://www.cs.umd.edu/~pugh/java/memoryModel/jsr-133-faq.htmlhttps://www.cnblogs.com/jiangds/p/6510583.htmlhttps://blog.csdn.net/javazejian/article/details/72772461 多任务和高并发的内存交互多任务和高并发">
+<meta name="twitter:image" content="http://pbw0qqogs.bkt.clouddn.com/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B.jpg">
+  
+    <link rel="alternate" href="/atom.xml" title="Jae&#39;s blog" type="application/atom+xml">
+  
+
+  
+
+  <link rel="icon" href="/css/images/mylogo.jpg">
+  <link rel="apple-touch-icon" href="/css/images/mylogo.jpg">
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans|Montserrat:700" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Roboto:400,300,300italic,400italic" rel="stylesheet" type="text/css">
+  <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+  <style type="text/css">
+    @font-face{font-family:futura-pt; src:url("css/fonts/FuturaPTBold.otf") format("woff");font-weight:500;font-style:normal;}
+    @font-face{font-family:futura-pt-light; src:url("css/fonts/FuturaPTBook.otf") format("woff");font-weight:lighter;font-style:normal;}
+    @font-face{font-family:futura-pt-italic; src:url("css/fonts/FuturaPTBookOblique.otf") format("woff");font-weight:400;font-style:italic;}
+}
+
+  </style>
+  <link rel="stylesheet" href="../../../../css/style.css">
+
+  <script src="../../../../js/jquery-3.1.1.min.js"></script>
+  <script src="../../../../js/bootstrap.js"></script>
+
+  <!-- Bootstrap core CSS -->
+  <link rel="stylesheet" href="/css/bootstrap.css" >
+
+  
+    <link rel="stylesheet" href="../../../../css/dialog.css">
+  
+
+  
+
+  
+    <link rel="stylesheet" href="/css/header-post.css" >
+  
+
+  
+  
+  
+    <link rel="stylesheet" href="/css/vdonate.css" >
+  
+
+</head>
+
+
+
+  <body data-spy="scroll" data-target="#toc" data-offset="50">
+
+
+  
+  <div id="container">
+    <div id="wrap">
+      
+        <header>
+
+    <div id="allheader" class="navbar navbar-default navbar-static-top" role="navigation">
+        <div class="navbar-inner">
+          
+          <div class="container"> 
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+
+            
+              <a class="brand" style="
+                 margin-top: 0px;"  
+                href="#" data-toggle="modal" data-target="#myModal" >
+                  <img width="124px" height="124px" alt="Hike News" src="/css/images/mylogo.jpg">
+              </a>
+            
+            
+            <div class="navbar-collapse collapse">
+              <ul class="hnav navbar-nav">
+                
+                  <li> <a class="main-nav-link" href="../../../../index.html">Home</a> </li>
+                
+                  <li> <a class="main-nav-link" href="../../../../archives">Archives</a> </li>
+                
+                  <li> <a class="main-nav-link" href="../../../../categories">Categories</a> </li>
+                
+                  <li> <a class="main-nav-link" href="../../../../tags">Tags</a> </li>
+                
+                  <li> <a class="main-nav-link" href="../../../../about">About</a> </li>
+                
+                  <li><div id="search-form-wrap">
+
+    <form class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="" />
+        <button type="submit" class="search-form-submit"></button>
+    </form>
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="Type something..." />
+            <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: 'Posts',
+            PAGES: 'Pages',
+            CATEGORIES: 'Categories',
+            TAGS: 'Tags',
+            UNTITLED: '(Untitled)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '../../../../content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+<script src="../../../../js/insight.js"></script>
+
+</div></li>
+            </div>
+          </div>
+                
+      </div>
+    </div>
+
+</header>
+
+
+
+      
+            
+      <div id="content" class="outer">
+        
+          <section id="main" style="float:none;"><article id="post-Java内存模型——JMM" style="width: 75%; float:left;" class="article article-type-post" itemscope itemprop="blogPost" >
+  <div id="articleInner" class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="thumb" class="article-title" itemprop="name">
+      Java内存模型——JMM
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      
+	<a href="" class="article-date">
+	  <time datetime="2018-05-24T03:35:26.000Z" itemprop="datePublished">2018-05-24</time>
+	</a>
+
+      
+    <a class="article-category-link" href="../../../../categories/原理/">原理</a>
+
+      
+	<a class="article-views">
+	<span id="busuanzi_container_page_pv">
+		PV:<span id="busuanzi_value_page_pv"></span>
+	</span>
+	</a>
+
+      
+
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="Java内存模型——JMM"><a href="#Java内存模型——JMM" class="headerlink" title="Java内存模型——JMM"></a>Java内存模型——JMM</h1><p>转载自<a href="http://www.cs.umd.edu/~pugh/java/memoryModel/jsr-133-faq.html" target="_blank" rel="noopener">http://www.cs.umd.edu/~pugh/java/memoryModel/jsr-133-faq.html</a><br><a href="https://www.cnblogs.com/jiangds/p/6510583.html" target="_blank" rel="noopener">https://www.cnblogs.com/jiangds/p/6510583.html</a><br><a href="https://blog.csdn.net/javazejian/article/details/72772461" target="_blank" rel="noopener">https://blog.csdn.net/javazejian/article/details/72772461</a></p>
+<h1 id="多任务和高并发的内存交互"><a href="#多任务和高并发的内存交互" class="headerlink" title="多任务和高并发的内存交互"></a>多任务和高并发的内存交互</h1><p>多任务和高并发是衡量一台计算机处理器的能力重要指标之一。一般衡量一个服务器性能的高低好坏，使用每秒事务处理数（Transactions Per Second，TPS）这个指标比较能说明问题，它代表着一秒内服务器平均能响应的请求数，而TPS值与程序的并发能力有着非常密切的关系。物理机的并发问题与虚拟机中的情况有很多相似之处，物理机对并发的处理方案对于虚拟机的实现也有相当大的参考意义。</p>
+<p>由于计算机的存储设备与处理器的运算能力之间有几个数量级的差距，所以现代计算机系统都不得不加入一层读写速度尽可能接近处理器运算速度的高速缓存（cache）来作为内存与处理器之间的缓冲：将运算需要使用到的数据复制到缓存中，让运算能快速进行，当运算结束后再从缓存同步回内存之中，这样处理器就无需等待缓慢的内存读写了。</p>
+<p>基于高速缓存的存储交互很好地解决了处理器与内存的速度矛盾，但是引入了一个新的问题：缓存一致性（Cache Coherence）。在多处理器系统中，每个处理器都有自己的高速缓存，而他们又共享同一主存，如下图所示：多个处理器运算任务都涉及同一块主存，需要一种协议可以保障数据的一致性，这类协议有MSI、MESI、MOSI及Dragon Protocol等。</p>
+<p>除此之外，为了使得处理器内部的运算单元能尽可能被充分利用，处理器可能会对输入代码进行<strong>乱序执行（Out-Of-Order Execution）优化</strong>，处理器会在计算之后将对乱序执行的代码进行结果重组，保证结果准确性。与处理器的乱序执行优化类似，Java虚拟机的即时编译器中也有类似的<strong>指令重排序（Instruction Recorder）优化</strong>。<br>下图是计算机的内存模型<br><img src="http://pbw0qqogs.bkt.clouddn.com/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B.jpg" alt="此处输入图片的描述"></p>
+<p><strong>好处：</strong>缓存通过加速数据访问（因为数据距离处理器更近）和降低共享内存在总线上的通讯（因为本地缓存能够满足许多内存操作）来提高CPU性能。<br><strong>挑战：</strong>当两个CPU同时检查相同的内存地址时会发生什么？在什么样的条件下它们会看到相同的值？</p>
+<p>有些处理器有<strong>很强的内存模型</strong>(strong memory model)，能够让所有的处理器在任何时候任何指定的内存地址上都可以看到完全相同的值。<br>而另外一些处理器则有<strong>较弱的内存模型</strong>（weaker memory model），在这种处理器中，必须使用内存屏障（一种特殊的指令）来<strong>刷新本地处理器缓存</strong>并使本地处理器缓存无效，目的是为了让当前处理器能够看到其他处理器的写操作或者让其他处理器能看到当前处理器的写操作。这些内存屏障通常在lock和unlock操作的时候完成。内存屏障在高级语言中对程序员是不可见的。</p>
+<p><strong>强内存模型：</strong>有时候编写程序可能会更容易，因为减少了对内存屏障的依赖。但是即使在一些最强的内存模型下，内存屏障仍然是必须的。设置内存屏障往往与我们的直觉并不一致。</p>
+<p><strong>弱的内存模型</strong>：近来处理器设计的趋势更倾向于此，因为弱内存模型削弱了缓存一致性，所以在多处理器平台和更大容量的内存下可以实现更好的<strong>可伸缩性</strong></p>
+<p>对比的，下图是Java内存模型<br><img src="http://paxblmm0h.bkt.clouddn.com/JMM%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B.png" alt="此处输入图片的描述"></p>
+<p><strong>作用：实现线程交互</strong></p>
+<p>Java内存模型描述了在<strong>多线程</strong>代码中哪些行为是合法的，以及<strong>线程如何通过内存进行交互</strong>。它描述了“程序中的变量“ 和 ”从内存或者寄存器 获取或存储它们的底层细节”之间的关系。Java内存模型通过使用各种各样的硬件和编译器的优化来正确实现以上事情。</p>
+<h1 id="Java内存模型"><a href="#Java内存模型" class="headerlink" title="Java内存模型"></a>Java内存模型</h1><p><strong>理解：</strong>内存模型可以理解为在特定的操作协议下，对特定的<strong>内存或者高速缓存进行读写访问的过程抽象</strong>，不同架构下的物理机拥有不一样的内存模型，Java虚拟机也有自己的内存模型，即Java内存模型（Java Memory Model, JMM）。</p>
+<p>在C/C++语言中直接使用物理硬件和操作系统内存模型，导致不同平台（linux和window不同）下并发访问出错。</p>
+<p><strong>JMM作用：</strong>JMM的出现，能够屏蔽掉各种硬件和操作系统的内存访问差异，实现平台一致性，是的Java程序能够“一次编写，到处运行”。</p>
+<h1 id="主内存和工作内存"><a href="#主内存和工作内存" class="headerlink" title="主内存和工作内存"></a>主内存和工作内存</h1><p><strong>JMM目标：</strong>定义程序中各个<strong>变量的访问规则（如何读写，如何安全）</strong>，即在虚拟机中将变量存储到内存和从内存中取出变量这样底层细节。<br><strong>变量：</strong><br>指共享部分：<strong>实例字段</strong>、<strong>静态字段</strong>和构成<strong>数组对象的元素</strong><br>不包括 局部变量与方法参数，后者是线程私有的，不会被共享。</p>
+<p><strong>规定：</strong><br>主内存：存储变量<br>工作内存：操作变量的拷贝</p>
+<p>所有的变量都<strong>存储</strong>在主内存中，每条线程还有自己的工作内存（可以与前面讲的处理器的高速缓存类比），线程的工作内存中保存了该线程使用到的变量到主内存副本拷贝，线程对变量的所有<strong>操作（读取、赋值）</strong>都必须在工作内存中进行，而不能直接读写主内存中的变量。<br>不同线程之间无法直接访问对方工作内存中的变量，线程间变量值的传递均需要在主内存来完成，线程、主内存和工作内存的交互关系如下图所示，和上图很类似。<br><img src="http://paxblmm0h.bkt.clouddn.com/JMM%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B.png" alt="此处输入图片的描述"><br>注意：这里的主内存、工作内存与Java内存区域的Java堆、栈、方法区不是同一层次内存划分，这两者基本上没有关系。</p>
+<h1 id="内存交互操作"><a href="#内存交互操作" class="headerlink" title="内存交互操作"></a>内存交互操作</h1><p>由上面的交互关系可知，关于主内存与工作内存之间的具体交互协议，即一个变量如何从主内存拷贝到工作内存、如何从工作内存同步到主内存之间的实现细节，Java内存模型定义了以下八种操作来完成：</p>
+<p> <strong>加锁解锁</strong></p>
+<ul>
+<li>lock（锁定）：作用于主内存的变量，把一个变量标识为一条线程独占状态。</li>
+<li>unlock（解锁）：作用于主内存变量，把一个处于锁定状态的变量释放出来，释放后的变量才可以被其他线程锁定。<br><strong>变量：主内存→工作内存</strong></li>
+<li>read（读取）：作用于主内存变量，把一个变量值从主内存传输到线程的工作内存中，以便随后的load动作使用</li>
+<li>load（载入）：作用于工作内存的变量，它把read操作从主内存中得到的变量值放入工作内存的变量副本中。<br><strong>变量：工作内存→主内存</strong></li>
+<li>store（存储）：作用于工作内存的变量，把工作内存中的一个变量的值传送到主内存中，以便随后的write的操作。</li>
+<li>write（写入）：作用于主内存的变量，它把store操作从工作内存中一个变量的值传送到主内存的变量中。</li>
+</ul>
+<p><strong>变量：虚拟机使用与赋值</strong></p>
+<ul>
+<li>use（使用）：作用于工作内存的变量，把工作内存中的一个变量值<strong>传递给执行引擎</strong>，每当虚拟机遇到一个需要使用变量的值的字节码指令时将会执行这个操作。</li>
+<li>assign（赋值）：作用于工作内存的变量，它把一个从<strong>执行引擎接收</strong>到的值赋值给工作内存的变量，每当虚拟机遇到一个给变量赋值的字节码指令时执行这个操作。</li>
+</ul>
+<p><img src="http://paxblmm0h.bkt.clouddn.com/JMM%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B.png" alt="此处输入图片的描述"><br>如果要把一个变量从主内存中复制到工作内存，就需要按顺寻地执行<strong>read和load</strong>操作，<br>如果把变量从工作内存中同步回主内存中，就要按顺序地执行<strong>store和write</strong>操作。<br>要求：上述两个操作必须<strong>按顺序执行</strong>，而<strong>没有保证必须是连续</strong>执行。也就是read和load之间，store和write之间是可以插入其他指令的，如对主内存中的变量a、b进行访问时，可能的顺序是read a，read b，load b， load a。Java内存模型还规定了在执行上述八种基本操作时，必须满足如下规则：</p>
+<p><strong>规则：</strong></p>
+<ul>
+<li>不允许read和load、store和write操作之一单独出现。<strong>读了就要加载，存了就要写入</strong></li>
+<li>不允许一个线程丢弃它的最近assign的操作，即变量在工作内存中改变了之后必须同步到主内存中。<strong>赋值了必须存回主内存</strong></li>
+<li>不允许一个线程无原因地（没有发生过任何assign操作）把数据从工作内存同步回主内存中。<strong>没赋值不许存回主内存</strong></li>
+<li>一个新的变量只能在主内存中诞生，不允许在工作内存中直接使用一个未被初始化（load或assign）的变量。即就是对一个变量实施use和store操作之前，必须先执行过了assign和load操作。（<strong>变量都是从主内存来的</strong>）</li>
+<li>一个变量在同一时刻只允许一条线程对其进行lock操作，lock和unlock必须成对出现，线程只能unlock自己的lock</li>
+<li>如果对一个变量执行lock操作，将会清空工作内存中此变量的值，在执行引擎使用use这个变量前需要重新执行load或assign（<strong>要么重新取，要么自己赋值</strong>）操作初始化变量的值（<strong>加锁会清空工作内存，用的话要么重新取，要么自己赋值</strong>）</li>
+<li>对一个变量执行unlock操作之前，必须先把此变量同步到主内存中（执行store和write操作）</li>
+</ul>
+<p><strong>lock-read-load-use-assign-store-write-unlock</strong></p>
+<p>这8种内存访问操作很繁琐，后文会使用一个等效判断原则，即先行发生（happens-before）原则来确定一个内存访问在并发环境下是否安全。</p>
+<h1 id="volatile变量规则"><a href="#volatile变量规则" class="headerlink" title="volatile变量规则"></a>volatile变量规则</h1><p>关键字volatile是JVM中最轻量的同步机制。volatile变量具有2种特性：</p>
+<ol>
+<li>保证变量的<strong>可见性</strong>。对一个volatile变量的读，总是能看到（任意线程）对这个volatile变量最后的写入，这个新值对于其他线程来说是立即可见的。（通过强制令缓存失效实现）</li>
+<li>屏蔽指令重排序：指令重排序是编译器和处理器为了高效对程序进行优化的手段，下文有详细的分析。</li>
+</ol>
+<p>volatile语义并不能保证变量的原子性。对任意单个volatile变量的读/写具有原子性，但类似于i++、i–这种复合操作不具有原子性，因为自增运算包括读取i的值、i值增加1、重新赋值3步操作，并不具备原子性。</p>
+<p>由于volatile只能保证变量的可见性和屏蔽指令重排序，只有满足下面2条规则时，才能使用volatile来保证并发安全，否则就需要加锁（使用synchronized、lock或者java.util.concurrent中的Atomic原子类）来保证并发中的原子性。</p>
+<h2 id="volatile何时并发安全"><a href="#volatile何时并发安全" class="headerlink" title="volatile何时并发安全"></a>volatile何时并发安全</h2><ol>
+<li>运算结果不存在<strong>数据依赖</strong>（重排序的数据依赖性），或者只有单一的线程修改变量的值（重排序的as-if-serial语义）</li>
+<li>变量<strong>不需要</strong>与其他的状态变量<strong>共同参与不变约束</strong></li>
+</ol>
+<p>因为需要在本地代码中插入许多内存屏蔽指令在屏蔽特定条件下的重排序，volatile变量的写操作与读操作相比慢一些，但是其性能开销比锁低很多。</p>
+<h2 id="long-double非原子协定"><a href="#long-double非原子协定" class="headerlink" title="long/double非原子协定"></a>long/double非原子协定</h2><p>JMM要求lock、unlock、read、load、assign、use、store、write这8个操作都必须具有原子性，但对于64位的数据类型（long和double，具有<strong>非原子协定</strong>：<br>允许虚拟机将没有被volatile修饰的64位数据的读写操作<strong>划分为2次32位操作进行</strong>。（与此类似的是，在栈帧结构的局部变量表中，long和double类型的局部变量可以使用2个能存储32位变量的变量槽（Variable Slot）来存储的，关于这一部分的详细分析，详见详见周志明著《深入理解Java虚拟机》8.2.1节）</p>
+<p>如果多个线程共享一个没有声明为volatile的long或double变量，并且同时读取和修改，某些线程<strong>可能会读取到一个既非原值，也不是其他线程修改值的代表了“半个变量”的数值</strong>。不过这种情况十分罕见。因为非原子协议换句话说，同样允许long和double的读写操作实现为原子操作，并且目前绝大多数的虚拟机都是这样做的。</p>
+<h2 id="原子性、可见性、有序性"><a href="#原子性、可见性、有序性" class="headerlink" title="原子性、可见性、有序性"></a>原子性、可见性、有序性</h2><p><a href="https://blog.csdn.net/chtnj/article/details/79174044" target="_blank" rel="noopener">参考文章</a></p>
+<h3 id="原子性"><a href="#原子性" class="headerlink" title="原子性"></a>原子性</h3><p>JMM保证的原子性变量操作包括read、load、assign、use、store、write，而long、double非原子协定导致的非原子性操作基本可以忽略。如果需要对更大范围的代码实行原子性操作，则需要JMM提供的lock、unlock、synchronized等来保证。</p>
+<h3 id="可见性"><a href="#可见性" class="headerlink" title="可见性"></a>可见性</h3><p>前面分析volatile语义时已经提到，可见性是指当一个线程修改了共享变量的值，其他线程能够立即得知这个修改。JMM在变量修改后将新值同步回主内存，依赖主内存作为媒介，在变量被线程读取前从内存刷新变量新值，保证变量的可见性。普通变量和volatile变量都是如此，只不过volatile的特殊规则保证了这种可见性是立即得知的，而普通变量并不具备这种严格的可见性。除了volatile外，synchronized和final也能保证可见性。</p>
+<h3 id="有序性"><a href="#有序性" class="headerlink" title="有序性"></a>有序性</h3><p>JMM的有序性表现为：如果在<strong>本线程内</strong>观察，所有的操作都是有序的；如果在一个线程中观察另一个线程，所有的操作都是无序的。前半句指“线程内表现为串行的语义”（as-if-serial），后半句值“指令重排序”和普通变量的”工作内存与主内存同步延迟“的现象。</p>
+<h3 id="重排序"><a href="#重排序" class="headerlink" title="重排序"></a>重排序</h3><p>在执行程序时为了提高性能，<strong>编译器和处理器</strong>经常会对指令进行重排序。从硬件架构上来说，指令重排序是指CPU采用了允许将多条指令不按照程序规定的顺序，分开发送给各个相应电路单元处理，而不是指令任意重排。重排序分成三种类型：</p>
+<ul>
+<li><strong>编译器优化的重排序</strong>。编译器在不改变单线程程序语义放入前提下，可以重新安排语句的执行顺序。</li>
+<li><strong>指令级并行的重排序</strong>。现代处理器采用了指令级并行技术来将多条指令重叠执行。如果不存在数据依赖性，处理器可以改变语句对应机器指令的执行顺序。</li>
+<li><strong>内存系统的重排序</strong>。由于处理器 使用<strong>缓存</strong>和<strong>读写缓冲区</strong>，这使得加载和存储操作看上去可能是在乱序执行。<br><img src="http://paxblmm0h.bkt.clouddn.com/%E4%B8%89%E7%A7%8D%E6%8C%87%E4%BB%A4%E9%87%8D%E6%8E%92%E5%BA%8F.jpg" alt="此处输入图片的描述"><h2 id="JMM的重排序屏障（保证内存的可见性而屏蔽）"><a href="#JMM的重排序屏障（保证内存的可见性而屏蔽）" class="headerlink" title="JMM的重排序屏障（保证内存的可见性而屏蔽）"></a>JMM的重排序屏障（保证内存的可见性而屏蔽）</h2>从Java源代码到最终实际执行的指令序列，会经过三种重排序。但是，为了<strong>保证内存的可见性</strong>，Java编译器在生成指令序列的适当位置会<strong>插入内存屏障指令</strong>来禁止特定类型的处理器重排序。<br>对于<strong>编译器重排序</strong>，JMM会根据重排序规则禁止特定类型的编译器重排序；<br>对于<strong>处理器重排序</strong>，JMM会插入特定类型的内存屏障，通过内存的屏障指令禁止特定类型的处理器重排序。</li>
+</ul>
+<h1 id="先行发生原则（happens-before）"><a href="#先行发生原则（happens-before）" class="headerlink" title="先行发生原则（happens-before）"></a>先行发生原则（happens-before）</h1><blockquote>
+<p>i = 1;       //线程A执行<br>j = i ;      //线程B执行<br>j 是否等于1呢？假定线程A的操作（i = 1）happens-before线程B的操作（j = i）,那么可以确定线程B执行后j = 1 一定成立，如果他们不存在happens-before原则，那么j = 1 不一定成立。这就是happens-before原则的威力。</p>
+</blockquote>
+<p><strong>定义</strong></p>
+<ol>
+<li>如果一个操作happens-before另一个操作，那么第一个操作的执行结果将对第二个操作<strong>可见</strong>，而且第一个操作的执行顺序排在第二个操作<strong>之前</strong>。 </li>
+<li>两个操作之间存在happens-before关系，并不意味着一定要按照happens-before原则制定的顺序来执行。如果重排序之后的执行结果与按照happens-before关系来执行的结果一致，那么这种重排序并合法。（可以重排序，但是结果要一致）</li>
+</ol>
+<p>前面所述的内存交互操作必须要满足一定的规则，而happens-before就是定义这些规则的一个等效判断原则。happens-before是JMM定义的2个操作之间的<strong>偏序关系</strong>：如果操作A线性发生于操作B，则A产生的影响能被操作B观察到，“影响”包括修改了内存中共享变量的值、发送了消息、调用了方法等。</p>
+<p><strong>如果两个操作满足happens-before原则，那么不需要进行同步操作</strong>，JVM能够保证操作具有顺序性，此时不能够随意的重排序。否则，无法保证顺序性，就能进行指令的重排序。</p>
+<h2 id="happens-before原则主要包括："><a href="#happens-before原则主要包括：" class="headerlink" title="happens-before原则主要包括："></a>happens-before原则主要包括：</h2><ul>
+<li><strong>程序顺序原则</strong>，即在一个线程内必须保证语义串行性，也就是说按照代码顺序执行。</li>
+<li><strong>锁规则</strong>  解锁(unlock)操作必然发生在后续的同一个锁的加锁(lock)之前，也就是说，如果对于一个锁 解锁后，再加锁，那么加锁的动作必须在解锁动作之后(同一个锁)。</li>
+<li><strong>volatile规则</strong>    volatile变量的写，先发生于读，这保证了volatile变量的可见性，简单的理解就是，volatile变量在每次被线程访问时，都强迫从主内存中读该变量的值，而当该变量发生变化时，又会强迫将最新的值刷新到主内存，任何时刻，不同的线程总是能够看到该变量的最新值。（强迫每次都读内存，写入内存）</li>
+<li><strong>线程启动规则</strong>  线程的<strong>start()方法先于它的每一个动作</strong>，即如果线程A在执行线程B的start方法之前修改了共享变量的值，那么当线程B执行start方法时，线程A对共享变量的修改对线程B可见</li>
+<li><strong>线程终止规则</strong> 线程的所有<strong>操作先于线程的终结</strong>，Thread.join()方法的作用是等待当前执行的线程终止。       假设在线程B终止之前，修改了共享变量，线程A从线程B的join方法成功返回后，线程B对共享变量的修改将对线程A可见。(A线程调用了B.join,然后B结束，返回A，A能看到B的修改）</li>
+<li><strong>线程中断规则</strong> 对线程 interrupt()方法的调用先行发生于被中断线程的代码检测到中断事件的发生，可以通过Thread.interrupted()方法检测线程是否中断。</li>
+<li><strong>传递性</strong> A先于B ，B先于C 那么A必然先于C</li>
+<li><strong>对象终结规则</strong> 对象的构造函数执行，结束先于finalize()方法（拯救方法）</li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      
+        <div id="donation_div"></div>
+
+<script src="../../../../js/vdonate.js"></script>
+<script>
+var a = new Donate({
+  title: '如果觉得我的文章对您有用，请随意打赏。您的支持将鼓励我继续创作!', // 可选参数，打赏标题
+  btnText: 'Donate', // 可选参数，打赏按钮文字
+  el: document.getElementById('donation_div'),
+  wechatImage: 'https://raw.githubusercontent.com/JaeCoding/JaeCoding.github.io/hexo/source/about/donate/images/wechat.jpg',
+  alipayImage: 'https://raw.githubusercontent.com/JaeCoding/JaeCoding.github.io/hexo/source/about/donate/images/alipay.jpg'
+});
+</script>
+      
+      
+      <div>
+        <ul class="post-copyright">
+          <li class="post-copyright-author">
+          <strong>Post author:  </strong>Jae Peng</a>
+          </li>
+          <li class="post-copyright-link">
+          <strong>Post link:  </strong>
+          <a href="/2018/05/24/Java内存模型——JMM/" target="_blank" title="Java内存模型——JMM">http://jaecoding.github.io/2018/05/24/Java内存模型——JMM/</a>
+          </li>
+          <li class="post-copyright-license">
+            <strong>Copyright Notice:   </strong>
+            All articles in this blog are licensed under <a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank" title="Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0)">CC BY-NC-ND 4.0</a>
+            unless stating additionally.
+          </li>
+         
+        </ul>
+<div>
+
+      
+      
+        
+	<div id="comment">
+		<!-- 来必力City版安装代码 -->
+		<div id="lv-container" data-id="city" data-uid="MTAyMC8yOTQ4MS82MDQ5">
+		<script type="text/javascript">
+		   (function(d, s) {
+		       var j, e = d.getElementsByTagName(s)[0];
+
+		       if (typeof LivereTower === 'function') { return; }
+
+		       j = d.createElement(s);
+		       j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+		       j.async = true;
+
+		       e.parentNode.insertBefore(j, e);
+		   })(document, 'script');
+		</script>
+		<noscript>为正常使用来必力评论功能请激活JavaScript</noscript>
+		</div>
+		<!-- City版安装代码已完成 -->
+	</div>
+
+
+
+      
+      
+        
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../../../tags/Java/">Java</a></li></ul>
+
+      
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="../lambda表达式的使用/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          lambda表达式的使用
+        
+      </div>
+    </a>
+  
+  
+    <a href="../../../04/14/JVM部分/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">JVM部分</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+<!-- Table of Contents -->
+
+  <aside id="toc-sidebar">
+    <div id="toc" class="toc-article">
+    <strong class="toc-title">Contents</strong>
+    
+        <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Java内存模型——JMM"><span class="nav-number">1.</span> <span class="nav-text">Java内存模型——JMM</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#多任务和高并发的内存交互"><span class="nav-number">2.</span> <span class="nav-text">多任务和高并发的内存交互</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Java内存模型"><span class="nav-number">3.</span> <span class="nav-text">Java内存模型</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#主内存和工作内存"><span class="nav-number">4.</span> <span class="nav-text">主内存和工作内存</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#内存交互操作"><span class="nav-number">5.</span> <span class="nav-text">内存交互操作</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#volatile变量规则"><span class="nav-number">6.</span> <span class="nav-text">volatile变量规则</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#volatile何时并发安全"><span class="nav-number">6.1.</span> <span class="nav-text">volatile何时并发安全</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#long-double非原子协定"><span class="nav-number">6.2.</span> <span class="nav-text">long/double非原子协定</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#原子性、可见性、有序性"><span class="nav-number">6.3.</span> <span class="nav-text">原子性、可见性、有序性</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#原子性"><span class="nav-number">6.3.1.</span> <span class="nav-text">原子性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#可见性"><span class="nav-number">6.3.2.</span> <span class="nav-text">可见性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#有序性"><span class="nav-number">6.3.3.</span> <span class="nav-text">有序性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#重排序"><span class="nav-number">6.3.4.</span> <span class="nav-text">重排序</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#JMM的重排序屏障（保证内存的可见性而屏蔽）"><span class="nav-number">6.4.</span> <span class="nav-text">JMM的重排序屏障（保证内存的可见性而屏蔽）</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#先行发生原则（happens-before）"><span class="nav-number">7.</span> <span class="nav-text">先行发生原则（happens-before）</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#happens-before原则主要包括："><span class="nav-number">7.1.</span> <span class="nav-text">happens-before原则主要包括：</span></a></li></ol></li></ol>
+    
+    </div>
+  </aside>
+
+</section>
+        
+      </div>
+      
+      <footer id="footer">
+  
+
+  <div class="container">
+      	<div class="row">
+	      <p> Powered by <a href="http://hexo.io/" target="_blank">Hexo</a> and <a href="https://github.com/iTimeTraveler/hexo-theme-hiker" target="_blank">Hexo-theme-hiker</a> </p>
+	      <p id="copyRightEn">Copyright &copy; 2017 - 2019 Jae&#39;s blog All Rights Reserved.</p>
+	      
+	      
+    		<p class="busuanzi_uv">
+				UV : <span id="busuanzi_value_site_uv"></span> |  
+				PV : <span id="busuanzi_value_site_pv"></span>
+		    </p>
+  		   
+		</div>
+
+		
+  </div>
+</footer>
+
+
+<!-- min height -->
+
+<script>
+    var wrapdiv = document.getElementById("wrap");
+    var contentdiv = document.getElementById("content");
+    var allheader = document.getElementById("allheader");
+
+    wrapdiv.style.minHeight = document.body.offsetHeight + "px";
+    if (allheader != null) {
+      contentdiv.style.minHeight = document.body.offsetHeight - allheader.offsetHeight - document.getElementById("footer").offsetHeight + "px";
+    } else {
+      contentdiv.style.minHeight = document.body.offsetHeight - document.getElementById("footer").offsetHeight + "px";
+    }
+</script>
+    </div>
+    <!-- <nav id="mobile-nav">
+  
+    <a href="../../../../index.html" class="mobile-nav-link">Home</a>
+  
+    <a href="../../../../archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="../../../../categories" class="mobile-nav-link">Categories</a>
+  
+    <a href="../../../../tags" class="mobile-nav-link">Tags</a>
+  
+    <a href="../../../../about" class="mobile-nav-link">About</a>
+  
+</nav> -->
+    
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+  <link rel="stylesheet" href="../../../../fancybox/jquery.fancybox.css">
+  <script src="../../../../fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="../../../../js/scripts.js"></script>
+
+
+
+
+  <script src="../../../../js/dialog.js"></script>
+
+
+
+
+
+
+
+
+	<div style="display: none;">
+    <script src="https://s95.cnzz.com/z_stat.php?id=1260716016&web_id=1260716016" language="JavaScript"></script>
+  </div>
+
+
+
+	<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js">
+	</script>
+
+
+
+
+
+
+  </div>
+
+  <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 class="modal-title" id="myModalLabel">设置</h2>
+      </div>
+      <hr style="margin-top:0px; margin-bottom:0px; width:80%; border-top: 3px solid #000;">
+      <hr style="margin-top:2px; margin-bottom:0px; width:80%; border-top: 1px solid #000;">
+
+
+      <div class="modal-body">
+          <div style="margin:6px;">
+            <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" onclick="javascript:setFontSize();" aria-expanded="true" aria-controls="collapseOne">
+              正文字号大小
+            </a>
+          </div>
+          <div id="collapseOne" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+          <div class="panel-body">
+            您已调整页面字体大小
+          </div>
+        </div>
+      
+
+
+          <div style="margin:6px;">
+            <a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" onclick="javascript:setBackground();" aria-expanded="true" aria-controls="collapseTwo">
+              夜间护眼模式
+            </a>
+        </div>
+          <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
+          <div class="panel-body">
+            夜间模式已经开启，再次单击按钮即可关闭 
+          </div>
+        </div>
+
+        <div>
+            <a data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="true" aria-controls="collapseThree">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;关 于&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a>
+        </div>
+         <div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
+          <div class="panel-body">
+            Jae&#39;s blog
+          </div>
+          <div class="panel-body">
+            Copyright © 2019 Jae Peng All Rights Reserved.
+          </div>
+        </div>
+      </div>
+
+
+      <hr style="margin-top:0px; margin-bottom:0px; width:80%; border-top: 1px solid #000;">
+      <hr style="margin-top:2px; margin-bottom:0px; width:80%; border-top: 3px solid #000;">
+      <div class="modal-footer">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+      </div>
+    </div>
+  </div>
+</div>
+  
+  <a id="rocket" href="#top" class=""></a>
+  <script type="text/javascript" src="/js/totop.js?v=1.0.0" async=""></script>
+  
+    <a id="menu-switch"><i class="fa fa-bars fa-lg"></i></a>
+  
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+</body>
+</html>

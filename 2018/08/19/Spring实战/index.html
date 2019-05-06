@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>spring | Jae&#39;s blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  
+  <meta name="keywords" content="操作系统IO" />
+  
+  
+  
+  
+  <meta name="description" content="本文全片以问题为导向，阐述Spring的意义 Spring实战Spring的目的简化Java开发问题：很多框架通过强迫应用继承它们的类或实现它们的接口从而导致应用与框架绑死。（侵入式） Spring构建的应用中，它的类通常没有任何痕迹表明你使用了Spring。最坏的场景是，一个类或许会使用Spring注解，但它依旧是POJO。 1.1.2 依赖注入类相互之间进行协作来完成特定的业务逻辑。就会产生依">
+<meta name="keywords" content="操作系统,IO">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Spring">
+<meta property="og:url" content="http://jaecoding.github.io/2018/08/19/Spring实战/index.html">
+<meta property="og:site_name" content="Jae&#39;s blog">
+<meta property="og:description" content="本文全片以问题为导向，阐述Spring的意义 Spring实战Spring的目的简化Java开发问题：很多框架通过强迫应用继承它们的类或实现它们的接口从而导致应用与框架绑死。（侵入式） Spring构建的应用中，它的类通常没有任何痕迹表明你使用了Spring。最坏的场景是，一个类或许会使用Spring注解，但它依旧是POJO。 1.1.2 依赖注入类相互之间进行协作来完成特定的业务逻辑。就会产生依">
+<meta property="og:locale" content="en">
+<meta property="og:updated_time" content="2019-05-03T13:44:55.832Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Spring">
+<meta name="twitter:description" content="本文全片以问题为导向，阐述Spring的意义 Spring实战Spring的目的简化Java开发问题：很多框架通过强迫应用继承它们的类或实现它们的接口从而导致应用与框架绑死。（侵入式） Spring构建的应用中，它的类通常没有任何痕迹表明你使用了Spring。最坏的场景是，一个类或许会使用Spring注解，但它依旧是POJO。 1.1.2 依赖注入类相互之间进行协作来完成特定的业务逻辑。就会产生依">
+  
+    <link rel="alternate" href="/atom.xml" title="Jae&#39;s blog" type="application/atom+xml">
+  
+
+  
+
+  <link rel="icon" href="/css/images/mylogo.jpg">
+  <link rel="apple-touch-icon" href="/css/images/mylogo.jpg">
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans|Montserrat:700" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Roboto:400,300,300italic,400italic" rel="stylesheet" type="text/css">
+  <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+  <style type="text/css">
+    @font-face{font-family:futura-pt; src:url("css/fonts/FuturaPTBold.otf") format("woff");font-weight:500;font-style:normal;}
+    @font-face{font-family:futura-pt-light; src:url("css/fonts/FuturaPTBook.otf") format("woff");font-weight:lighter;font-style:normal;}
+    @font-face{font-family:futura-pt-italic; src:url("css/fonts/FuturaPTBookOblique.otf") format("woff");font-weight:400;font-style:italic;}
+}
+
+  </style>
+  <link rel="stylesheet" href="../../../../css/style.css">
+
+  <script src="../../../../js/jquery-3.1.1.min.js"></script>
+  <script src="../../../../js/bootstrap.js"></script>
+
+  <!-- Bootstrap core CSS -->
+  <link rel="stylesheet" href="/css/bootstrap.css" >
+
+  
+    <link rel="stylesheet" href="../../../../css/dialog.css">
+  
+
+  
+
+  
+    <link rel="stylesheet" href="/css/header-post.css" >
+  
+
+  
+  
+  
+    <link rel="stylesheet" href="/css/vdonate.css" >
+  
+
+</head>
+
+
+
+  <body data-spy="scroll" data-target="#toc" data-offset="50">
+
+
+  
+  <div id="container">
+    <div id="wrap">
+      
+        <header>
+
+    <div id="allheader" class="navbar navbar-default navbar-static-top" role="navigation">
+        <div class="navbar-inner">
+          
+          <div class="container"> 
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+
+            
+              <a class="brand" style="
+                 margin-top: 0px;"  
+                href="#" data-toggle="modal" data-target="#myModal" >
+                  <img width="124px" height="124px" alt="Hike News" src="/css/images/mylogo.jpg">
+              </a>
+            
+            
+            <div class="navbar-collapse collapse">
+              <ul class="hnav navbar-nav">
+                
+                  <li> <a class="main-nav-link" href="../../../../index.html">Home</a> </li>
+                
+                  <li> <a class="main-nav-link" href="../../../../archives">Archives</a> </li>
+                
+                  <li> <a class="main-nav-link" href="../../../../categories">Categories</a> </li>
+                
+                  <li> <a class="main-nav-link" href="../../../../tags">Tags</a> </li>
+                
+                  <li> <a class="main-nav-link" href="../../../../about">About</a> </li>
+                
+                  <li><div id="search-form-wrap">
+
+    <form class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="" />
+        <button type="submit" class="search-form-submit"></button>
+    </form>
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="Type something..." />
+            <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: 'Posts',
+            PAGES: 'Pages',
+            CATEGORIES: 'Categories',
+            TAGS: 'Tags',
+            UNTITLED: '(Untitled)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '../../../../content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+<script src="../../../../js/insight.js"></script>
+
+</div></li>
+            </div>
+          </div>
+                
+      </div>
+    </div>
+
+</header>
+
+
+
+      
+            
+      <div id="content" class="outer">
+        
+          <section id="main" style="float:none;"><article id="post-Spring实战" style="width: 75%; float:left;" class="article article-type-post" itemscope itemprop="blogPost" >
+  <div id="articleInner" class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="thumb" class="article-title" itemprop="name">
+      Spring
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      
+	<a href="" class="article-date">
+	  <time datetime="2018-08-19T01:38:37.000Z" itemprop="datePublished">2018-08-19</time>
+	</a>
+
+      
+    <a class="article-category-link" href="../../../../categories/原理/">原理</a>
+
+      
+	<a class="article-views">
+	<span id="busuanzi_container_page_pv">
+		PV:<span id="busuanzi_value_page_pv"></span>
+	</span>
+	</a>
+
+      
+
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>本文全片以问题为导向，阐述Spring的意义</p>
+<h1 id="Spring实战"><a href="#Spring实战" class="headerlink" title="Spring实战"></a>Spring实战</h1><h1 id="Spring的目的"><a href="#Spring的目的" class="headerlink" title="Spring的目的"></a>Spring的目的</h1><p>简化Java开发<br>问题：很多框架通过强迫应用<strong>继承它们的类或实现它们的接口</strong>从<br>而导致应用与框架绑死。（侵入式）</p>
+<p>Spring构建的应用中，它的类通常没有任何痕迹表明你使用了Spring。最坏的场景是，一个类或许会使用<strong>Spring注解</strong>，但它依旧是POJO。</p>
+<h3 id="1-1-2-依赖注入"><a href="#1-1-2-依赖注入" class="headerlink" title="1.1.2 依赖注入"></a>1.1.2 依赖注入</h3><p>类相互之间进行<strong>协作</strong>来完成特定的业务逻辑。就会产生依赖</p>
+<p><strong>问题：</strong>传统的做法，每个对象负责管理与自己相互协作的对象（即它所依赖的对象）的引用，这将会导致<strong>高度耦合</strong>和<strong>难以测试</strong>的代码。<br><strong>解决：</strong>通过DI，对象的依赖关系将由系统中负责协调各对象的第三方组件在创建对象的时候进行设定。对象无需自行创建或管理它们的依赖关系。<br><strong>总结：</strong>任务对象不是在骑士对象中创建，并引用，而是通过注入骑士对象来引用，创建与使用分开。</p>
+<p><strong>装配：</strong>如何将任务注入骑士？<br>1.使用<strong>应用上下文（Application Context）xml</strong>，配置id，class与constructor-arg。被声明为Spring中的bean。就BraveKnightbean来讲，它在构造时传入了对SlayDragonQuest bean的引用，将其作为构造器参数。</p>
+<p><strong>使用：</strong> ClassPathXmlApplicationContext加载knights.xml，并获得<br>Knight对象的引用</p>
+<p>2.Java @Configuration<strong>注解配置</strong></p>
+<h3 id="1-1-3-应用切面AOP"><a href="#1-1-3-应用切面AOP" class="headerlink" title="1.1.3 应用切面AOP"></a>1.1.3 应用切面AOP</h3><p><strong>作用：</strong> AOP允许你把遍布应用各处的<strong>功能分离</strong>出来形成<strong>可重用的组件</strong>。</p>
+<p>服务：如日志、事务管理和安全这样的系统服务</p>
+<p><strong>问题：</strong></p>
+<ul>
+<li>1.实现系统关注点功能的代码将会<strong>重复出现</strong>在多个组件中。若要修改这些关注点，需要修改所有模块中的实现</li>
+<li>2.组件会因为那些与自身核心业务无关的<strong>代码而变得混乱</strong>。</li>
+</ul>
+<p><strong>解决：</strong> AOP以声明的方式将它们应用到它们需要影响的组件中去，使用各种<strong>功能层</strong>去包裹<strong>核心业务层</strong>。</p>
+<p><strong>实现:</strong>在spring配置中，声明<strong>切面bean</strong>，并且配置aop：config引入切面bean。主要有定义切点，声明前置通知，声明后置通知。</p>
+<h3 id="1-1-4-使用-模板-消除样板式代码（虽然还是不够简洁）"><a href="#1-1-4-使用-模板-消除样板式代码（虽然还是不够简洁）" class="headerlink" title="1.1.4 使用 模板 消除样板式代码（虽然还是不够简洁）"></a>1.1.4 使用 <strong>模板</strong> 消除样板式代码（虽然还是不够简洁）</h3><p><strong>问题：</strong>在使用JDBC的时候，每个SQL都需要写一大堆样板式代码，然后一大堆清理。<br><strong>解决：</strong> Spring的<strong>JdbcTemplate</strong>重写的getEmployeeById()方法仅仅关注于获取员工数据的核心逻辑，而不需要迎合JDBC API的需求。</p>
+<h2 id="Spring-Bean容器"><a href="#Spring-Bean容器" class="headerlink" title="Spring Bean容器"></a>Spring Bean容器</h2><p>Spring容器并不是只有一个。Spring自带了多个容器实现，可以归为<br>两种不同的类型。</p>
+<ul>
+<li><strong>bean工厂</strong>（由org.springframework. beans. factory.BeanFactory接口定义）是最简单的容器，提供基本的DI 支持。</li>
+<li><strong>应用上下文</strong>（常用，更受欢迎）（由org.springframework.context.ApplicationContext接口定义）基于BeanFactory构建，并提供应用框架级别的服务，例如 从<strong>属性文件解析文本信息</strong>以及发布应用事件给感兴趣的事件监听者。</li>
+</ul>
+<p><strong>多种应用上下文</strong></p>
+<ul>
+<li>AnnotationConfigApplicationContext：从一个或多个 基于<strong>Java的配置类</strong>中加载<strong>Spring应用</strong>上下文。 </li>
+<li>AnnotationConfigWebApplicationContext：从一个或 多个基于<strong>Java的配置类</strong>中加载<strong>SpringWeb应用</strong>上下文。 </li>
+<li>ClassPathXmlApplicationContext：从类路径下的一个或多个<strong>XML配置文件</strong>中加载上下文定义，把应用上下文的定义文件作为类资源。</li>
+<li>FileSystemXmlapplicationcontext：从<strong>文件系统</strong>下的一 个或多个<strong>XML配置</strong>文件中加载上下文定义。</li>
+<li>XmlWebApplicationContext：从<strong>Web应用下</strong>的一个或多个 <strong>XML配置</strong>文件中加载上下文定义。</li>
+</ul>
+<h3 id="1-2-2-bean的生命周期"><a href="#1-2-2-bean的生命周期" class="headerlink" title="1.2.2 bean的生命周期"></a>1.2.2 bean的生命周期</h3><p>一般：new -&gt; 使用 -&gt; GC<br>Spring：<br>![此处输入图片的描述][1]<br>  [1]: <a href="http://paxblmm0h.bkt.clouddn.com/bean%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F.png" target="_blank" rel="noopener">http://paxblmm0h.bkt.clouddn.com/bean%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F.png</a></p>
+<p>实例化-&gt;填充属性-&gt;传id，传beanFactory，传上下文，初始化前处理，（之后的操作根据是否实现接口而调用）-&gt;<strong>自定义的初始化方法</strong>-&gt;初始化后处理方法-&gt;bean可以使用，驻留在应用上下文中-destroy()方法</p>
+<ul>
+<li>BeanNameAware接口，Spring将<strong>bean的ID</strong>传递给setBean-Name()方法</li>
+<li>BeanFactoryAware接口，Spring将调用setBeanFactory()方法，将<strong>BeanFactory容器实例</strong>传入；</li>
+<li>ApplicationContextAware接口，Spring将调用setApplicationContext()方法，将bean所在的<strong>应用上下文的引用</strong>传入进来；</li>
+<li>BeanPostProcessor接口，Spring将调用它们的post-ProcessBeforeInitialization()方法；</li>
+<li>InitializingBean接口，Spring将调用它们的after-PropertiesSet()方法。类似地，如果bean使用initmethod声明了初始化方法，该方法也会被调用；</li>
+<li>BeanPostProcessor接口，Spring将调用它们的post-ProcessAfterInitialization()方法；</li>
+<li>了DisposableBean接口，Spring将调用它的destroy()接口方法。</li>
+</ul>
+<h1 id="第二章-装配Bean"><a href="#第二章-装配Bean" class="headerlink" title="第二章 装配Bean"></a>第二章 装配Bean</h1><p>创建应用对象之间协作关系的行为通常称为装配（wiring），这也是<br>依赖注入（DI）的本质。</p>
+<p>三种机制：显式（XML，Java），隐式（bean发现机制和自动装载）</p>
+<h2 id="自动装配Bean"><a href="#自动装配Bean" class="headerlink" title="自动装配Bean"></a>自动装配Bean</h2><p><strong>@Component注解</strong>。这个简单的注解表明该类会作为组件类，并告知Spring要为这个类创建bean。</p>
+<p><strong>组件扫描：</strong><br>不过，组件扫描默认是不启用的。我们还需要<strong>显式配置一下Spring</strong>，从而命令它去寻找带有@Component注解的类，并为其创建bean。<br>1.<strong>@ComponentScan注解</strong>启用了组件扫描，添加在类上。<br>2.XMl使用Spring context命名空间的<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">如：```&lt;context:component-scan base-package=&quot;soundsystem&quot;&gt;</span><br></pre></td></tr></table></figure></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      
+        <div id="donation_div"></div>
+
+<script src="../../../../js/vdonate.js"></script>
+<script>
+var a = new Donate({
+  title: '如果觉得我的文章对您有用，请随意打赏。您的支持将鼓励我继续创作!', // 可选参数，打赏标题
+  btnText: 'Donate', // 可选参数，打赏按钮文字
+  el: document.getElementById('donation_div'),
+  wechatImage: 'https://raw.githubusercontent.com/JaeCoding/JaeCoding.github.io/hexo/source/about/donate/images/wechat.jpg',
+  alipayImage: 'https://raw.githubusercontent.com/JaeCoding/JaeCoding.github.io/hexo/source/about/donate/images/alipay.jpg'
+});
+</script>
+      
+      
+      <div>
+        <ul class="post-copyright">
+          <li class="post-copyright-author">
+          <strong>Post author:  </strong>Jae Peng</a>
+          </li>
+          <li class="post-copyright-link">
+          <strong>Post link:  </strong>
+          <a href="/2018/08/19/Spring实战/" target="_blank" title="Spring">http://jaecoding.github.io/2018/08/19/Spring实战/</a>
+          </li>
+          <li class="post-copyright-license">
+            <strong>Copyright Notice:   </strong>
+            All articles in this blog are licensed under <a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank" title="Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0)">CC BY-NC-ND 4.0</a>
+            unless stating additionally.
+          </li>
+         
+        </ul>
+<div>
+
+      
+      
+        
+	<div id="comment">
+		<!-- 来必力City版安装代码 -->
+		<div id="lv-container" data-id="city" data-uid="MTAyMC8yOTQ4MS82MDQ5">
+		<script type="text/javascript">
+		   (function(d, s) {
+		       var j, e = d.getElementsByTagName(s)[0];
+
+		       if (typeof LivereTower === 'function') { return; }
+
+		       j = d.createElement(s);
+		       j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+		       j.async = true;
+
+		       e.parentNode.insertBefore(j, e);
+		   })(document, 'script');
+		</script>
+		<noscript>为正常使用来必力评论功能请激活JavaScript</noscript>
+		</div>
+		<!-- City版安装代码已完成 -->
+	</div>
+
+
+
+      
+      
+        
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../../../tags/IO/">IO</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../../../tags/操作系统/">操作系统</a></li></ul>
+
+      
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="../../15/Netty（一） 之 I-O通信/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Netty（一） 之 I/O通信</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+<!-- Table of Contents -->
+
+  <aside id="toc-sidebar">
+    <div id="toc" class="toc-article">
+    <strong class="toc-title">Contents</strong>
+    
+        <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Spring实战"><span class="nav-number">1.</span> <span class="nav-text">Spring实战</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Spring的目的"><span class="nav-number">2.</span> <span class="nav-text">Spring的目的</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-2-依赖注入"><span class="nav-number">2.0.1.</span> <span class="nav-text">1.1.2 依赖注入</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-3-应用切面AOP"><span class="nav-number">2.0.2.</span> <span class="nav-text">1.1.3 应用切面AOP</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-4-使用-模板-消除样板式代码（虽然还是不够简洁）"><span class="nav-number">2.0.3.</span> <span class="nav-text">1.1.4 使用 模板 消除样板式代码（虽然还是不够简洁）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Spring-Bean容器"><span class="nav-number">2.1.</span> <span class="nav-text">Spring Bean容器</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-2-bean的生命周期"><span class="nav-number">2.1.1.</span> <span class="nav-text">1.2.2 bean的生命周期</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#第二章-装配Bean"><span class="nav-number">3.</span> <span class="nav-text">第二章 装配Bean</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#自动装配Bean"><span class="nav-number">3.1.</span> <span class="nav-text">自动装配Bean</span></a></li></ol></li></ol>
+    
+    </div>
+  </aside>
+
+</section>
+        
+      </div>
+      
+      <footer id="footer">
+  
+
+  <div class="container">
+      	<div class="row">
+	      <p> Powered by <a href="http://hexo.io/" target="_blank">Hexo</a> and <a href="https://github.com/iTimeTraveler/hexo-theme-hiker" target="_blank">Hexo-theme-hiker</a> </p>
+	      <p id="copyRightEn">Copyright &copy; 2017 - 2019 Jae&#39;s blog All Rights Reserved.</p>
+	      
+	      
+    		<p class="busuanzi_uv">
+				UV : <span id="busuanzi_value_site_uv"></span> |  
+				PV : <span id="busuanzi_value_site_pv"></span>
+		    </p>
+  		   
+		</div>
+
+		
+  </div>
+</footer>
+
+
+<!-- min height -->
+
+<script>
+    var wrapdiv = document.getElementById("wrap");
+    var contentdiv = document.getElementById("content");
+    var allheader = document.getElementById("allheader");
+
+    wrapdiv.style.minHeight = document.body.offsetHeight + "px";
+    if (allheader != null) {
+      contentdiv.style.minHeight = document.body.offsetHeight - allheader.offsetHeight - document.getElementById("footer").offsetHeight + "px";
+    } else {
+      contentdiv.style.minHeight = document.body.offsetHeight - document.getElementById("footer").offsetHeight + "px";
+    }
+</script>
+    </div>
+    <!-- <nav id="mobile-nav">
+  
+    <a href="../../../../index.html" class="mobile-nav-link">Home</a>
+  
+    <a href="../../../../archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="../../../../categories" class="mobile-nav-link">Categories</a>
+  
+    <a href="../../../../tags" class="mobile-nav-link">Tags</a>
+  
+    <a href="../../../../about" class="mobile-nav-link">About</a>
+  
+</nav> -->
+    
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+  <link rel="stylesheet" href="../../../../fancybox/jquery.fancybox.css">
+  <script src="../../../../fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="../../../../js/scripts.js"></script>
+
+
+
+
+  <script src="../../../../js/dialog.js"></script>
+
+
+
+
+
+
+
+
+	<div style="display: none;">
+    <script src="https://s95.cnzz.com/z_stat.php?id=1260716016&web_id=1260716016" language="JavaScript"></script>
+  </div>
+
+
+
+	<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js">
+	</script>
+
+
+
+
+
+
+  </div>
+
+  <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 class="modal-title" id="myModalLabel">设置</h2>
+      </div>
+      <hr style="margin-top:0px; margin-bottom:0px; width:80%; border-top: 3px solid #000;">
+      <hr style="margin-top:2px; margin-bottom:0px; width:80%; border-top: 1px solid #000;">
+
+
+      <div class="modal-body">
+          <div style="margin:6px;">
+            <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" onclick="javascript:setFontSize();" aria-expanded="true" aria-controls="collapseOne">
+              正文字号大小
+            </a>
+          </div>
+          <div id="collapseOne" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+          <div class="panel-body">
+            您已调整页面字体大小
+          </div>
+        </div>
+      
+
+
+          <div style="margin:6px;">
+            <a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" onclick="javascript:setBackground();" aria-expanded="true" aria-controls="collapseTwo">
+              夜间护眼模式
+            </a>
+        </div>
+          <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
+          <div class="panel-body">
+            夜间模式已经开启，再次单击按钮即可关闭 
+          </div>
+        </div>
+
+        <div>
+            <a data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="true" aria-controls="collapseThree">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;关 于&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a>
+        </div>
+         <div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
+          <div class="panel-body">
+            Jae&#39;s blog
+          </div>
+          <div class="panel-body">
+            Copyright © 2019 Jae Peng All Rights Reserved.
+          </div>
+        </div>
+      </div>
+
+
+      <hr style="margin-top:0px; margin-bottom:0px; width:80%; border-top: 1px solid #000;">
+      <hr style="margin-top:2px; margin-bottom:0px; width:80%; border-top: 3px solid #000;">
+      <div class="modal-footer">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+      </div>
+    </div>
+  </div>
+</div>
+  
+  <a id="rocket" href="#top" class=""></a>
+  <script type="text/javascript" src="/js/totop.js?v=1.0.0" async=""></script>
+  
+    <a id="menu-switch"><i class="fa fa-bars fa-lg"></i></a>
+  
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+</body>
+</html>

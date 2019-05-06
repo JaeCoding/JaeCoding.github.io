@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>md5信息摘要算法原理及破解原理 | Jae&#39;s blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  
+  <meta name="keywords" content="加密算法" />
+  
+  
+  
+  
+  <meta name="description" content="虽然目前MD5已经宣布可破解了，但是其算法思想还是可以学习的。 MD5应用1.一致性验证典型应用是对一段信息（Message）产生信息摘要（Message-Digest），以防止被篡改。比如，在Unix下有很多软件在下载的时候都有一个文件名相同，文件扩展名为.md5的文件，在这个文件中通常只有一行文本，大致结构如：  MD5 (tanajiya.tar.gz) = 38b8c2c1093dd0fe">
+<meta name="keywords" content="加密算法">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MD5信息摘要算法原理及破解原理">
+<meta property="og:url" content="http://jaecoding.github.io/2018/07/09/MD5应用/index.html">
+<meta property="og:site_name" content="Jae&#39;s blog">
+<meta property="og:description" content="虽然目前MD5已经宣布可破解了，但是其算法思想还是可以学习的。 MD5应用1.一致性验证典型应用是对一段信息（Message）产生信息摘要（Message-Digest），以防止被篡改。比如，在Unix下有很多软件在下载的时候都有一个文件名相同，文件扩展名为.md5的文件，在这个文件中通常只有一行文本，大致结构如：  MD5 (tanajiya.tar.gz) = 38b8c2c1093dd0fe">
+<meta property="og:locale" content="en">
+<meta property="og:updated_time" content="2019-05-05T16:28:44.487Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="MD5信息摘要算法原理及破解原理">
+<meta name="twitter:description" content="虽然目前MD5已经宣布可破解了，但是其算法思想还是可以学习的。 MD5应用1.一致性验证典型应用是对一段信息（Message）产生信息摘要（Message-Digest），以防止被篡改。比如，在Unix下有很多软件在下载的时候都有一个文件名相同，文件扩展名为.md5的文件，在这个文件中通常只有一行文本，大致结构如：  MD5 (tanajiya.tar.gz) = 38b8c2c1093dd0fe">
+  
+    <link rel="alternate" href="/atom.xml" title="Jae&#39;s blog" type="application/atom+xml">
+  
+
+  
+
+  <link rel="icon" href="/css/images/mylogo.jpg">
+  <link rel="apple-touch-icon" href="/css/images/mylogo.jpg">
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans|Montserrat:700" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Roboto:400,300,300italic,400italic" rel="stylesheet" type="text/css">
+  <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+  <style type="text/css">
+    @font-face{font-family:futura-pt; src:url("css/fonts/FuturaPTBold.otf") format("woff");font-weight:500;font-style:normal;}
+    @font-face{font-family:futura-pt-light; src:url("css/fonts/FuturaPTBook.otf") format("woff");font-weight:lighter;font-style:normal;}
+    @font-face{font-family:futura-pt-italic; src:url("css/fonts/FuturaPTBookOblique.otf") format("woff");font-weight:400;font-style:italic;}
+}
+
+  </style>
+  <link rel="stylesheet" href="../../../../css/style.css">
+
+  <script src="../../../../js/jquery-3.1.1.min.js"></script>
+  <script src="../../../../js/bootstrap.js"></script>
+
+  <!-- Bootstrap core CSS -->
+  <link rel="stylesheet" href="/css/bootstrap.css" >
+
+  
+    <link rel="stylesheet" href="../../../../css/dialog.css">
+  
+
+  
+
+  
+    <link rel="stylesheet" href="/css/header-post.css" >
+  
+
+  
+  
+  
+    <link rel="stylesheet" href="/css/vdonate.css" >
+  
+
+</head>
+
+
+
+  <body data-spy="scroll" data-target="#toc" data-offset="50">
+
+
+  
+  <div id="container">
+    <div id="wrap">
+      
+        <header>
+
+    <div id="allheader" class="navbar navbar-default navbar-static-top" role="navigation">
+        <div class="navbar-inner">
+          
+          <div class="container"> 
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+
+            
+              <a class="brand" style="
+                 margin-top: 0px;"  
+                href="#" data-toggle="modal" data-target="#myModal" >
+                  <img width="124px" height="124px" alt="Hike News" src="/css/images/mylogo.jpg">
+              </a>
+            
+            
+            <div class="navbar-collapse collapse">
+              <ul class="hnav navbar-nav">
+                
+                  <li> <a class="main-nav-link" href="../../../../index.html">Home</a> </li>
+                
+                  <li> <a class="main-nav-link" href="../../../../archives">Archives</a> </li>
+                
+                  <li> <a class="main-nav-link" href="../../../../categories">Categories</a> </li>
+                
+                  <li> <a class="main-nav-link" href="../../../../tags">Tags</a> </li>
+                
+                  <li> <a class="main-nav-link" href="../../../../about">About</a> </li>
+                
+                  <li><div id="search-form-wrap">
+
+    <form class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="" />
+        <button type="submit" class="search-form-submit"></button>
+    </form>
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="Type something..." />
+            <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: 'Posts',
+            PAGES: 'Pages',
+            CATEGORIES: 'Categories',
+            TAGS: 'Tags',
+            UNTITLED: '(Untitled)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '../../../../content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+<script src="../../../../js/insight.js"></script>
+
+</div></li>
+            </div>
+          </div>
+                
+      </div>
+    </div>
+
+</header>
+
+
+
+      
+            
+      <div id="content" class="outer">
+        
+          <section id="main" style="float:none;"><article id="post-MD5应用" style="width: 75%; float:left;" class="article article-type-post" itemscope itemprop="blogPost" >
+  <div id="articleInner" class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="thumb" class="article-title" itemprop="name">
+      MD5信息摘要算法原理及破解原理
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      
+	<a href="" class="article-date">
+	  <time datetime="2018-07-09T08:14:23.000Z" itemprop="datePublished">2018-07-09</time>
+	</a>
+
+      
+    <a class="article-category-link" href="../../../../categories/技术博客/">技术博客</a>
+
+      
+	<a class="article-views">
+	<span id="busuanzi_container_page_pv">
+		PV:<span id="busuanzi_value_page_pv"></span>
+	</span>
+	</a>
+
+      
+
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>虽然目前MD5已经宣布可破解了，但是其算法思想还是可以学习的。</p>
+<h1 id="MD5应用"><a href="#MD5应用" class="headerlink" title="MD5应用"></a>MD5应用</h1><p>1.一致性验证<br>典型应用是对一段信息（Message）产生信息摘要（Message-Digest），以防止被篡改。比如，在Unix下有很多软件在下载的时候都有一个文件名相同，文件扩展名为.md5的文件，在这个文件中通常只有一行文本，大致结构如：</p>
+<blockquote>
+<p>MD5 (tanajiya.tar.gz) = 38b8c2c1093dd0fec383a9d9ac940515</p>
+</blockquote>
+<p>作用：在我们可以在下载该软件后，对下载回来的文件用专门的软件（如Windows MD5 Check等）做一次MD5校验，以确保我们获得的文件与该站点提供的文件为同一文件。</p>
+<p>2.数字签名</p>
+<p>MD5的典型应用是对一段Message(字节串)产生fingerprint(指纹），以防止被“篡改”。举个例子，你将一段话写在一个叫readme.txt文件中，并对这个readme.txt产生一个MD5的值并记录在案，然后你可以传播这个文件给别人，别人如果修改了文件中的任何内容，你对这个文件重新计算MD5时就会发现（两个MD5值不相同）。如果再有一个第三方的认证机构，用MD5还可以防止文件作者的“抵赖”，这就是所谓的数字签名应用。</p>
+<p>3.安全访问认证</p>
+<p>MD5还广泛用于操作系统的登陆认证上，如在Unix系统中用户的密码是以MD5（或其它类似的算法）经Hash运算后存储在文件系统中。</p>
+<p>当用户登录的时候，系统把用户输入的密码进行MD5Hash运算，然后再去和保存在文件系统中的MD5值进行比较，进而确定输入的密码是否正确。<br>通过这样的步骤，系统在并不知道用户密码的明码的情况下就可以确定用户登录系统的合法性。这可以避免用户的密码被具有系统管理员权限的用户知道。</p>
+<p>MD5将任意长度的“字节串”映射为一个128bit的大整数，并且是通过该128bit反推原始字符串是困难的，换句话说就是，即使你看到源程序和算法描述，也无法将一个MD5的值变换回原始的字符串，从数学原理上说，是因为原始的字符串有无穷多个，这有点象不存在反函数的数学函数。所以，要遇到了md5密码的问题，比较好的办法是：你可以用这个系统中的md5（）函数重新设一个密码，如admin，把生成的一串密码的Hash值覆盖原来的Hash值就行了。<br>（不去用MD5反运算明文密码，而是用大量的字符串去生成MD5密码并比对）</p>
+<p>正是因为这个原因，现在被黑客使用最多的一种破译密码的方法就是一种被称为”跑字典”的方法。有两种方法得到字典，一种是日常搜集的用做密码的字符串表，另一种是用排列组合方法生成的，先用MD5程序计算出这些字典项的MD5值，然后再用目标的MD5值在这个字典中检索。我们假设密码的最大长度为8位字节（8 Bytes），同时密码只能是字母和数字，共26+26+10=62个字节，排列组合出的字典的项数则是P（62,1）+P（62,2）….+P（62,8），那也已经是一个很天文的数字了，存储这个字典就需要TB级的磁盘阵列，而且这种方法还有一个前提，就是能获得目标账户的密码MD5值的情况下才可以。这种加密技术被广泛的应用于Unix系统中，这也是为什么Unix系统比一般操作系统更为坚固一个重要原因。</p>
+<h1 id="算法原理"><a href="#算法原理" class="headerlink" title="算法原理"></a>算法原理</h1><p>对MD5算法简要的叙述可以为：MD5以512位分组来处理输入的信息，且每一分组又被划分为16个32位子分组，经过了一系列的处理后，算法的输出由四个32位分组组成，将这<strong>四个32位分组级联</strong>后将生成一个128位散列值。</p>
+<h2 id="1-填充"><a href="#1-填充" class="headerlink" title="1.填充"></a>1.填充</h2><p>在MD5算法中，首先需要对信息进行填充，并且填充必须进行，即使其位长对512求余的结果等于448（因为后面还有个64位表示长度，合起来就是512）。<br>因此，信息的位长（Bits Length）将被扩展至N*512+448，N为一个非负整数，N可以是零。</p>
+<p>填充的方法如下：</p>
+<ol>
+<li>在信息的后面填充一个1和无数个0，直到满足上面的条件时才停止用0对信息的填充。</li>
+<li>在这个结果后面附加一个以64位二进制表示的   <strong>填充前信息长度</strong>（单位为Bit），如果二进制表示的填充前信息长度超过64位，则取低64位。</li>
+</ol>
+<p>经过这两步的处理，信息的位长=N<em>512+448+64=(N+1）</em>512，即长度恰好是<strong>512的整数倍</strong>。这样做的原因是为满足后面处理中对信息长度的要求。</p>
+<h2 id="2-初始化变量"><a href="#2-初始化变量" class="headerlink" title="2. 初始化变量"></a>2. 初始化变量</h2><p>初始的128位值为<strong>初始链接变量</strong>，这些参数用于第一轮的运算，以大端字节序来表示，他们分别为： A=0x01234567，B=0x89ABCDEF，C=0xFEDCBA98，D=0x76543210。</p>
+<p>（每一个变量给出的数值是<strong>高字节存于内存低地址</strong>，<strong>低字节存于内存高地址</strong>，即<strong>大端字节序</strong>。在程序中变量A、B、C、D的值分别为0x67452301，0xEFCDAB89，0x98BADCFE，0x10325476）</p>
+<ol start="3">
+<li>处理分组数据</li>
+</ol>
+<p>准备需要用到的数据：</p>
+<blockquote>
+<p>4个常数： A = 0x67452301, B = 0x0EFCDAB89, C = 0x98BADCFE, D = 0x10325476;</p>
+<p>4个函数：F(X,Y,Z)=(X &amp; Y) | ((~X) &amp; Z); G(X,Y,Z)=(X &amp; Z) | (Y &amp; (~Z));<br>H(X,Y,Z)=X ^ Y ^ Z; I(X,Y,Z)=Y ^ (X | (~Z));</p>
+</blockquote>
+<p>把消息分以512位为一分组进行处理，每一个分组进行4轮变换，以上面所说4个常数为起始变量进行计算，重新输出4个变量，以这4个变量再进行下一分组的运算，如果已经是最后一个分组，则这4个变量为最后的结果，即MD5值。</p>
+<p>每一分组的算法流程如下：</p>
+<p>第一分组需要将<strong>上面四个链接变量</strong>复制到<strong>另外四个变量</strong>中：A到a，B到b，C到c，D到d。从第二分组开始的变量为上一分组的运算结果，即A = a， B = b， C = c， D = d。</p>
+<p>主循环有四轮（MD4只有三轮），每轮循环都很相似。第一轮进行16次操作。每次操作对a、b、c和d中的<strong>其中三个作一次非线性函数运算</strong>，然后将所得结果<strong>加上第四个变量</strong>，文本的一个子分组和一个常数。再将所得结果向左环移一个不定的数，并加上a、b、c或d中之一。最后用该结果取代a、b、c或d中之一。</p>
+<p>以下是每次操作中用到的四个非线性函数（每轮一个）。</p>
+<p>F( X ,Y ,Z ) = ( X &amp; Y ) | ( (~X) &amp; Z )</p>
+<p>G( X ,Y ,Z ) = ( X &amp; Z ) | ( Y &amp; (~Z) )</p>
+<p>H( X ,Y ,Z ) =X ^ Y ^ Z</p>
+<p>I( X ,Y ,Z ) =Y ^ ( X | (~Z) )</p>
+<p>（&amp;是与（And），|是或（Or），~是非（Not），^是异或（Xor））</p>
+<p>这四个函数的说明：如果X、Y和Z的对应位是独立和均匀的，那么结果的每一位也应是独立和均匀的。</p>
+<p>F是一个逐位运算的函数。即，如果X，那么Y，否则Z。函数H是逐位奇偶操作符。</p>
+<p>假设Mj表示消息的第j个子分组（从0到15），常数ti是4294967296*abs( sin(i) ）的整数部分，i 取值从1到64，单位是弧度。（4294967296=232）</p>
+<p>现定义：</p>
+<p>FF(a ,b ,c ,d ,Mj ,s ,ti ) 操作为 a = b + ( (a + F(b,c,d) + Mj + ti) &lt;&lt; s)</p>
+<p>GG(a ,b ,c ,d ,Mj ,s ,ti ) 操作为 a = b + ( (a + G(b,c,d) + Mj + ti) &lt;&lt; s)</p>
+<p>HH(a ,b ,c ,d ,Mj ,s ,ti) 操作为 a = b + ( (a + H(b,c,d) + Mj + ti) &lt;&lt; s)</p>
+<p>II(a ,b ,c ,d ,Mj ,s ,ti) 操作为 a = b + ( (a + I(b,c,d) + Mj + ti) &lt;&lt; s)</p>
+<p>注意：“&lt;&lt;”表示循环左移位，不是左移位。</p>
+<h1 id="彩虹表"><a href="#彩虹表" class="headerlink" title="彩虹表"></a>彩虹表</h1><p>如果将哈希后的密文比作一把锁，暴力破解的方法就是现场制作各种各样不同齿形的钥匙，再来尝试能否开锁，这样耗时无疑很长；我以前错误理解的“彩虹表”是事先制作好所有齿形的钥匙，全部拿过来尝试开锁，这样虽然省去了制作钥匙的时间，但是后来发现这些钥匙实在是太多了，没法全部带在身上。而真正的彩虹表，是将<strong>钥匙按照某种规律进行分组</strong>，每组钥匙中只需要带<strong>最有特点的一个</strong>，当发现某个“特征钥匙” <strong>差一点就能开锁</strong>了，则当场对该钥匙进行简单的<strong>打磨</strong>，直到能开锁为止。这种方法是既省力又省时的.</p>
+<h1 id="哈希碰撞"><a href="#哈希碰撞" class="headerlink" title="哈希碰撞"></a>哈希碰撞</h1><p>哈希碰撞就是一种优化过算法,其基本原理就是把密码明文对应的MD5与你的MD5进行对比,因为经过一些优化,所以无论是时间上,还是空间都很很快，感兴趣的可以查一下王小云教授关于哈希碰撞的论文.</p>
+<h1 id="常用破解MD5方法"><a href="#常用破解MD5方法" class="headerlink" title="常用破解MD5方法"></a>常用破解MD5方法</h1><p>目前来说,破解MD5加密的最有效的方法就是 <strong>哈希碰撞+彩虹表+对应秘钥</strong>,一些网络黑客会在一些明文存储用户密码的网站上窃取信息,假如黑客有一亿条数据,因为都是真实用户所以经过哈希碰撞之后,你的密码被破译出来的几率就真的非常大了,那破译不出来的可能就是因为大小写和一些特殊符号,这就用到了彩虹表,最后就是你的秘钥,比如你是之前对用户的密码进行加盐,还是之后对MD5之后的字符串进行的特殊处理,只要对方知道你的秘钥,那么你密码被破译出来的几率就非常非常高了,所以我们说: 一个密码系统的安全性只在于密钥的保密性，而不在于算法的保密性.</p>
+<p>总结<br>MD5本身是不可逆和无冲突的,但是用一些巧妙地方法会被破解出来.一个密码系统的是没有绝对安全的,密码系统只是增加了被破解的代价.</p>
+<p>参考链接：<a href="https://www.jianshu.com/p/2e75c64dbc4f" target="_blank" rel="noopener">https://www.jianshu.com/p/2e75c64dbc4f</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      
+        <div id="donation_div"></div>
+
+<script src="../../../../js/vdonate.js"></script>
+<script>
+var a = new Donate({
+  title: '如果觉得我的文章对您有用，请随意打赏。您的支持将鼓励我继续创作!', // 可选参数，打赏标题
+  btnText: 'Donate', // 可选参数，打赏按钮文字
+  el: document.getElementById('donation_div'),
+  wechatImage: 'https://raw.githubusercontent.com/JaeCoding/JaeCoding.github.io/hexo/source/about/donate/images/wechat.jpg',
+  alipayImage: 'https://raw.githubusercontent.com/JaeCoding/JaeCoding.github.io/hexo/source/about/donate/images/alipay.jpg'
+});
+</script>
+      
+      
+      <div>
+        <ul class="post-copyright">
+          <li class="post-copyright-author">
+          <strong>Post author:  </strong>Jae Peng</a>
+          </li>
+          <li class="post-copyright-link">
+          <strong>Post link:  </strong>
+          <a href="/2018/07/09/MD5应用/" target="_blank" title="MD5信息摘要算法原理及破解原理">http://jaecoding.github.io/2018/07/09/MD5应用/</a>
+          </li>
+          <li class="post-copyright-license">
+            <strong>Copyright Notice:   </strong>
+            All articles in this blog are licensed under <a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank" title="Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0)">CC BY-NC-ND 4.0</a>
+            unless stating additionally.
+          </li>
+         
+        </ul>
+<div>
+
+      
+      
+        
+	<div id="comment">
+		<!-- 来必力City版安装代码 -->
+		<div id="lv-container" data-id="city" data-uid="MTAyMC8yOTQ4MS82MDQ5">
+		<script type="text/javascript">
+		   (function(d, s) {
+		       var j, e = d.getElementsByTagName(s)[0];
+
+		       if (typeof LivereTower === 'function') { return; }
+
+		       j = d.createElement(s);
+		       j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+		       j.async = true;
+
+		       e.parentNode.insertBefore(j, e);
+		   })(document, 'script');
+		</script>
+		<noscript>为正常使用来必力评论功能请激活JavaScript</noscript>
+		</div>
+		<!-- City版安装代码已完成 -->
+	</div>
+
+
+
+      
+      
+        
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../../../tags/加密算法/">加密算法</a></li></ul>
+
+      
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="../../11/LeetCode-5-最长回文子串/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          LeetCode-5 最长回文子串
+        
+      </div>
+    </a>
+  
+  
+    <a href="../MD5信息摘要算法原理及实现/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">MD5信息摘要算法原理及破解原理</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+<!-- Table of Contents -->
+
+  <aside id="toc-sidebar">
+    <div id="toc" class="toc-article">
+    <strong class="toc-title">Contents</strong>
+    
+        <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#MD5应用"><span class="nav-number">1.</span> <span class="nav-text">MD5应用</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#算法原理"><span class="nav-number">2.</span> <span class="nav-text">算法原理</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-填充"><span class="nav-number">2.1.</span> <span class="nav-text">1.填充</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-初始化变量"><span class="nav-number">2.2.</span> <span class="nav-text">2. 初始化变量</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#彩虹表"><span class="nav-number">3.</span> <span class="nav-text">彩虹表</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#哈希碰撞"><span class="nav-number">4.</span> <span class="nav-text">哈希碰撞</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#常用破解MD5方法"><span class="nav-number">5.</span> <span class="nav-text">常用破解MD5方法</span></a></li></ol>
+    
+    </div>
+  </aside>
+
+</section>
+        
+      </div>
+      
+      <footer id="footer">
+  
+
+  <div class="container">
+      	<div class="row">
+	      <p> Powered by <a href="http://hexo.io/" target="_blank">Hexo</a> and <a href="https://github.com/iTimeTraveler/hexo-theme-hiker" target="_blank">Hexo-theme-hiker</a> </p>
+	      <p id="copyRightEn">Copyright &copy; 2017 - 2019 Jae&#39;s blog All Rights Reserved.</p>
+	      
+	      
+    		<p class="busuanzi_uv">
+				UV : <span id="busuanzi_value_site_uv"></span> |  
+				PV : <span id="busuanzi_value_site_pv"></span>
+		    </p>
+  		   
+		</div>
+
+		
+  </div>
+</footer>
+
+
+<!-- min height -->
+
+<script>
+    var wrapdiv = document.getElementById("wrap");
+    var contentdiv = document.getElementById("content");
+    var allheader = document.getElementById("allheader");
+
+    wrapdiv.style.minHeight = document.body.offsetHeight + "px";
+    if (allheader != null) {
+      contentdiv.style.minHeight = document.body.offsetHeight - allheader.offsetHeight - document.getElementById("footer").offsetHeight + "px";
+    } else {
+      contentdiv.style.minHeight = document.body.offsetHeight - document.getElementById("footer").offsetHeight + "px";
+    }
+</script>
+    </div>
+    <!-- <nav id="mobile-nav">
+  
+    <a href="../../../../index.html" class="mobile-nav-link">Home</a>
+  
+    <a href="../../../../archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="../../../../categories" class="mobile-nav-link">Categories</a>
+  
+    <a href="../../../../tags" class="mobile-nav-link">Tags</a>
+  
+    <a href="../../../../about" class="mobile-nav-link">About</a>
+  
+</nav> -->
+    
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+  <link rel="stylesheet" href="../../../../fancybox/jquery.fancybox.css">
+  <script src="../../../../fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="../../../../js/scripts.js"></script>
+
+
+
+
+  <script src="../../../../js/dialog.js"></script>
+
+
+
+
+
+
+
+
+	<div style="display: none;">
+    <script src="https://s95.cnzz.com/z_stat.php?id=1260716016&web_id=1260716016" language="JavaScript"></script>
+  </div>
+
+
+
+	<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js">
+	</script>
+
+
+
+
+
+
+  </div>
+
+  <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 class="modal-title" id="myModalLabel">设置</h2>
+      </div>
+      <hr style="margin-top:0px; margin-bottom:0px; width:80%; border-top: 3px solid #000;">
+      <hr style="margin-top:2px; margin-bottom:0px; width:80%; border-top: 1px solid #000;">
+
+
+      <div class="modal-body">
+          <div style="margin:6px;">
+            <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" onclick="javascript:setFontSize();" aria-expanded="true" aria-controls="collapseOne">
+              正文字号大小
+            </a>
+          </div>
+          <div id="collapseOne" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+          <div class="panel-body">
+            您已调整页面字体大小
+          </div>
+        </div>
+      
+
+
+          <div style="margin:6px;">
+            <a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" onclick="javascript:setBackground();" aria-expanded="true" aria-controls="collapseTwo">
+              夜间护眼模式
+            </a>
+        </div>
+          <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
+          <div class="panel-body">
+            夜间模式已经开启，再次单击按钮即可关闭 
+          </div>
+        </div>
+
+        <div>
+            <a data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="true" aria-controls="collapseThree">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;关 于&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a>
+        </div>
+         <div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
+          <div class="panel-body">
+            Jae&#39;s blog
+          </div>
+          <div class="panel-body">
+            Copyright © 2019 Jae Peng All Rights Reserved.
+          </div>
+        </div>
+      </div>
+
+
+      <hr style="margin-top:0px; margin-bottom:0px; width:80%; border-top: 1px solid #000;">
+      <hr style="margin-top:2px; margin-bottom:0px; width:80%; border-top: 3px solid #000;">
+      <div class="modal-footer">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+      </div>
+    </div>
+  </div>
+</div>
+  
+  <a id="rocket" href="#top" class=""></a>
+  <script type="text/javascript" src="/js/totop.js?v=1.0.0" async=""></script>
+  
+    <a id="menu-switch"><i class="fa fa-bars fa-lg"></i></a>
+  
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+</body>
+</html>
