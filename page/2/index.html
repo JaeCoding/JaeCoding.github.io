@@ -784,7 +784,7 @@ redis-benchmark -h 127.0.0.1 -p 6...
 
 
   
-    <article id="post-设计模式沉思录（三）之单例模式"  class="article article-type-post" itemscope itemprop="blogPost" >
+    <article id="post-设计模式沉思录（四）之建造者模式"  class="article article-type-post" itemscope itemprop="blogPost" >
   <div id="articleInner" class="article-inner">
     
     
@@ -792,7 +792,7 @@ redis-benchmark -h 127.0.0.1 -p 6...
         
   
     <h1 class="thumb" itemprop="name">
-      <a class="article-title" href="../../2018/07/12/设计模式沉思录（三）之单例模式/">设计模式沉思录（三）之单例模式</a>
+      <a class="article-title" href="../../2018/07/12/设计模式沉思录（四）之建造者模式/">设计模式沉思录（四）之建造者模式</a>
     </h1>
   
 
@@ -800,7 +800,7 @@ redis-benchmark -h 127.0.0.1 -p 6...
     
     <div class="article-meta">
       
-	<a href="../../2018/07/12/设计模式沉思录（三）之单例模式/" class="article-date">
+	<a href="../../2018/07/12/设计模式沉思录（四）之建造者模式/" class="article-date">
 	  <time datetime="2018-07-12T03:21:41.000Z" itemprop="datePublished">2018-07-12</time>
 	</a>
 
@@ -814,12 +814,13 @@ redis-benchmark -h 127.0.0.1 -p 6...
     <div class="article-entry" itemprop="articleBody">
       
         <p class="article-excerpt-content">
-          设计模式沉思录（三）之单例模式本文整理自四人帮著作：Design Patterns - Elements of Reusable Object-Oriented Software（中文译名：设计模式 - 可复用的面向对象软件元素）
-单例模式（Singleton Pattern）是 Java 中最简单的设计模式之一。这种模式涉及到一个单一的类，该类负责创建自己的对象，同时确保只有单个对象被创建。这个类提供了一种访问其唯一的对象的方式，可以直接访问，不需要实例化该类的对象。
-注意：1、单例类只...
+          设计模式沉思录（四）之建造者模式建造者模式（Builder Pattern）使用多个简单的对象一步一步构建成一个复杂的对象。这种类型的设计模式属于创建型模式。
+本文整理自四人帮著作：Design Patterns - Elements of Reusable Object-Oriented Software（中文译名：设计模式 - 可复用的面向对象软件元素）
+一个 Builder 类会一步一步构造最终的对象。该 Builder 类是独立于其他对象的。
+介绍意图：将一个复杂的构建与其表示相分...
         </p>
         <p class="article-more-link">
-          <a href="../../2018/07/12/设计模式沉思录（三）之单例模式/#more">Read More</a>
+          <a href="../../2018/07/12/设计模式沉思录（四）之建造者模式/#more">Read More</a>
         </p>
       
     </div>
@@ -1029,20 +1030,5 @@ redis-benchmark -h 127.0.0.1 -p 6...
   <a id="rocket" href="#top" class=""></a>
   <script type="text/javascript" src="/js/totop.js?v=1.0.0" async=""></script>
   
-<script type="text/x-mathjax-config">
-    MathJax.Hub.Config({
-        tex2jax: {
-            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
-            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
-            processEscapes: true
-        }
-    });
-    MathJax.Hub.Queue(function() {
-        var all = MathJax.Hub.getAllJax();
-        for (var i = 0; i < all.length; ++i)
-            all[i].SourceElement().parentNode.className += ' has-jax';
-    });
-</script>
-<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 </body>
 </html>

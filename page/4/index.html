@@ -458,6 +458,63 @@ hash索引弊端：因其hash映射原则（1）Hash 索引仅仅能满足”=�
 
 
   
+    <article id="post-Java高并发-有借有还——Java线程池"  class="article article-type-post" itemscope itemprop="blogPost" >
+  <div id="articleInner" class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="thumb" itemprop="name">
+      <a class="article-title" href="../../2018/06/29/Java高并发-有借有还——Java线程池/">[Java高并发]有借有还——Java线程池</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      
+	<a href="../../2018/06/29/Java高并发-有借有还——Java线程池/" class="article-date">
+	  <time datetime="2018-06-29T07:46:54.000Z" itemprop="datePublished">2018-06-29</time>
+	</a>
+
+      
+    <a class="article-category-link" href="../../categories/技术博客/">技术博客</a>
+
+      
+      
+
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p class="article-excerpt-content">
+          为什么要用线程池？
+降低资源消耗。  通过重复利用已创建的线程降低线程创建和销毁造成的消耗。
+提高响应速度。  当任务到达时，任务可以不需要的等到线程创建就能立即执行。
+提高线程的可管理性。  线程是稀缺资源，如果无限制的创建，不仅会消耗系统资源，还会降低系统的稳定性，使用线程池可以进行统一的分配，调优和监控。
+
+如何使用？创建线程池通过ThreadPoolExecutor来创建一个线程池。12new ThreadPoolExecutor(corePoolSize, maximumPool...
+        </p>
+        <p class="article-more-link">
+          <a href="../../2018/06/29/Java高并发-有借有还——Java线程池/#more">Read More</a>
+        </p>
+      
+    </div>
+    <footer class="article-footer">
+      
+      
+      
+      
+
+    </footer>
+  </div>
+  
+</article>
+
+<!-- Table of Contents -->
+
+
+  
     <article id="post-[Java高并发]有借有还——Java线程池"  class="article article-type-post" itemscope itemprop="blogPost" >
   <div id="articleInner" class="article-inner">
     
@@ -515,7 +572,7 @@ hash索引弊端：因其hash映射原则（1）Hash 索引仅仅能满足”=�
 
 
   
-    <article id="post-Java高并发-有借有还——Java线程池"  class="article article-type-post" itemscope itemprop="blogPost" >
+    <article id="post-[Java高并发]Java内存模型中的原子性、有序性及可见性"  class="article article-type-post" itemscope itemprop="blogPost" >
   <div id="articleInner" class="article-inner">
     
     
@@ -523,7 +580,7 @@ hash索引弊端：因其hash映射原则（1）Hash 索引仅仅能满足”=�
         
   
     <h1 class="thumb" itemprop="name">
-      <a class="article-title" href="../../2018/06/29/Java高并发-有借有还——Java线程池/">[Java高并发]有借有还——Java线程池</a>
+      <a class="article-title" href="../../2018/06/29/[Java高并发]Java内存模型中的原子性、有序性及可见性/">[Java高并发]Java内存模型中的原子性、有序性及可见性</a>
     </h1>
   
 
@@ -531,13 +588,11 @@ hash索引弊端：因其hash映射原则（1）Hash 索引仅仅能满足”=�
     
     <div class="article-meta">
       
-	<a href="../../2018/06/29/Java高并发-有借有还——Java线程池/" class="article-date">
-	  <time datetime="2018-06-29T07:46:54.000Z" itemprop="datePublished">2018-06-29</time>
+	<a href="../../2018/06/29/[Java高并发]Java内存模型中的原子性、有序性及可见性/" class="article-date">
+	  <time datetime="2018-06-29T06:20:08.000Z" itemprop="datePublished">2018-06-29</time>
 	</a>
 
       
-    <a class="article-category-link" href="../../categories/技术博客/">技术博客</a>
-
       
       
 
@@ -545,15 +600,13 @@ hash索引弊端：因其hash映射原则（1）Hash 索引仅仅能满足”=�
     <div class="article-entry" itemprop="articleBody">
       
         <p class="article-excerpt-content">
-          为什么要用线程池？
-降低资源消耗。  通过重复利用已创建的线程降低线程创建和销毁造成的消耗。
-提高响应速度。  当任务到达时，任务可以不需要的等到线程创建就能立即执行。
-提高线程的可管理性。  线程是稀缺资源，如果无限制的创建，不仅会消耗系统资源，还会降低系统的稳定性，使用线程池可以进行统一的分配，调优和监控。
-
-如何使用？创建线程池通过ThreadPoolExecutor来创建一个线程池。12new ThreadPoolExecutor(corePoolSize, maximumPool...
+          [Java高并发]Java内存模型中的原子性、有序性及可见性我们都知道Java内存模型都会运用主存，每个工作线程有自己的工作内存。数据在主存中会有一份，在工作内存中也有一份。工作内存和主存之间会有各种原子操作去进行同步。
+内存模型的原型基于上图
+原子性原子性是指一个操作是不可中断的。即使是在多个线程一起执行的时候，一个操作一旦开始，就不会被其它线程干扰。
+一般认为cpu的指令都是原子操作，有些代码就不一定是原子操作了。比如说i++。这个操作不是原子操作，基本分为3个操作，读取i，进行+1，...
         </p>
         <p class="article-more-link">
-          <a href="../../2018/06/29/Java高并发-有借有还——Java线程池/#more">Read More</a>
+          <a href="../../2018/06/29/[Java高并发]Java内存模型中的原子性、有序性及可见性/#more">Read More</a>
         </p>
       
     </div>
@@ -661,59 +714,6 @@ ReentrantLock的特点：在功能上更加丰富，它具有可重入、可中�
         </p>
         <p class="article-more-link">
           <a href="../../2018/06/29/[Java高并发]JDK并发包的使用及原理/#more">Read More</a>
-        </p>
-      
-    </div>
-    <footer class="article-footer">
-      
-      
-      
-      
-
-    </footer>
-  </div>
-  
-</article>
-
-<!-- Table of Contents -->
-
-
-  
-    <article id="post-[Java高并发]Java内存模型中的原子性、有序性及可见性"  class="article article-type-post" itemscope itemprop="blogPost" >
-  <div id="articleInner" class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 class="thumb" itemprop="name">
-      <a class="article-title" href="../../2018/06/29/[Java高并发]Java内存模型中的原子性、有序性及可见性/">[Java高并发]Java内存模型中的原子性、有序性及可见性</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-meta">
-      
-	<a href="../../2018/06/29/[Java高并发]Java内存模型中的原子性、有序性及可见性/" class="article-date">
-	  <time datetime="2018-06-29T06:20:08.000Z" itemprop="datePublished">2018-06-29</time>
-	</a>
-
-      
-      
-      
-
-    </div>
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p class="article-excerpt-content">
-          [Java高并发]Java内存模型中的原子性、有序性及可见性我们都知道Java内存模型都会运用主存，每个工作线程有自己的工作内存。数据在主存中会有一份，在工作内存中也有一份。工作内存和主存之间会有各种原子操作去进行同步。
-内存模型的原型基于上图
-原子性原子性是指一个操作是不可中断的。即使是在多个线程一起执行的时候，一个操作一旦开始，就不会被其它线程干扰。
-一般认为cpu的指令都是原子操作，有些代码就不一定是原子操作了。比如说i++。这个操作不是原子操作，基本分为3个操作，读取i，进行+1，...
-        </p>
-        <p class="article-more-link">
-          <a href="../../2018/06/29/[Java高并发]Java内存模型中的原子性、有序性及可见性/#more">Read More</a>
         </p>
       
     </div>
@@ -1039,20 +1039,5 @@ P&nbsp;&nbsp;&nbsp;&nbsp;A  &nbsp;&nbsp;&nbsp; H &nbsp;&nbsp;&nbsp;  NA P&nbsp; 
   <a id="rocket" href="#top" class=""></a>
   <script type="text/javascript" src="/js/totop.js?v=1.0.0" async=""></script>
   
-<script type="text/x-mathjax-config">
-    MathJax.Hub.Config({
-        tex2jax: {
-            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
-            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
-            processEscapes: true
-        }
-    });
-    MathJax.Hub.Queue(function() {
-        var all = MathJax.Hub.getAllJax();
-        for (var i = 0; i < all.length; ++i)
-            all[i].SourceElement().parentNode.className += ' has-jax';
-    });
-</script>
-<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 </body>
 </html>
